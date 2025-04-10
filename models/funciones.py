@@ -2,9 +2,9 @@ def buscarPlantillaPresupuesto(record):
     # Diccionario con rutas por categoría y nombre del producto
     productoCategoria = {
         "Branding": {
-            "Creación isologotipo": "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Plantillas/Branding/PlantillaCreacionIsologotipo.html",
-            "Diseño Manual de Estilo": "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Plantillas/Branding/PlantillaDisenoManualDeEstilo.html",
-            "Rediseño Isologotipo": "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Plantillas/Branding/PlantillaRediseñoIsologotipo.html"
+            "Creación isologotipo": "/opt/odoo2/odoo/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaBranding/PlantillaCreacionIsologotipo.html",
+            "Diseño Manual de Estilo": "/opt/odoo2/odoo/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaBranding/PlantillaDisenoManualDeEstilo.html",
+            "Rediseño Isologotipo": "/opt/odoo2/odoo/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaBranding/PlantillaRediseñoIsologotipo.html"
         },
         "Desarrollo Web": {},
         "Editorial": {},
