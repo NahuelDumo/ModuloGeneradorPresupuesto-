@@ -1,6 +1,5 @@
-
 def buscarPlantillaPresupuesto(record):
-    # Defino un diccionario para guardar todas las direcciones por categoria
+    # Diccionario con rutas por categoría y nombre del producto
     productoCategoria = {
         "Branding": {
             "Creacion Isologotipo": "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Plantillas/Branding/PlantillaCreacionIsologotipo.html",
@@ -15,15 +14,16 @@ def buscarPlantillaPresupuesto(record):
         "Productos": {}
     }
 
-    # Obtener la etiqueta asociada al producto
-    etiqueta = record.product_id.categ_id.name
-    producto_nombre = record.product_id.name
+    # Iterar sobre las líneas del pedido
+    for line in record.order_line:
+        if line.product_id and line.product_id.categ_id:
+            etiqueta = line.product_id.categ_id.name
+            producto_nombre = line.product_id.name
+            rutas_categoria = productoCategoria.get(etiqueta, {})
+            ruta_plantilla = rutas_categoria.get(producto_nombre)
 
-    # Obtener las rutas si la categoría existe, y si el producto está definido
-    rutas_categoria = productoCategoria.get(etiqueta, {})
-    ruta_plantilla = rutas_categoria.get(producto_nombre)
+            if ruta_plantilla:
+                return ruta_plantilla  # Devuelve la primera que encuentra
 
-    return ruta_plantilla
-
-
-    
+    # Si no encuentra ninguna coincidencia
+    return "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Plantillas/PlantillaDefault.html"
