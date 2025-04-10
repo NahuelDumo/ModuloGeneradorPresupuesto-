@@ -95,14 +95,14 @@ class SaleOrder(models.Model):
             variables = {
                 "{{NOMBRE_CLIENTE}}": contacto.split(" ")[0],
                 "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
-                "{{nombre_contacto}}": nombre_cliente,
+                "{{nombre_contacto}}": "",
                 
                 
                 "{{precio_total}}": f"{precio} + IVA",
                 "{{plazo_validez}}": str(plazo_validez),
                 "{{forma_pago}}": forma_pago,
-                "{{plazo_predeterminado}}": str(plazo_pago),
-                "{{numero_presupuesto}}": numero_cotizacion,
+                "{{plazo_prederteminado}}": str(plazo_pago),
+                "{{numero-presupuesto}}": numero_cotizacion,
             }
 
             for variable, placeholder in variables.items():
