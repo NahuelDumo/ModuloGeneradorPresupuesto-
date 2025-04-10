@@ -7,7 +7,8 @@ import os
 from io import BytesIO
 from odoo.exceptions import UserError
 from playwright.async_api import async_playwright
-from funciones import *
+from .funciones import *
+
 
 
 class SaleOrder(models.Model):
