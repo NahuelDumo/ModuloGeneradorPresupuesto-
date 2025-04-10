@@ -24,6 +24,8 @@ def buscarPlantillaPresupuesto(record):
 
             if ruta_plantilla:
                 return ruta_plantilla  # Devuelve la primera que encuentra
+        else:
+            return "No se encontro nada"
 
     # Si no encuentra ninguna coincidencia
     return "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Plantillas/PlantillaDefault.html"
