@@ -5,25 +5,9 @@ from PIL import Image
 import base64
 import os
 from io import BytesIO
+from odoo.exceptions import UserError
 from playwright.async_api import async_playwright
-
-async def cargarNavegador(modified_html_path, output_pdf_path):
-    async with async_playwright() as p:
-        browser = await p.firefox.launch(args=['--no-sandbox', '--disable-setuid-sandbox'])
-        page = await browser.new_page()
-        await page.goto(f"file:///{modified_html_path}", timeout=600000)
-        print("Página cargada con éxito. Generando PDF...")
-        
-        await page.pdf(
-            path=output_pdf_path,
-            format="A4",
-            landscape=True,
-            margin={"top": "2cm", "bottom": "2cm", "left": "2cm", "right": "2cm"},
-            display_header_footer=False,
-        )
-        
-        print("PDF generado con éxito.")
-        await browser.close()
+from funciones import *
 
 
 class SaleOrder(models.Model):
@@ -34,6 +18,23 @@ class SaleOrder(models.Model):
         required=True,
         help="Especifica la forma de pago para este presupuesto.",
     )
+    async def cargarNavegador(modified_html_path, output_pdf_path):
+        async with async_playwright() as p:
+            browser = await p.firefox.launch(args=['--no-sandbox', '--disable-setuid-sandbox'])
+            page = await browser.new_page()
+            await page.goto(f"file:///{modified_html_path}", timeout=600000)
+            print("Página cargada con éxito. Generando PDF...")
+            
+            await page.pdf(
+                path=output_pdf_path,
+                format="A4",
+                landscape=True,
+                margin={"top": "2cm", "bottom": "2cm", "left": "2cm", "right": "2cm"},
+                display_header_footer=False,
+            )
+            
+            print("PDF generado con éxito.")
+            await browser.close()
 
     def generar_presupuesto_pdf(self):
         for record in self:
@@ -57,7 +58,9 @@ class SaleOrder(models.Model):
             #Esto varia segun la etiqueta asociada a cada producto.
 
             # Cargar el archivo HTML
-            html_path = "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Hoja_Cotizaciones_Veo_para_Odoo_modificado3.html"
+            html_path = buscarPlantillaPresupuesto(record)
+            if html_path is None:
+                raise UserError("No se encontró una plantilla HTML para el producto seleccionado.")
 
             #Se debe cambiar el html_path segun la etiqueta asociada a cada producto.
 
@@ -81,6 +84,7 @@ class SaleOrder(models.Model):
                 </style>
             </head>
             """
+
             if "<head>" in html_content:
                 html_content = html_content.replace("<head>", font_style, 1)
             else:
@@ -93,7 +97,7 @@ class SaleOrder(models.Model):
                 "{{ nombre_contacto }}": nombre_cliente,
                 "{{ nombre_servicio }}": nombre_servicio,
                 "{{ especificacionDeServicio }}": descripcion_servicio,
-                                "{{ precio_total }}": f"{precio} + IVA",
+                "{{ precio_total }}": f"{precio} + IVA",
                 "{{ plazo_validez }}": str(plazo_validez),
                 "{{ forma_pago }}": forma_pago,
                 "{{ plazo_predeterminado }}": str(plazo_pago),
@@ -123,7 +127,6 @@ class SaleOrder(models.Model):
                    "mimetype": "text/html",  # Tipo MIME para HTML
                })
 
-            
             # Enviar mensaje al chatter
             record.message_post(
                 body="Presupuesto generado correctamente.",
