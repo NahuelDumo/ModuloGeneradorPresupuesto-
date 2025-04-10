@@ -103,6 +103,7 @@ class SaleOrder(models.Model):
                 "{{forma_pago}}": forma_pago,
                 "{{plazo_prederteminado}}": str(plazo_pago),
                 "{{numero-presupuesto}}": numero_cotizacion,
+                "{{numero_presupuesto}}": numero_cotizacion,
             }
 
             for variable, placeholder in variables.items():
