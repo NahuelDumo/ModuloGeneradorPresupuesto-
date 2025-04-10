@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_generar_presupuesto_pdf" model="ir.actions.server">
+        <field name="name">Generar Presupuesto PDF</field>
+        <field name="model_id" ref="model_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = env['sale.order'].browse(record.id).generar_presupuesto_pdf()
+        </field>
+    </record>
+</odoo>

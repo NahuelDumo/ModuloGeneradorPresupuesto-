@@ -1,0 +1,18 @@
+<odoo>
+    <record id="view_sale_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Inserta el botón en una ubicación válida dentro de la vista -->
+            <xpath expr="//header" position="inside">
+                <button name="generar_presupuesto_pdf" type="object" string="Generar Presupuesto PDF"/>
+            </xpath>
+
+            <!-- Agregar el campo "Forma de pago" después del campo "Plazos de pago" -->
+            <xpath expr="//field[@name='validity_date']" position="after">
+                <field name="payment_method" placeholder="Especificar forma de pago" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
