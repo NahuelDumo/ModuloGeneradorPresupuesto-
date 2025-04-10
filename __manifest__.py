@@ -7,7 +7,6 @@
     'depends': ['sale'],
     'data': [
         'views/sale_order_views.xml',
-        'views/Hoja_Cotizaciones_Veo_para_Odoo_modificado3.xml',  # Agregamos tu plantilla
         'data/actions.xml',  # Asegúrate de añadir tu archivo aquí
      ],
 
