@@ -95,7 +95,7 @@ class SaleOrder(models.Model):
             variables = {
                 "{{NOMBRE_CLIENTE}}": contacto.split(" ")[0],
                 "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
-                "{{nombre_contacto}}": "",
+                "{{nombre_contacto}}": nombre_cliente,
                 
                 
                 "{{precio_total}}": f"{precio} + IVA",
