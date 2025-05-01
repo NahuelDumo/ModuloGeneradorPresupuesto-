@@ -108,7 +108,7 @@ class SaleOrder(models.Model):
                 "{{NOMBRE_CLIENTE}}": contacto.split(" ")[0],
                 "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
                 "{{nombre_contacto}}": nombre_cliente,
-                "{{precio_total}}": f"{precio} + IVA",
+                "{{ precio_total }}": f"{precio} + IVA",
                 "{{plazo_validez}}": str(plazo_validez),
                 "{{forma_pago}}": forma_pago,
                 "{{plazo_prederteminado}}": plazo_pago,
