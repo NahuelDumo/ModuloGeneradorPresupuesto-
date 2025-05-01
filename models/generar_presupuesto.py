@@ -96,14 +96,19 @@ class SaleOrder(models.Model):
                 "{{NOMBRE_CLIENTE}}": contacto.split(" ")[0],
                 "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
                 "{{nombre_contacto}}": nombre_cliente,
-                
-                
                 "{{precio_total}}": f"{precio} + IVA",
                 "{{plazo_validez}}": str(plazo_validez),
                 "{{forma_pago}}": forma_pago,
-                "{{plazo_prederteminado}}": str(plazo_pago),
+                "{{plazo_prederteminado}}": plazo_pago,
                 "{{numero-presupuesto}}": numero_cotizacion,
                 "{{numero_presupuesto}}": numero_cotizacion,
+                #Horaciones editables PAGINA 1
+                "{{ oracionEditable1_____________________________________________________________}}": "",
+                "{{ oracionEditable2_____________________________________________________________}}": "", 
+                #Horaciones editables PAGINA 2
+                "{{ oracion_1______________________________________________________________________________________________}}": "",
+                "{{ oracion_2______________________________________________________________________________________________}}": "",
+                "{{ oracion_3______________________________________________________________________________________________}}": ""
             }
 
             for variable, placeholder in variables.items():
