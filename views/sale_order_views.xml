@@ -16,12 +16,12 @@
 
             <!-- Agregar el campo "Texto Editable Pagina 1" después del campo "Plazos de pago" con limite de caracteres de 164 caracteres -->
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="text_pagina1" placeholder="Rellenar texto pagina 1" size="164" widget="char_length_counter" />
+                <field name="text_pagina1" placeholder="Rellenar texto pagina 1" widget="char_length_counter" />
             </xpath>
 
             <!-- Agregar el campo "Texto Editable Pagina 2" después del campo "texto pagina 1" -->
             <xpath expr="//field[@name='text_pagina1']" position="after">
-                <field name="text_pagina2" placeholder="Rellenar texto pagina 2" size="354" widget="char_length_counter" />
+                <field name="text_pagina2" placeholder="Rellenar texto pagina 2" widget="char_length_counter" />
             </xpath>
         </field>
     </record>
