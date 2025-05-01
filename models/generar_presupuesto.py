@@ -64,6 +64,23 @@ class SaleOrder(models.Model):
             nombre_servicio = record.order_line[0].product_id.name or "No disponible"
             descripcion_servicio = record.order_line[0].name or "No disponible"
             precio = record.order_line[0].price_unit
+
+            ##################################################### CASO EXCEPCIONAL #######################################################
+            # Impresion de Boletin, Libro, Pieza Editorial, Revista
+            if nombre_servicio.startswith("Impresión"):
+                cantidad_unidades1 = record.order_line[0].product_uom_qty or 1
+                cantidad_unidades2 = record.order_line[1].product_uom_qty or 1
+                cantidad_unidades3 = record.order_line[2].product_uom_qty or 1
+
+                precio1 = record.order_line[0].price_unit or 0.0
+                precio2 = record.order_line[1].price_unit or 0.0
+                precio3 = record.order_line[2].price_unit or 0.0
+
+                precioTotal1 = precio1 * cantidad_unidades1
+                precioTotal2 = precio2 * cantidad_unidades2
+                precioTotal3 = precio3 * cantidad_unidades3
+
+
             plazo_validez = record.validity_date or "No disponible"
             plazo_pago = record.payment_term_id.name if record.payment_term_id else "No disponible"
 
@@ -139,7 +156,19 @@ class SaleOrder(models.Model):
                 #Horaciones editables PAGINA 2
                 "{{ oracion_1______________________________________________________________________________________________}}": oracion_1,
                 "{{ oracion_2______________________________________________________________________________________________}}": oracion_2,
-                "{{ oracion_3______________________________________________________________________________________________}}": oracion_3
+                "{{ oracion_3______________________________________________________________________________________________}}": oracion_3,
+                ###########################################EXCEPCIONALES#######################################################
+                # Impresion de Boletin, Libro, Pieza Editorial, Revista
+                "{{ cantidad_unidades1 }}": str(cantidad_unidades1),
+                "{{ cantidad_unidades2 }}": str(cantidad_unidades2),
+                "{{ cantidad_unidades3 }}": str(cantidad_unidades3),
+                "{{ precio_cantidad_1 }}": str(precio1),
+                "{{ precio_cantidad_2 }}": str(precio2),
+                "{{ precio_cantidad_3 }}": str(precio3),
+                "{{ precio_total1 }}": str(precioTotal1) + " + IVA",
+                "{{ precio_total2 }}": str(precioTotal2) + " + IVA",
+                "{{ precio_total3 }}": str(precioTotal3) + " + IVA",
+            
             }
 
             for variable, placeholder in variables.items():

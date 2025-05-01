@@ -11,7 +11,11 @@ def buscarPlantillaPresupuesto(record):
             "Diseño gráfico de Boletín o News":"/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDiseñoEditorial_DGrafBoletin.html",
             "Diseño gráfico de Libro": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDiseñoEditorial_DGrafLibro.html",
             "Diseño gráfico de Revista": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDiseñoEditorial_DGrafRevista.html",
-            "Diseño gráfico de pieza editorial especial": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDiseñoEditorial_DGrafPiezaEditorial.html"
+            "Diseño gráfico de pieza editorial especial": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDiseñoEditorial_DGrafPiezaEditorial.html",
+            "Impresión de Boletín o News": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDiseñoImpresionBoletin.html",
+            "Impresión de Libro": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDiseñoImpresionLibro.html",
+            "Impresión de Revista": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDiseñoImpresionRevista.html",
+            "Impresión de pieza editorial especial": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDiseñoImpresionPiezaEditorial.html",
         },
         "Gestion I&C": {},
         "Grafica": {},
