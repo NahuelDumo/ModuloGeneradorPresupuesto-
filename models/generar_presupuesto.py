@@ -40,7 +40,7 @@ class SaleOrder(models.Model):
         _logger = logging.getLogger(__name__)
         try:
             async with async_playwright() as p:
-                browser = await p.firefox.launch(args=['--no-sandbox', '--disable-setuid-sandbox'])
+                browser = await p.chromium.launch(args=['--no-sandbox'], headless=True)
                 page = await browser.new_page()
                 await page.goto(f"file:///{modified_html_path}", timeout=600000)
 
