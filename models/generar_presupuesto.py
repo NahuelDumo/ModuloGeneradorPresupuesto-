@@ -53,109 +53,109 @@ class SaleOrder(models.Model):
             await browser.close()
     
 
-def generar_presupuesto_pdf(self):
-    for record in self:
-        if not record.partner_id or not record.order_line:
-            raise ValueError("La orden de venta no tiene cliente o líneas de productos.")
+    def generar_presupuesto_pdf(self):
+        for record in self:
+            if not record.partner_id or not record.order_line:
+                raise ValueError("La orden de venta no tiene cliente o líneas de productos.")
 
-        # Datos
-        nombre_cliente = record.partner_id.name or "-"
-        contacto = record.partner_id.parent_id.name or "-"
-        numero_cotizacion = record.name
-        forma_pago = record.payment_method
-        nombre_servicio = record.order_line[0].product_id.name or "No disponible"
-        descripcion_servicio = record.order_line[0].name or "No disponible"
-        precio = record.order_line[0].price_unit
-        plazo_validez = record.validity_date or "No disponible"
-        plazo_pago = record.payment_term_id.name if record.payment_term_id else "No disponible"
+            # Datos
+            nombre_cliente = record.partner_id.name or "-"
+            contacto = record.partner_id.parent_id.name or "-"
+            numero_cotizacion = record.name
+            forma_pago = record.payment_method
+            nombre_servicio = record.order_line[0].product_id.name or "No disponible"
+            descripcion_servicio = record.order_line[0].name or "No disponible"
+            precio = record.order_line[0].price_unit
+            plazo_validez = record.validity_date or "No disponible"
+            plazo_pago = record.payment_term_id.name if record.payment_term_id else "No disponible"
 
-        # Oraciones editables
-        texto1 = record.text_pagina1
-        texto2 = record.text_pagina2
+            # Oraciones editables
+            texto1 = record.text_pagina1
+            texto2 = record.text_pagina2
 
-        oraciones_texto1 = dividir_en_oraciones(texto1, max_len=82)
-        oracion_editable1 = oraciones_texto1[0] if len(oraciones_texto1) > 0 else ""
-        oracion_editable2 = oraciones_texto1[1] if len(oraciones_texto1) > 1 else ""
+            oraciones_texto1 = dividir_en_oraciones(texto1, max_len=82)
+            oracion_editable1 = oraciones_texto1[0] if len(oraciones_texto1) > 0 else ""
+            oracion_editable2 = oraciones_texto1[1] if len(oraciones_texto1) > 1 else ""
 
-        oraciones_texto2 = dividir_en_oraciones(texto2, max_len=118)
-        oracion_1 = oraciones_texto2[0] if len(oraciones_texto2) > 0 else ""
-        oracion_2 = oraciones_texto2[1] if len(oraciones_texto2) > 1 else ""
-        oracion_3 = oraciones_texto2[2] if len(oraciones_texto2) > 2 else ""
+            oraciones_texto2 = dividir_en_oraciones(texto2, max_len=118)
+            oracion_1 = oraciones_texto2[0] if len(oraciones_texto2) > 0 else ""
+            oracion_2 = oraciones_texto2[1] if len(oraciones_texto2) > 1 else ""
+            oracion_3 = oraciones_texto2[2] if len(oraciones_texto2) > 2 else ""
 
-        # Buscar HTML base
-        html_path = buscarPlantillaPresupuesto(record)
-        if html_path is None:
-            raise UserError("No se encontró una plantilla HTML para el producto seleccionado.")
+            # Buscar HTML base
+            html_path = buscarPlantillaPresupuesto(record)
+            if html_path is None:
+                raise UserError("No se encontró una plantilla HTML para el producto seleccionado.")
 
-        with open(html_path, "r", encoding="UTF-8") as file:
-            html_content = file.read()
+            with open(html_path, "r", encoding="UTF-8") as file:
+                html_content = file.read()
 
-        # Agregar Google Fonts
-        font_style = """
-        <head>
-            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-            <style>
-            body { font-family: 'Roboto', sans-serif; }
-            h1, h2 { font-weight: 700; }
-            p { font-weight: 400; }
-            </style>
-        </head>
-        """
-        html_content = html_content.replace("<head>", font_style, 1) if "<head>" in html_content else font_style + html_content
+            # Agregar Google Fonts
+            font_style = """
+            <head>
+                <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+                <style>
+                body { font-family: 'Roboto', sans-serif; }
+                h1, h2 { font-weight: 700; }
+                p { font-weight: 400; }
+                </style>
+            </head>
+            """
+            html_content = html_content.replace("<head>", font_style, 1) if "<head>" in html_content else font_style + html_content
 
-        # Reemplazar variables
-        variables = {
-            "{{NOMBRE_CLIENTE}}": contacto.split(" ")[0],
-            "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
-            "{{nombre_contacto}}": nombre_cliente,
-            "{{ precio_total }}": f"<b>{precio} + IVA</b>",
-            "{{plazo_validez}}": str(plazo_validez),
-            "{{forma_pago}}": forma_pago,
-            "{{plazo_prederteminado}}": plazo_pago,
-            "{{numero-presupuesto}}": numero_cotizacion,
-            "{{numero_presupuesto}}": f"<b>{numero_cotizacion}</b>",
-            "{{ oracionEditable1_____________________________________________________________}}": oracion_editable1,
-            "{{ oracionEditable2_____________________________________________________________}}": oracion_editable2,
-            "{{ oracion_1______________________________________________________________________________________________}}": oracion_1,
-            "{{ oracion_2______________________________________________________________________________________________}}": oracion_2,
-            "{{ oracion_3______________________________________________________________________________________________}}": oracion_3,
-        }
+            # Reemplazar variables
+            variables = {
+                "{{NOMBRE_CLIENTE}}": contacto.split(" ")[0],
+                "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
+                "{{nombre_contacto}}": nombre_cliente,
+                "{{ precio_total }}": f"<b>{precio} + IVA</b>",
+                "{{plazo_validez}}": str(plazo_validez),
+                "{{forma_pago}}": forma_pago,
+                "{{plazo_prederteminado}}": plazo_pago,
+                "{{numero-presupuesto}}": numero_cotizacion,
+                "{{numero_presupuesto}}": f"<b>{numero_cotizacion}</b>",
+                "{{ oracionEditable1_____________________________________________________________}}": oracion_editable1,
+                "{{ oracionEditable2_____________________________________________________________}}": oracion_editable2,
+                "{{ oracion_1______________________________________________________________________________________________}}": oracion_1,
+                "{{ oracion_2______________________________________________________________________________________________}}": oracion_2,
+                "{{ oracion_3______________________________________________________________________________________________}}": oracion_3,
+            }
 
-        for var, val in variables.items():
-            html_content = html_content.replace(var.strip(), val.strip())
+            for var, val in variables.items():
+                html_content = html_content.replace(var.strip(), val.strip())
 
-        # Crear archivo HTML temporal
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".html", mode="w", encoding="utf-8") as html_file:
-            html_file.write(html_content)
-            temp_html_path = html_file.name
+            # Crear archivo HTML temporal
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".html", mode="w", encoding="utf-8") as html_file:
+                html_file.write(html_content)
+                temp_html_path = html_file.name
 
-        # Crear archivo PDF temporal
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as pdf_file:
-            temp_pdf_path = pdf_file.name
+            # Crear archivo PDF temporal
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as pdf_file:
+                temp_pdf_path = pdf_file.name
 
-        # Generar PDF con Playwright
-        asyncio.run(self.cargarNavegador(temp_html_path, temp_pdf_path))
+            # Generar PDF con Playwright
+            asyncio.run(self.cargarNavegador(temp_html_path, temp_pdf_path))
 
-        # Leer el contenido del PDF para adjuntarlo
-        with open(temp_pdf_path, "rb") as pdf_file:
-            attachment = self.env["ir.attachment"].create({
-                "name": f"{record.name}_presupuesto.pdf",
-                "type": "binary",
-                "datas": base64.b64encode(pdf_file.read()).decode("utf-8"),
-                "res_model": "sale.order",
-                "res_id": record.id,
-                "mimetype": "application/pdf",
-            })
+            # Leer el contenido del PDF para adjuntarlo
+            with open(temp_pdf_path, "rb") as pdf_file:
+                attachment = self.env["ir.attachment"].create({
+                    "name": f"{record.name}_presupuesto.pdf",
+                    "type": "binary",
+                    "datas": base64.b64encode(pdf_file.read()).decode("utf-8"),
+                    "res_model": "sale.order",
+                    "res_id": record.id,
+                    "mimetype": "application/pdf",
+                })
 
-        # Publicar en el chatter
-        record.message_post(
-            body="Presupuesto generado correctamente.",
-            subject="Presupuesto Generado",
-            attachment_ids=[attachment.id],
-        )
+            # Publicar en el chatter
+            record.message_post(
+                body="Presupuesto generado correctamente.",
+                subject="Presupuesto Generado",
+                attachment_ids=[attachment.id],
+            )
 
-        # Limpiar archivos temporales (opcional)
-        os.remove(temp_html_path)
-        os.remove(temp_pdf_path)
+            # Limpiar archivos temporales (opcional)
+            os.remove(temp_html_path)
+            os.remove(temp_pdf_path)
 
-        return attachment
+            return attachment
