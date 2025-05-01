@@ -35,23 +35,28 @@ class SaleOrder(models.Model):
         help="Especifica el texto de la pagina 2.",
     )
     async def cargarNavegador(self, modified_html_path, output_pdf_path):
-        async with async_playwright() as p:
-            browser = await p.firefox.launch(args=['--no-sandbox', '--disable-setuid-sandbox'])
-            page = await browser.new_page()
-            await page.goto(f"file:///{modified_html_path}", timeout=600000)
-            print("Página cargada con éxito. Generando PDF...")
+        _logger = logging.getLogger(__name__)
+        try:
+            async with async_playwright() as p:
+                browser = await p.firefox.launch(args=['--no-sandbox', '--disable-setuid-sandbox'])
+                page = await browser.new_page()
+                await page.goto(f"file:///{modified_html_path}", timeout=600000)
 
-            await page.pdf(
-                path=output_pdf_path,
-                format="A4",
-                landscape=True,
-                margin={"top": "2cm", "bottom": "2cm", "left": "2cm", "right": "2cm"},
-                display_header_footer=False,
-            )
+                _logger.info("Página cargada. Generando PDF...")
+                await page.pdf(
+                    path=output_pdf_path,
+                    format="A4",
+                    landscape=True,
+                    margin={"top": "2cm", "bottom": "2cm", "left": "2cm", "right": "2cm"},
+                    display_header_footer=False,
+                )
+                _logger.info("PDF generado con éxito.")
+                await browser.close()
 
-            print("PDF generado con éxito.")
-            await browser.close()
-    
+        except Exception as e:
+            _logger.exception("Error al generar el PDF con Playwright.")
+            raise UserError(f"Falló la generación del PDF: {str(e)}")
+
 
     def generar_presupuesto_pdf(self):
         for record in self:
@@ -134,7 +139,11 @@ class SaleOrder(models.Model):
                 temp_pdf_path = pdf_file.name
 
             # Generar PDF con Playwright
-            asyncio.run(self.cargarNavegador(temp_html_path, temp_pdf_path))
+            # Ejecutar el navegador de forma segura (sin usar asyncio.run)
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(self.cargarNavegador(temp_html_path, temp_pdf_path))
+            loop.close()
 
             # Leer el contenido del PDF para adjuntarlo
             with open(temp_pdf_path, "rb") as pdf_file:
