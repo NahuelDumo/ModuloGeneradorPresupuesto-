@@ -35,6 +35,8 @@ class SaleOrder(models.Model):
         help="Especifica el texto de la pagina 2.",
     )
     async def cargarNavegador(self, modified_html_path, output_pdf_path):
+        from odoo.tools import config
+        import logging
         _logger = logging.getLogger(__name__)
         try:
             async with async_playwright() as p:
