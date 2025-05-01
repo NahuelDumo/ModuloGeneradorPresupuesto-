@@ -1,13 +1,15 @@
 import asyncio
-from odoo import models, fields
+from odoo import models, fields, api, _
 from fpdf import FPDF
 from PIL import Image
 import base64
-import os
 from io import BytesIO
 from odoo.exceptions import UserError
 from playwright.async_api import async_playwright
 from .funciones import *
+import asyncio
+import base64
+import os
 
 
 
@@ -31,13 +33,13 @@ class SaleOrder(models.Model):
         size=354,
         help="Especifica el texto de la pagina 2.",
     )
-    async def cargarNavegador(modified_html_path, output_pdf_path):
+    async def cargarNavegador(self, modified_html_path, output_pdf_path):
         async with async_playwright() as p:
             browser = await p.firefox.launch(args=['--no-sandbox', '--disable-setuid-sandbox'])
             page = await browser.new_page()
             await page.goto(f"file:///{modified_html_path}", timeout=600000)
             print("Página cargada con éxito. Generando PDF...")
-            
+
             await page.pdf(
                 path=output_pdf_path,
                 format="A4",
@@ -45,10 +47,9 @@ class SaleOrder(models.Model):
                 margin={"top": "2cm", "bottom": "2cm", "left": "2cm", "right": "2cm"},
                 display_header_footer=False,
             )
-            
+
             print("PDF generado con éxito.")
             await browser.close()
-
     
 
     def generar_presupuesto_pdf(self):
@@ -146,23 +147,26 @@ class SaleOrder(models.Model):
                 html_content = html_content.replace(variable.strip(), placeholder.strip())
 
             # Guardar el HTML modificado
-            modified_html_path = "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Hoja_Cotizaciones_Veo_para_Odoo_modificado4.html"
+            modified_html_path = "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/models/Hoja_Cotizaciones_Veo_para_Odoo_modificado4.html"
             with open(modified_html_path, "w", encoding="utf-8") as file:
                 file.write(html_content)
 
             # Convertir HTML a PDF
-            output_pdf_path = "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Presupuesto.pdf"
+            output_pdf_path = "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/models/Presupuesto.pdf"
+
+            # Ejecutar Playwright para generar el PDF
+            asyncio.run(self.cargarNavegador(modified_html_path, output_pdf_path))
 
             #asyncio.run(cargarNavegador(modified_html_path, output_pdf_path))
             # Crear el archivo HTML como adjunto en Odoo
             with open(modified_html_path, "r", encoding="utf-8") as html_file:
                attachment = self.env["ir.attachment"].create({
-                   "name": f"{record.name}_presupuesto.html",  # Nombre del archivo
+                   "name": f"{record.name}_presupuesto.pdf",  # Nombre del archivo
                    "type": "binary",
-                   "datas": base64.b64encode(html_file.read().encode("utf-8")).decode("utf-8"),  # Codificar el contenido HT>
+                   "datas": base64.b64encode(pdf_file.read()).decode("utf-8"), # Codificar el contenido HT>
                    "res_model": "sale.order",  # Relacionar el adjunto con el modelo 'sale.order'
                    "res_id": record.id,  # ID del registro relacionado
-                   "mimetype": "text/html",  # Tipo MIME para HTML
+                   "mimetype": "application/pdf",  # Tipo MIME para HTML
                })
 
             # Enviar mensaje al chatter
