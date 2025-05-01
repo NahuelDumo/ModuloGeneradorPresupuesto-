@@ -19,6 +19,18 @@ class SaleOrder(models.Model):
         required=True,
         help="Especifica la forma de pago para este presupuesto.",
     )
+    text_pagina1 = fields.Char(
+        string="Texto editable pagina 1",
+        required=True,
+        size=164,
+        help="Especifica el texto de la pagina 1 ESPECIFICACIONES TECNICAS.",
+    )
+    text_pagina2 = fields.Char(
+        string="Texto editable pagina 2",
+        required=True,
+        size=354,
+        help="Especifica el texto de la pagina 2.",
+    )
     async def cargarNavegador(modified_html_path, output_pdf_path):
         async with async_playwright() as p:
             browser = await p.firefox.launch(args=['--no-sandbox', '--disable-setuid-sandbox'])

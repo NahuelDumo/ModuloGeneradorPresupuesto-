@@ -20,7 +20,7 @@
             </xpath>
 
             <!-- Agregar el campo "Texto Editable Pagina 2" después del campo "texto pagina 1" -->
-            <xpath expr="//field[@name='partner_id']" position="after">
+            <xpath expr="//field[@name='text_pagina1']" position="after">
                 <field name="text_pagina2" placeholder="Rellenar texto pagina 2" size="354" widget="char_length_counter" />
             </xpath>
         </field>
