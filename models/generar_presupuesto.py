@@ -63,7 +63,7 @@ class SaleOrder(models.Model):
             descripcion_servicio = record.order_line[0].name or "No disponible"
             precio = record.order_line[0].price_unit
             plazo_validez = record.validity_date or "No disponible"
-            plazo_pago = record.payment_term_id
+            plazo_pago = str(record.payment_term_id)
             condiciones_generales = (
                 "Los precios no incluyen IVA. Forma de pago: 50% al inicio, 50% al finalizar. "
                 "Plazo de ejecución: 30-45 días corridos. Incluye entrevistas virtuales y una reunión presencial."
