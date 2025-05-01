@@ -49,6 +49,24 @@ class SaleOrder(models.Model):
             print("PDF generado con éxito.")
             await browser.close()
 
+    def dividir_en_oraciones(texto, max_len=118):
+        oraciones_finales = []
+        texto = texto.strip()
+        
+        while len(texto) > 0:
+            if len(texto) <= max_len:
+                oraciones_finales.append(texto.strip())
+                break
+
+            corte = texto.rfind(" ", 0, max_len + 1)
+            if corte == -1:
+                corte = max_len  # Si no hay espacios, cortar exactamente en 118
+            oracion = texto[:corte].strip()
+            oraciones_finales.append(oracion)
+            texto = texto[corte:].strip()
+
+        return oraciones_finales
+
     def generar_presupuesto_pdf(self):
         for record in self:
             if not record.partner_id or not record.order_line:
@@ -64,11 +82,28 @@ class SaleOrder(models.Model):
             precio = record.order_line[0].price_unit
             plazo_validez = record.validity_date or "No disponible"
             plazo_pago = record.payment_term_id.name if record.payment_term_id else "No disponible"
-            condiciones_generales = (
-                "Los precios no incluyen IVA. Forma de pago: 50% al inicio, 50% al finalizar. "
-                "Plazo de ejecución: 30-45 días corridos. Incluye entrevistas virtuales y una reunión presencial."
-            )
-            #Esto varia segun la etiqueta asociada a cada producto.
+
+            # Oraciones editables
+            texto1 = record.text_pagina1
+            texto2 = record.text_pagina2
+
+            #Divido en oraciones editables
+            oraciones_texto1 = dividir_en_oraciones(texto1, max_len=118)
+
+            # Divido en oraciones editables
+            oracion_editable1 = oraciones_texto1[0] if len(oraciones_texto1) > 0 else ""
+            oracion_editable2 = oraciones_texto1[1] if len(oraciones_texto1) > 1 else ""
+            
+        
+            oraciones_texto2 = dividir_en_oraciones(texto2, max_len=118)
+
+
+            # Se asignan las oraciones editables a variables
+            oracion_1 = oraciones_texto2[0] if len(oraciones_texto1) > 0 else ""
+            oracion_2 = oraciones_texto2[1] if len(oraciones_texto1) > 1 else ""
+            oracion_3 = oraciones_texto2[2] if len(oraciones_texto1) > 2 else ""
+            # Se asignan las oraciones editables a variables
+
 
             # Cargar el archivo HTML
             html_path = buscarPlantillaPresupuesto(record)
@@ -115,12 +150,12 @@ class SaleOrder(models.Model):
                 "{{numero-presupuesto}}": numero_cotizacion,
                 "{{numero_presupuesto}}": f"<b>{numero_cotizacion}</b>",
                 #Horaciones editables PAGINA 1
-                "{{ oracionEditable1_____________________________________________________________}}": "",
-                "{{ oracionEditable2_____________________________________________________________}}": "", 
+                "{{ oracionEditable1_____________________________________________________________}}": oracion_editable1,
+                "{{ oracionEditable2_____________________________________________________________}}": oracion_editable2, 
                 #Horaciones editables PAGINA 2
-                "{{ oracion_1______________________________________________________________________________________________}}": "",
-                "{{ oracion_2______________________________________________________________________________________________}}": "",
-                "{{ oracion_3______________________________________________________________________________________________}}": ""
+                "{{ oracion_1______________________________________________________________________________________________}}": oracion_1,
+                "{{ oracion_2______________________________________________________________________________________________}}": oracion_2,
+                "{{ oracion_3______________________________________________________________________________________________}}": oracion_3
             }
 
             for variable, placeholder in variables.items():
