@@ -83,9 +83,9 @@ class SaleOrder(models.Model):
 
 
             # Se asignan las oraciones editables a variables
-            oracion_1 = oraciones_texto2[0] if len(oraciones_texto1) > 0 else ""
-            oracion_2 = oraciones_texto2[1] if len(oraciones_texto1) > 1 else ""
-            oracion_3 = oraciones_texto2[2] if len(oraciones_texto1) > 2 else ""
+            oracion_1 = oraciones_texto2[0] if len(oraciones_texto2) > 0 else ""
+            oracion_2 = oraciones_texto2[1] if len(oraciones_texto2) > 1 else ""
+            oracion_3 = oraciones_texto2[2] if len(oraciones_texto2) > 2 else ""
             # Se asignan las oraciones editables a variables
 
 
