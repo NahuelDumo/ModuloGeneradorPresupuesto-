@@ -35,7 +35,7 @@ def buscarPlantillaPresupuesto(record):
     # Si no encuentra ninguna coincidencia
     return "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Plantillas/PlantillaDefault.html"
 
-def dividir_en_oraciones(texto, max_len=118):
+def dividir_en_oraciones(texto, max_len):
         oraciones_finales = []
         texto = texto.strip()
         
