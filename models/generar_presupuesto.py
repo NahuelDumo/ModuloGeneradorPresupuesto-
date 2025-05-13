@@ -72,13 +72,13 @@ class SaleOrder(models.Model):
                 cantidad_unidades2 = record.order_line[1].product_uom_qty or 1
                 cantidad_unidades3 = record.order_line[2].product_uom_qty or 1
 
-                precio1 = record.order_line[0].price_unit or 0.0
-                precio2 = record.order_line[1].price_unit or 0.0
-                precio3 = record.order_line[2].price_unit or 0.0
+                precio1 = round(record.order_line[0].price_unit, 0) or 0.0
+                precio2 = round(record.order_line[1].price_unit, 0) or 0.0
+                precio3 = round(record.order_line[2].price_unit, 0) or 0.0
 
-                precioTotal1 = precio1 * cantidad_unidades1
-                precioTotal2 = precio2 * cantidad_unidades2
-                precioTotal3 = precio3 * cantidad_unidades3
+                precioTotal1 = round(precio1 * cantidad_unidades1, 0)
+                precioTotal2 = round(precio2 * cantidad_unidades2, 0)
+                precioTotal3 = round(precio3 * cantidad_unidades3, 0)
 
 
             plazo_validez = record.validity_date or "No disponible"
@@ -89,7 +89,7 @@ class SaleOrder(models.Model):
             texto2 = record.text_pagina2
 
             #Divido en oraciones editables
-            oraciones_texto1 = dividir_en_oraciones(texto1, max_len=82)
+            oraciones_texto1 = dividir_en_oraciones(texto1, max_len=94)
 
             # Divido en oraciones editables
             oracion_editable1 = oraciones_texto1[0] if len(oraciones_texto1) > 0 else ""
@@ -144,7 +144,7 @@ class SaleOrder(models.Model):
                 "{{NOMBRE_CLIENTE}}": contacto.split(" ")[0],
                 "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
                 "{{nombre_contacto}}": nombre_cliente,
-                "{{ precio_total }}": f"<b>{precio} + IVA</b>",
+                "{{ precio_total }}": f"<b>{round(precio, 0)} + IVA</b>",
                 "{{plazo_validez}}": str(plazo_validez),
                 "{{forma_pago}}": forma_pago,
                 "{{plazo_prederteminado}}": plazo_pago,
