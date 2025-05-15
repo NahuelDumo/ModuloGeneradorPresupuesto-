@@ -66,6 +66,18 @@ class SaleOrder(models.Model):
             precio = record.order_line[0].price_unit
 
             ##################################################### CASO EXCEPCIONAL #######################################################
+            # Inicializar valores por defecto
+            cantidad_unidades1 = ""
+            cantidad_unidades2 = ""
+            cantidad_unidades3 = ""
+
+            precio1 = ""
+            precio2 = ""
+            precio3 = ""
+
+            precioTotal1 = ""
+            precioTotal2 = ""
+            precioTotal3 = ""
             # Impresion de Boletin, Libro, Pieza Editorial, Revista
             if nombre_servicio.startswith("Impresión"):
                 cantidad_unidades1 = record.order_line[0].product_uom_qty or 1
