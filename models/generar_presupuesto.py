@@ -22,13 +22,13 @@ class SaleOrder(models.Model):
     text_pagina1 = fields.Char(
         string="Texto editable pagina 1",
         required=True,
-        size=164,
+        size=150,
         help="Especifica el texto de la pagina 1 ESPECIFICACIONES TECNICAS.",
     )
     text_pagina2 = fields.Char(
         string="Texto editable pagina 2",
         required=True,
-        size=354,
+        size=315,
         help="Especifica el texto de la pagina 2.",
     )
     async def cargarNavegador(modified_html_path, output_pdf_path):
@@ -89,14 +89,14 @@ class SaleOrder(models.Model):
             texto2 = record.text_pagina2
 
             #Divido en oraciones editables
-            oraciones_texto1 = dividir_en_oraciones(texto1, max_len=94)
+            oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
 
             # Divido en oraciones editables
             oracion_editable1 = oraciones_texto1[0] if len(oraciones_texto1) > 0 else ""
             oracion_editable2 = oraciones_texto1[1] if len(oraciones_texto1) > 1 else ""
             
         
-            oraciones_texto2 = dividir_en_oraciones(texto2, max_len=118)
+            oraciones_texto2 = dividir_en_oraciones(texto2, max_len=105)
 
 
             # Se asignan las oraciones editables a variables
