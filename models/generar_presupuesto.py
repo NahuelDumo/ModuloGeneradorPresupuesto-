@@ -163,8 +163,8 @@ class SaleOrder(models.Model):
                 "{{numero-presupuesto}}": numero_cotizacion,
                 "{{numero_presupuesto}}": f"<b>{numero_cotizacion}</b>",
                 #Horaciones editables PAGINA 1
-                "{{oracionEditable1_____________________________________________________________}}": oracion_editable1,
-                "{{oracionEditable2_____________________________________________________________}}": oracion_editable2, 
+                "{{oracionEditable1_______________________________________________________}}": oracion_editable1,
+                "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
                 #Horaciones editables PAGINA 2
                 "{{oracion_1______________________________________________________________________________________________}}": oracion_1,
                 "{{oracion_2______________________________________________________________________________________________}}": oracion_2,
