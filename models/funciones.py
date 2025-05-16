@@ -56,3 +56,12 @@ def dividir_en_oraciones(texto, max_len):
             texto = texto[corte:].strip()
 
         return oraciones_finales
+
+def separar_mayusculas(texto):
+    resultado = texto[0]  # Comenzamos con la primera letra tal cual
+    for letra in texto[1:]:
+        if letra.isupper():
+            resultado += ' ' + letra
+        else:
+            resultado += letra
+    return resultado
