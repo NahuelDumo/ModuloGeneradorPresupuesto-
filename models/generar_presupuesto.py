@@ -156,7 +156,7 @@ class SaleOrder(models.Model):
 
             # Reemplazar variables en el HTML
             variables = {
-                "{{ NOMBRE_CLIENTE }}": contacto.split(" ")[0],
+                "{{NOMBRE_CLIENTE}}": contacto.split(" ")[0],
                 "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
                 "{{nombre_contacto}}": nombre_cliente,
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio, 0)} + IVA</span>",
