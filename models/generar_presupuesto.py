@@ -160,12 +160,11 @@ class SaleOrder(models.Model):
                 "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
                 "{{nombre_contacto}}": nombre_cliente,
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio, 0)} + IVA</span>",
-                "{{ numero_presupuesto }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
+                "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": str(plazo_validez),
                 "{{forma_pago}}": forma_pago,
                 "{{plazo_prederteminado}}": plazo_pago,
                 "{{numero-presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
-                "{{numero_presupuesto}}": f"<b>{numero_cotizacion}</b>",
                 #Horaciones editables PAGINA 1
                 "{{oracionEditable1_______________________________________________________}}": oracion_editable1,
                 "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
