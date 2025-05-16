@@ -68,6 +68,8 @@ class SaleOrder(models.Model):
             descripcion_servicio = record.order_line[0].name or "No disponible"
             precio = record.order_line[0].price_unit
 
+
+
             ##################################################### CASO EXCEPCIONAL #######################################################
             # Inicializar valores por defecto
             cantidad_unidades1 = ""
@@ -119,7 +121,10 @@ class SaleOrder(models.Model):
             oracion_2 = oraciones_texto2[1] if len(oraciones_texto2) > 1 else ""
             oracion_3 = oraciones_texto2[2] if len(oraciones_texto2) > 2 else ""
             # Se asignan las oraciones editables a variables
-
+            record.message_post(
+                body=f"oracion_1: {oracion_1}, oracion_2: {oracion_2}, oracion_3: {oracion_3}, nombre_cliente: {nombre_cliente}, contacto: {contacto}, numero_cotizacion: {numero_cotizacion}, forma_pago: {forma_pago}, plazo_validez: {plazo_validez}, plazo_pago: {plazo_pago}",
+                subject="Texto editable"
+            )
 
             # Cargar el archivo HTML
             html_path = buscarPlantillaPresupuesto(record)
@@ -149,6 +154,8 @@ class SaleOrder(models.Model):
             </head>
             """
 
+            
+           
             if "<head>" in html_content:
                 html_content = html_content.replace("<head>", font_style, 1)
             else:
