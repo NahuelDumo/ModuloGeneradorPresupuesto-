@@ -165,7 +165,7 @@ class SaleOrder(models.Model):
             variables = {
                 "{{NOMBRE_CLIENTE}}": f'<span style="white-space: pre-wrap;">{contacto.split(" ")[0]}</span>',
                 "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
-                "{{nombre_contacto}}": nombre_cliente,
+                "{{nombre_contacto}}": f'<span style="white-space: pre-wrap;">{nombre_cliente}</span>',
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio, 0)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": str(plazo_validez),
