@@ -63,7 +63,7 @@ class SaleOrder(models.Model):
             nombre_cliente = nombre_cliente
             contacto = record.partner_id.parent_id.name or "-"
             if len(contacto) > 17:
-                contacto = f"<span style='font-family: Roboto, sans-serif; font-weight: 700; font-size: 75px;'>{contacto}</span>"
+                contacto = f"<span style='font-family: Roboto, sans-serif font-size: 66px;'>{contacto}</span>"
 
             numero_cotizacion = record.name
             forma_pago = record.payment_method
