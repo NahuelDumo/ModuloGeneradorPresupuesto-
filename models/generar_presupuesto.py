@@ -60,7 +60,7 @@ class SaleOrder(models.Model):
             # Datos necesarios para el PDF
             nombre_cliente = record.partner_id.name or "-"
             # Agregar espacio antes de cada mayúscula en el nombre del cliente (excepto la primera letra)
-            nombre_cliente = separar_mayusculas(nombre_cliente)
+            nombre_cliente = nombre_cliente
             contacto = record.partner_id.parent_id.name or "-"
             numero_cotizacion = record.name
             forma_pago = record.payment_method
@@ -163,7 +163,7 @@ class SaleOrder(models.Model):
                 
                 "{{NOMBRE_CLIENTE}}": contacto.split(" ")[0],
                 "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
-                "{{nombre_contacto}}": f"<span style='white-space: pre-wrap;'>{nombre_cliente.replace(' ', '&nbsp;')}</span>",
+                "{{nombre_contacto}}": f"<span style='white-space: pre-wrap; display: inline-block;'>{nombre_cliente.replace(' ', '&nbsp;')}</span>",
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio, 0)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": str(plazo_validez),
