@@ -58,11 +58,11 @@ class SaleOrder(models.Model):
                 raise ValueError("La orden de venta no tiene cliente o líneas de productos.")
 
             # Datos necesarios para el PDF
-            nombre_cliente = record.partner_id.name or "-"
-            # Agregar espacio antes de cada mayúscula en el nombre del cliente (excepto la primera letra)
-            nombre_cliente = nombre_cliente
+            nombre_cliente = f"<span style='font-family: Roboto, sans-serif;'>{record.partner_id.name or "-"}</span>"
+
+
             contacto = record.partner_id.parent_id.name or "-"
-            if len(contacto) > 17:
+            if len(contacto) > 18:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 66px;'>{contacto}</span>"
 
             numero_cotizacion = record.name
