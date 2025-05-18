@@ -62,7 +62,10 @@ class SaleOrder(models.Model):
             # Agregar espacio antes de cada mayúscula en el nombre del cliente (excepto la primera letra)
             nombre_cliente = nombre_cliente
             contacto = record.partner_id.parent_id.name or "-"
-            numero_cotizacion = record.name
+
+            if len(contacto) > 18:
+                contacto = f"<span style='font-family: Roboto, sans-serif; font-weight: 700; font-size: 75px;'>{contacto}</span>"
+
             forma_pago = record.payment_method
             nombre_servicio = record.order_line[0].product_id.name or "No disponible"
             descripcion_servicio = record.order_line[0].name or "No disponible"
