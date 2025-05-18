@@ -89,13 +89,13 @@ class SaleOrder(models.Model):
                 cantidad_unidades2 = record.order_line[1].product_uom_qty or 1
                 cantidad_unidades3 = record.order_line[2].product_uom_qty or 1
 
-                precio1 = round(record.order_line[0].price_unit, 0) or 0.0
-                precio2 = round(record.order_line[1].price_unit, 0) or 0.0
-                precio3 = round(record.order_line[2].price_unit, 0) or 0.0
+                precio1 = round(record.order_line[0].price_unit) or 0.0
+                precio2 = round(record.order_line[1].price_unit) or 0.0
+                precio3 = round(record.order_line[2].price_unit) or 0.0
 
-                precioTotal1 = round(precio1 * cantidad_unidades1, 0)
-                precioTotal2 = round(precio2 * cantidad_unidades2, 0)
-                precioTotal3 = round(precio3 * cantidad_unidades3, 0)
+                precioTotal1 = round(precio1 * cantidad_unidades1)
+                precioTotal2 = round(precio2 * cantidad_unidades2)
+                precioTotal3 = round(precio3 * cantidad_unidades3)
 
 
             plazo_validez = record.validity_date or "No disponible"
@@ -163,9 +163,10 @@ class SaleOrder(models.Model):
 
             # Reemplazar variables en el HTML
             variables = {
-                "{{NOMBRE_CLIENTE}}": f'<span style="white-space: pre-wrap;">{contacto.split(" ")[0]}</span>',
+                
+                "{{NOMBRE_CLIENTE}}": contacto.split(" ")[0],
                 "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
-                "{{nombre_contacto}}": f'<span style="white-space: pre-wrap;">{nombre_cliente}</span>',
+                "{{nombre_contacto}}": nombre_cliente,
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio, 0)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": str(plazo_validez),
