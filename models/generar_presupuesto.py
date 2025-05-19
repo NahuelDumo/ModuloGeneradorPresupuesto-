@@ -95,8 +95,8 @@ class SaleOrder(models.Model):
             oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
 
             # Divido en oraciones editables
-            oracion_editable1 = oraciones_texto1[0] if len(oraciones_texto1) > 0 else ""
-            oracion_editable2 = oraciones_texto1[1] if len(oraciones_texto1) > 1 else ""
+            oracion_editable1 = f"<span style='font-family: Roboto, sans-serif ;font-size: 75px; word-spacing: 0px;'>{oraciones_texto1[0]}</span>" if len(oraciones_texto1) > 0 else ""
+            oracion_editable2 = f"<span style='font-family: Roboto, sans-serif ;font-size: 75px; word-spacing: 0px;'>{oraciones_texto1[1]}</span>" if len(oraciones_texto1) > 1 else ""
             
         
             oraciones_texto2 = dividir_en_oraciones(texto2, max_len=105)
