@@ -1,12 +1,10 @@
 import asyncio
 from odoo import models, fields
-from fpdf import FPDF
-from PIL import Image
+
 import base64
 import os
 from io import BytesIO
 from odoo.exceptions import UserError
-from playwright.async_api import async_playwright
 from .funciones import *
 import re
 
@@ -32,26 +30,7 @@ class SaleOrder(models.Model):
         size=315,
         help="Especifica el texto de la pagina 2.",
     )
-    async def cargarNavegador(modified_html_path, output_pdf_path):
-        async with async_playwright() as p:
-            browser = await p.firefox.launch(args=['--no-sandbox', '--disable-setuid-sandbox'])
-            page = await browser.new_page()
-            await page.goto(f"file:///{modified_html_path}", timeout=600000)
-            print("Página cargada con éxito. Generando PDF...")
-            
-            await page.pdf(
-                path=output_pdf_path,
-                format="A4",
-                landscape=True,
-                margin={"top": "2cm", "bottom": "2cm", "left": "2cm", "right": "2cm"},
-                display_header_footer=False,
-            )
-            
-            print("PDF generado con éxito.")
-            await browser.close()
-
     
-
     def generar_presupuesto_pdf(self):
         for record in self:
             if not record.partner_id or not record.order_line:
@@ -67,7 +46,6 @@ class SaleOrder(models.Model):
             numero_cotizacion = record.name
             forma_pago = record.payment_method
             nombre_servicio = record.order_line[0].product_id.name or "No disponible"
-            descripcion_servicio = record.order_line[0].name or "No disponible"
             precio = record.order_line[0].price_unit
 
 
