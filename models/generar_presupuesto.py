@@ -41,9 +41,9 @@ class SaleOrder(models.Model):
 
 
             contacto = record.partner_id.parent_id.name or "-"
-            if 20 > len(contacto) > 18:
+            if 22 > len(contacto) > 18:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 85px;'>{(contacto)}</span>"
-            elif 25>len(contacto) > 20:
+            elif 25>len(contacto) > 22:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 75px;'>{(contacto)}</span>"
             else:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 65px;'>{cadena_reformada(contacto)}</span>"
