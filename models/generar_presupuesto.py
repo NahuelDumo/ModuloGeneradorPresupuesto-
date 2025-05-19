@@ -58,7 +58,8 @@ class SaleOrder(models.Model):
                 raise ValueError("La orden de venta no tiene cliente o líneas de productos.")
 
             # Datos necesarios para el PDF
-            nombre_cliente = f"<span style='font-family: Roboto, sans-serif;'>{record.partner_id.name or '-'}</span>"
+            nombre_cliente = f"<span style='font-family: Roboto, sans-serif; white-space: pre-line;'>{record.partner_id.name or '-'}</span>",
+
 
             contacto = record.partner_id.parent_id.name or "-"
             if len(contacto) > 18:
@@ -163,8 +164,7 @@ class SaleOrder(models.Model):
             variables = {
                 
                 "{{NOMBRE_CLIENTE}}": contacto,
-                "{{restoNombreEmpresa}}": " ".join(contacto.split(" ")[1:]),
-                "{{nombre_contacto}}": f"<span style='white-space: pre-wrap; display: inline-block;'>{nombre_cliente.replace(' ', '&nbsp;')}</span>",
+                "{{nombre_contacto}}": nombre_cliente,
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio, 0)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": str(plazo_validez),
