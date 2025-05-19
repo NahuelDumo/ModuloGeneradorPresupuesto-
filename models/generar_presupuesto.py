@@ -1,9 +1,6 @@
-import asyncio
-from odoo import models, fields
 
+from odoo import models, fields
 import base64
-import os
-from io import BytesIO
 from odoo.exceptions import UserError
 from .funciones import *
 import re
@@ -176,10 +173,6 @@ class SaleOrder(models.Model):
                 "{{ precio_total3 }}": str(precioTotal3) + " + IVA",
             
             }
-            record.message_post(
-                body=variables,
-                subject="Texto editable"
-            )
 
             for variable, placeholder in variables.items():
                 html_content = html_content.replace(variable.strip(), placeholder.strip())
