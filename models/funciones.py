@@ -63,7 +63,7 @@ def cadena_reformada(nombre):
     
     # Reemplazar el ultimo por un \n + el mismo
     anteultima = palabras[-2]
-    palabras[-1] = "<br>" + anteultima    
+    palabras[-2] =  anteultima +"<br>"   
     # Unir las palabras nuevamente
     nombre_reformado = " ".join(palabras)
     
