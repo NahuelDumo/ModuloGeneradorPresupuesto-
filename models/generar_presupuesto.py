@@ -42,7 +42,7 @@ class SaleOrder(models.Model):
 
             contacto = record.partner_id.parent_id.name or "-"
             if len(contacto) > 18:
-                contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 66px;'>{contacto}</span>"
+                contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 66px;'>{cadena_reformada(contacto)}</span>"
             numero_cotizacion = record.name
             forma_pago = record.payment_method
             nombre_servicio = record.order_line[0].product_id.name or "No disponible"

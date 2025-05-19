@@ -57,11 +57,14 @@ def dividir_en_oraciones(texto, max_len):
 
         return oraciones_finales
 
-def separar_mayusculas(texto):
-    resultado = texto[0]  # Comenzamos con la primera letra tal cual
-    for letra in texto[1:]:
-        if letra.isupper():
-            resultado += ' ' + letra
-        else:
-            resultado += letra
-    return resultado
+def cadena_reformada(nombre):
+    # Separar la cadena en palabras
+    palabras = nombre.split(" ")
+    
+    # Reemplazar el ultimo por un \n + el mismo
+    anteultima = palabras[-2]
+    palabras[-1] = "<br>" + anteultima    
+    # Unir las palabras nuevamente
+    nombre_reformado = " ".join(palabras)
+    
+    return nombre_reformado
