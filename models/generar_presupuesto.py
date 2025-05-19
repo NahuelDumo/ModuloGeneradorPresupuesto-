@@ -41,10 +41,13 @@ class SaleOrder(models.Model):
 
 
             contacto = record.partner_id.parent_id.name or "-"
-            if len(contacto) > 18:
-                contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 66px;'>{cadena_reformada(contacto)}</span>"
+            if 20 > len(contacto) > 18:
+                contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 85px;'>{(contacto)}</span>"
+            elif 25>len(contacto) > 20:
+                contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 75px;'>{(contacto)}</span>"
+            else:
+                contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 65px;'>{cadena_reformada(contacto)}</span>"
                 nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'><br>{record.partner_id.name or '-'}</span>"
-
 
             numero_cotizacion = record.name
             forma_pago = record.payment_method
