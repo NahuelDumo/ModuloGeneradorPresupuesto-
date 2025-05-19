@@ -37,7 +37,7 @@ class SaleOrder(models.Model):
                 raise ValueError("La orden de venta no tiene cliente o líneas de productos.")
 
             # Datos necesarios para el PDF
-            nombre_cliente = f"<span style='font-family: Roboto, sans-serif; white-space: pre-line;'>{record.partner_id.name or '-'}</span>",
+            nombre_cliente = f"<span style='font-family: Roboto, sans-serif; white-space: pre-line;'>{record.partner_id.name or '-'}</span>"
 
 
             contacto = record.partner_id.parent_id.name or "-"
