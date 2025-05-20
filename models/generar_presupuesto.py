@@ -37,12 +37,12 @@ class SaleOrder(models.Model):
             nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.partner_id.name or '-'}</span>"
             contacto = record.partner_id.parent_id.name or "-"
             
-            if len(contacto) < 18:
+            if len(contacto) <= 19:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 95px;'>{(contacto)}</span>"
    
-            elif 22 > len(contacto) > 18:
+            elif 22 >= len(contacto) > 19:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 85px;'>{(contacto)}</span>"
-            elif 25>len(contacto) > 22:
+            elif 25>= len(contacto) > 22:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 75px;'>{(contacto)}</span>"
             else:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 65px;'>{cadena_reformada(contacto)}</span>"
