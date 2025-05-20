@@ -35,7 +35,7 @@ class SaleOrder(models.Model):
 
             # Datos necesarios para el PDF
             nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.partner_id.name or '-'}</span>"
-            contacto = record.partner_id.company_id.name or "-"
+            contacto = record.partner_id.parent_id.name or "-"
             
             if len(contacto) <= 19:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 95px;'>{(contacto)}</span>"
