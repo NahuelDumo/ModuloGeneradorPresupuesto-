@@ -68,3 +68,26 @@ def cadena_reformada(nombre):
     nombre_reformado = " ".join(palabras)
     
     return nombre_reformado
+
+
+def agregarBotonDescargarEnPDF():
+        script = """
+        <script>
+        function imprimirPaginasImpares() {
+            window.print(); // Imprime todo, pero filtramos con CSS
+        }
+        // CSS para ocultar páginas pares al imprimir
+        var style = document.createElement('style');
+        style.type = 'text/css';
+        style.media = 'print';
+        style.innerHTML = `
+            @page { size: auto; }
+            body { counter-reset: page; }
+            .pagina { page-break-after: always; }
+            .pagina:nth-of-type(even) { display: none !important; }
+        `;
+        document.head.appendChild(style);
+        </script>
+        <button onclick="imprimirPaginasImpares()">Descargar PDF (páginas impares)</button>
+        """
+        return script
