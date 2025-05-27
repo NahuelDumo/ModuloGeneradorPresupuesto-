@@ -36,7 +36,7 @@ class SaleOrder(models.Model):
             # Datos necesarios para el PDF
             nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.partner_id.name or '-'}</span>"
             contacto = record.partner_id.parent_id.name or "-"
-            
+            """
             if len(contacto) <= 19:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 95px;'>{(contacto)}</span>"
    
@@ -47,9 +47,9 @@ class SaleOrder(models.Model):
             else:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 65px;'>{cadena_reformada(contacto)}</span>"
                 nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'><br>{record.partner_id.name or '-'}</span>"
-
+            """
             numero_cotizacion = record.name
-            forma_pago = record.payment_method
+            forma_pago = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.payment_method}</span>"
             nombre_servicio = record.order_line[0].product_id.name or "No disponible"
             precio = record.order_line[0].price_unit
 
