@@ -84,11 +84,14 @@ def dividir_en_oraciones(texto, max_len):
 def cadena_reformada(nombre):
     # Separar la cadena en palabras
     palabras = nombre.split(" ")
-    
-    # Reemplazar el ultimo por un \n + el mismo
-    ultima = palabras[-1]
-    palabras[-1] =  "<br>" + ultima   
+
+    # Calcular el índice del medio
+    mitad = len(palabras) // 2
+
+    # Insertar el salto de línea en el medio
+    palabras.insert(mitad, "<br>")
+
     # Unir las palabras nuevamente
     nombre_reformado = " ".join(palabras)
-    
+
     return nombre_reformado
