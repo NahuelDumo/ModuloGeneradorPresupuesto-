@@ -86,7 +86,7 @@ def cadena_reformada(nombre):
     palabras = nombre.split()
 
     # Calcular índice del medio
-    mitad = len(palabras) // 2
+    mitad = (len(palabras) // 2)+1
 
     # Insertar <br> en el medio
     palabras.insert(mitad, "<br>")
