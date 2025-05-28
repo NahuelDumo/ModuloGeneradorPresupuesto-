@@ -115,35 +115,33 @@ class SaleOrder(models.Model):
 
             # Agregar estilo con Google Fonts
             font_style = """
-            <head>
-                <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-                <style>
-                    body {
-                        font-family: 'Roboto', sans-serif;
-                    }
-                    h1, h2 {
-                        font-weight: 700;
-                    }
-                    p {
-                        font-weight: 400;
-                    }
-                    @media print {
-                        #page-container {
-                            display: flex;
-                            flex-direction: column;
-                        }
-
-                        #page-container > div[id^="pf"] {
-                            height: 100vh;              /* Usa el alto máximo visible de la hoja */
-                            overflow: hidden !important; /* Corta el contenido que se pasa */
-                            page-break-inside: avoid !important; /* Evita cortes dentro */
-                            page-break-before: auto;
-                            page-break-after: auto;
-                        }
-                        }
-                </style>
-            </head>
-
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+        font-family: 'Roboto', sans-serif;
+        }
+        h1, h2 {
+        font-weight: 700;
+        }
+        p {
+        font-weight: 400;
+        }
+        @media print {
+        #page-container {
+            display: flex;
+            flex-direction: column;
+        }
+        #page-container > div[id^="pf"] {
+            height: 100vh;              /* Usa el alto máximo visible de la hoja */
+            overflow: hidden !important; /* Corta el contenido que se pasa */
+            page-break-inside: avoid !important; /* Evita cortes dentro */
+            page-break-before: auto;
+            page-break-after: auto;
+            }
+          }
+    </style>
+</head>
             """
 
             
