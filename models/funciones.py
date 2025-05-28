@@ -82,19 +82,23 @@ def dividir_en_oraciones(texto, max_len):
         return oraciones_finales
 
 def cadena_reformada(nombre):
-    # Separar la cadena en palabras
-    palabras = nombre.split(" ")
+    # Separar en palabras
+    palabras = nombre.split()
 
-    # Calcular el índice del medio
-    mitad = (len(palabras) // 2)+1
+    # Calcular índice del medio
+    mitad = len(palabras) // 2
 
-    # Insertar el salto de línea en el medio
+    # Insertar <br> en el medio
     palabras.insert(mitad, "<br>")
-    # Reemplazar " " por "" en la palabra siguiente a la mitad ( solo el inicio)
-    if len(palabras) > mitad + 1:
-        palabras[mitad + 1] = palabras[mitad + 1].replace("<br>", "")
 
-    # Unir las palabras nuevamente
-    nombre_reformado = " ".join(palabras)
+    # Unir las partes sin agregar espacio alrededor del <br>
+    resultado = ""
+    for i, palabra in enumerate(palabras):
+        if palabra == "<br>":
+            resultado += palabra  # sin espacio
+        elif i > 0 and palabras[i - 1] != "<br>":
+            resultado += " " + palabra
+        else:
+            resultado += palabra
 
-    return nombre_reformado
+    return resultado
