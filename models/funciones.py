@@ -90,6 +90,9 @@ def cadena_reformada(nombre):
 
     # Insertar el salto de línea en el medio
     palabras.insert(mitad, "<br>")
+    # Reemplazar " " por "" en la palabra siguiente a la mitad ( solo el inicio)
+    if len(palabras) > mitad + 1:
+        palabras[mitad + 1] = palabras[mitad + 1].replace(" ", "")
 
     # Unir las palabras nuevamente
     nombre_reformado = " ".join(palabras)
