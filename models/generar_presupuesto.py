@@ -139,9 +139,15 @@ class SaleOrder(models.Model):
             page-break-before: auto;
             page-break-after: auto;
             }
+        button {
+            display: none !important;
+        }
+            
           }
     </style>
 </head>
+<button onclick="window.print()">Descargar</button>
+
             """
 
             
