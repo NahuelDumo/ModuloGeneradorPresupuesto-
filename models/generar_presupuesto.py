@@ -173,15 +173,15 @@ class SaleOrder(models.Model):
                 
                 ###########################################EXCEPCIONALES#######################################################
                 # Impresion de Boletin, Libro, Pieza Editorial, Revista
-                "{{ cantidad_unidades1 }}": str(cantidad_unidades1),
-                "{{ cantidad_unidades2 }}": str(cantidad_unidades2),
-                "{{ cantidad_unidades3 }}": str(cantidad_unidades3),
-                "{{ precio_cantidad_1 }}": str(precio1),
-                "{{ precio_cantidad_2 }}": str(precio2),
-                "{{ precio_cantidad_3 }}": str(precio3),
-                "{{ precio_total1 }}": str(precioTotal1) + " + IVA",
-                "{{ precio_total2 }}": str(precioTotal2) + " + IVA",
-                "{{ precio_total3 }}": str(precioTotal3) + " + IVA",
+                "{{ cantidad_unidades1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
+                "{{ cantidad_unidades2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades2)}</span>",
+                "{{ cantidad_unidades3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades3)}</span>",
+                "{{ precio_cantidad_1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precio1)}</span>",
+                "{{ precio_cantidad_2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precio2)}</span>",
+                "{{ precio_cantidad_3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precio3)}</span>",
+                "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal1) + " + IVA"}</span>",
+                "{{ precio_total2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal2) + " + IVA"}</span>",
+                "{{ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal3) + " + IVA"}</span>",
             
             }
 
