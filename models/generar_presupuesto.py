@@ -22,7 +22,7 @@ class SaleOrder(models.Model):
         help="Especifica el texto de la pagina 1 ESPECIFICACIONES TECNICAS.",
     )
     text_pagina2 = fields.Char(
-        string="Condiciones editables",
+        string="Condiciones editables Pag. 2",
         required=True,
         size=315,
         help="Especifica el texto de la pagina 2. Condiciones editables",
