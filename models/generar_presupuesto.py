@@ -65,9 +65,9 @@ class SaleOrder(models.Model):
             precioTotal3 = ""
             # Impresion de Boletin, Libro, Pieza Editorial, Revista
             if nombre_servicio.startswith("Impresión"):
-                cantidad_unidades1 = record.order_line[0].product_uom_qty or 1
-                cantidad_unidades2 = record.order_line[1].product_uom_qty or 1
-                cantidad_unidades3 = record.order_line[2].product_uom_qty or 1
+                cantidad_unidades1 = record.order_line[0].product_uom_qty or 0
+                cantidad_unidades2 = record.order_line[1].product_uom_qty or 0
+                cantidad_unidades3 = record.order_line[2].product_uom_qty or 0
 
                 precio1 = round(record.order_line[0].price_unit) or 0.0
                 precio2 = round(record.order_line[1].price_unit) or 0.0
