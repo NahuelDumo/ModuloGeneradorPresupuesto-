@@ -22,10 +22,10 @@ class SaleOrder(models.Model):
         help="Especifica el texto de la pagina 1 ESPECIFICACIONES TECNICAS.",
     )
     text_pagina2 = fields.Char(
-        string="Texto editable pagina 2",
+        string="Condiciones editables",
         required=True,
         size=315,
-        help="Especifica el texto de la pagina 2.",
+        help="Especifica el texto de la pagina 2. Condiciones editables",
     )
     
     def generar_presupuesto_pdf(self):
