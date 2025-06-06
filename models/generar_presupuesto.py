@@ -181,7 +181,7 @@ class SaleOrder(models.Model):
                 "{{ precio_cantidad_3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precio3)}</span>",
                 "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal1) + " + IVA"}</span>",
                 "{{ precio_total2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal2) + " + IVA"}</span>",
-                "{{ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal3) + " + IVA"}</span>",
+                "{{ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal3) + " + IVA"}</span>"
             
             }
 
