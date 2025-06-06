@@ -16,7 +16,7 @@ class SaleOrder(models.Model):
         help="Especifica la forma de pago para este presupuesto.",
     )
     text_pagina1 = fields.Char(
-        string="Texto editable pagina 1",
+        string="Esp. Técnicas editables",
         required=True,
         size=150,
         help="Especifica el texto de la pagina 1 ESPECIFICACIONES TECNICAS.",
