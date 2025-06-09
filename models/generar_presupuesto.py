@@ -89,7 +89,7 @@ class SaleOrder(models.Model):
             oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
 
             # Divido en oraciones editables
-            items = [oraciones_texto2[i] if len(oraciones_texto2) > i else "" for i in range(6)]
+            items = [oraciones_texto1[i] if len(oraciones_texto1) > i else "" for i in range(6)]
             item1, item2, item3, item4, item5, item6 = items
             
         
