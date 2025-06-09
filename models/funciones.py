@@ -102,3 +102,12 @@ def cadena_reformada(nombre):
             resultado += palabra
 
     return resultado
+
+def dividir_en_items(texto, max_len):
+    items = []
+    texto = texto.split(".")
+    for item in texto:
+        if len(item) <= max_len:
+            items.append(item + ".")
+
+    return items

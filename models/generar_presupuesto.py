@@ -89,8 +89,8 @@ class SaleOrder(models.Model):
             oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
 
             # Divido en oraciones editables
-            oracion_editable1 = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px;'>{oraciones_texto1[0]}</span>" if len(oraciones_texto1) > 0 else ""
-            oracion_editable2 = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px;'>{oraciones_texto1[1]}</span>" if len(oraciones_texto1) > 1 else ""
+            items = [oraciones_texto2[i] if len(oraciones_texto2) > i else "" for i in range(6)]
+            item1, item2, item3, item4, item5, item6 = items
             
         
             oraciones_texto2 = dividir_en_oraciones(texto2, max_len=105)
@@ -164,8 +164,12 @@ class SaleOrder(models.Model):
                 "{{plazo_prederteminado}}": plazo_pago,
                 "{{numero-presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 #Horaciones editables PAGINA 1
-                "{{oracionEditable1_______________________________________________________}}": oracion_editable1,
-                "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
+                "{{item1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item1}</span>",
+                "{{item2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item2}</span>",
+                "{{item3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item3}</span>",
+                "{{item4}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item4}</span>",
+                "{{item5}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item5}</span>",
+                "{{item6}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item6}</span>",
                 #Horaciones editables PAGINA 2
                 "{{oracion_1______________________________________________________________________________________________}}": oracion_1,
                 "{{oracion_2______________________________________________________________________________________________}}": oracion_2,
