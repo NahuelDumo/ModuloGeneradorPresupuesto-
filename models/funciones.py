@@ -25,7 +25,7 @@ def buscarPlantillaPresupuesto(record):
             "Diseño gráfico de Carteles o Banners": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGBanners.html",  
             "Diseño gráfico de Certificados" : "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGCertificados.html",
             "Diseño gráfico de Etiquetas" : "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGEtiquetas.html",
-            "Diseño gráfico de Flyers o Afiche": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGFlyer.html",
+            "Diseño gráfico de Flyer o Afiche": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGFlyer.html",
             "Diseño gráfico de Folletos": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGFolletos.html",
             "Diseño gráfico de Membretes o Formularios": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGFormularios.html",
             "Diseño gráfico de Sobres" : "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGSobres.html",
