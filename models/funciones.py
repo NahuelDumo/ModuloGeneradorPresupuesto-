@@ -109,5 +109,6 @@ def dividir_en_items(texto, max_len):
     for item in texto:
         if len(item) <= max_len:
             items.append(item + ".")
-
+        else:
+            items.append(len(item))
     return items
