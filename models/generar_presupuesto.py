@@ -86,7 +86,7 @@ class SaleOrder(models.Model):
             texto2 = record.text_pagina2
 
             #Divido en oraciones editables
-            oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
+            oraciones_texto1 = dividir_en_items(texto1, max_len=27)
 
             # Divido en oraciones editables
             items = [oraciones_texto1[i] if len(oraciones_texto1) > i else "" for i in range(6)]
