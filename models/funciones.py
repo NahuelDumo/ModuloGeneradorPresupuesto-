@@ -103,7 +103,7 @@ def cadena_reformada(nombre):
 
     return resultado
 
-def dividir_en_items(texto, max_len_total=62, cantidad_items=6):
+def dividir_en_items(texto, max_len_total=33, cantidad_items=6):
     items = []
     texto = texto.strip().split(".")
     oraciones = [o.strip() + "." for o in texto if o.strip()]
