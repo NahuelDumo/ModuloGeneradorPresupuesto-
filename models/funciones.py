@@ -103,7 +103,7 @@ def cadena_reformada(nombre):
 
     return resultado
 
-def dividir_en_items(texto, max_len_total=37, cantidad_items=6):
+def dividir_en_items(texto, max_len_total=44, cantidad_items=6):
     items = []
     
     # Dividir en oraciones usando punto como separador
