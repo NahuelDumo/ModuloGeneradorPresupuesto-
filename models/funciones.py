@@ -105,27 +105,18 @@ def cadena_reformada(nombre):
 
 def dividir_en_items(texto, max_len_total=33, cantidad_items=6):
     items = []
+    
+    # Dividir en oraciones usando punto como separador
     texto = texto.strip().split(".")
     oraciones = [o.strip() + "." for o in texto if o.strip()]
     
-    total_disponible = max_len_total * cantidad_items
-    total_utilizado = 0
+    for oracion in oraciones[:cantidad_items]:
+        # Rellenar con espacios si es más corta, o cortar si es más larga
+        item = oracion.ljust(max_len_total)[:max_len_total]
+        items.append(item)
 
-    for oracion in oraciones:
-        longitud = len(oracion)
-        
-        # Si aún hay espacio para la oración
-        if total_utilizado + longitud <= total_disponible:
-            items.append(oracion)
-            total_utilizado += longitud
-        else:
-            break
-
-    # Rellenar cada item con espacios a la derecha hasta 62 caracteres
-    items = [item.ljust(max_len_total) for item in items]
-
-    # Rellenar con strings vacíos si faltan items
+    # Rellenar con ítems vacíos si faltan
     while len(items) < cantidad_items:
         items.append(" " * max_len_total)
-
+    
     return items
