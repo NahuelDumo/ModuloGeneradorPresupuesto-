@@ -109,7 +109,7 @@ def dividir_en_items(texto, max_len_total=33, cantidad_items=6):
     # Dividir en oraciones usando punto como separador
     texto = texto.strip().split(".")
     oraciones = [o.strip() + "." for o in texto if o.strip()]
-    itemIndice = 1 
+    itemIndice = 0 
     for oracion in oraciones[:cantidad_items]:
         
         # Rellenar con espacios si es más corta, o cortar si es más larga
