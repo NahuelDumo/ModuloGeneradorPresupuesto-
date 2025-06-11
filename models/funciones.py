@@ -29,7 +29,7 @@ def buscarPlantillaPresupuesto(record):
             "Diseño gráfico de Folletos": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGFolletos.html",
             "Diseño gráfico de Membretes o Formularios": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGFormularios.html",
             "Diseño gráfico de Sobres" : "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGSobres.html",
-            "Diseño gráfico de Tarjetas" : "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G2_DGTarjetas.html",
+            "Diseño gráfico de Tarjetas" : "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGTarjetas.html",
             "Diseño gráfico de pieza gráfica especial": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G1_DGPiezaGEspecial.html",
             "Impresión de Bolsas o Cajas": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G2_DGBolsas.html",
             "Impresión de Brochure": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaGrafica/plantillaGrafica_G2_DGBrochure.html",
