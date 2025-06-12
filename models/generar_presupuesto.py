@@ -18,7 +18,7 @@ class SaleOrder(models.Model):
     text_pagina1 = fields.Char(
         string="Esp. Técnicas editables.",
         required=True,
-        size=150,
+        size=162,
         help="Especifica el texto de la pagina 1 ESPECIFICACIONES TECNICAS.",
     )
     text_pagina2 = fields.Char(
