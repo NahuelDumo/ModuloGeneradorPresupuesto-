@@ -169,7 +169,7 @@ class SaleOrder(models.Model):
                 "{{item2}}": f"<pre style='font-family: Roboto, sans-serif; white-space: pre;'>{item2}</pre>",
                 "{{item3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item3}</span>",
                 "{{item4}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item4}</span>",
-                "{{item5}}": <pre style='font-family: Roboto, sans-serif; white-space: pre;'>{item5}</pre>",
+                "{{item5}}": f"<pre style='font-family: Roboto, sans-serif; white-space: pre;'>{item5}</pre>",
                 "{{item6}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item6}</span>",
                 #Horaciones editables PAGINA 2
                 "{{oracion_1______________________________________________________________________________________________}}": oracion_1,
