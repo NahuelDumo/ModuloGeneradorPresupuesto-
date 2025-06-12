@@ -124,7 +124,7 @@ def verificarEspacios(oracion, max_len_total):
     if len(oracion) < max_len_total:
         # Rellenar con espacios
         espacios_faltantes = max_len_total - len(oracion)
-        oracion += " " * espacios_faltantes
+        oracion += "&zwj" * espacios_faltantes
     elif len(oracion) > max_len_total:
         # Cortar la oración
         oracion = oracion[:max_len_total]
