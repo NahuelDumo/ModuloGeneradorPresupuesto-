@@ -166,10 +166,10 @@ class SaleOrder(models.Model):
                 "{{numero-presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 #Horaciones editables PAGINA 1
                 "{{item1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item1}</span>",
-                "{{item2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item2}</span>",
+                "{{item2}}": f"<pre style='font-family: Roboto, sans-serif; white-space: pre;'>• {item2}</pre>",
                 "{{item3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item3}</span>",
                 "{{item4}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item4}</span>",
-                "{{item5}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item5}</span>",
+                "{{item5}}": <pre style='font-family: Roboto, sans-serif; white-space: pre;'>• {item5}</pre>",
                 "{{item6}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px'>{item6}</span>",
                 #Horaciones editables PAGINA 2
                 "{{oracion_1______________________________________________________________________________________________}}": oracion_1,
