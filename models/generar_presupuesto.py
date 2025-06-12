@@ -164,12 +164,12 @@ class SaleOrder(models.Model):
                 "{{plazo_prederteminado}}": plazo_pago,
                 "{{numero-presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 #Horaciones editables PAGINA 1
-                "{{item1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; min-width:180px;'> {item1}</span>",
-                "{{item2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; min-width:180px;'> {item2}</span>",
-                "{{item3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; min-width:180px;'> {item3}</span>",
-                "{{item4}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; min-width:180px;'> {item4}</span>",
-                "{{item5}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; min-width:180px;'> {item5}</span>",
-                "{{item6}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; min-width:180px;'> {item6}</span>",
+                "{{item1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item1}</span>",
+                "{{item2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item2}</span>",
+                "{{item3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item3}</span>",
+                "{{item4}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item4}</span>",
+                "{{item5}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item5}</span>",
+                "{{item6}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item6}</span>",
                 #Horaciones editables PAGINA 2
                 "{{oracion_1______________________________________________________________________________________________}}": oracion_1,
                 "{{oracion_2______________________________________________________________________________________________}}": oracion_2,
