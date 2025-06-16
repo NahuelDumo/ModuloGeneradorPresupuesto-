@@ -326,12 +326,6 @@ if __name__ == "__main__":
     # Si no hay argumentos, mostrar ejemplo de uso
     if len(sys.argv) == 1:
         print("🚀 HTML to PDF Converter")
-        print("\n📋 Uso desde línea de comandos:")
-        print("python Borrar.py archivo.html salida.pdf")
-        print("\n📋 Ejemplo:")
-        print("python Borrar.py S00003_presupuesto.html S00003_presupuesto.pdf")
-        print("\n📋 Con opciones:")
-        print("python Borrar.py S00003_presupuesto.html output.pdf --landscape --wait 8")
         print("\n📋 Uso programático:")
         print("Descomenta las líneas al final del archivo para usar directamente\n")
 
