@@ -94,7 +94,7 @@ class SaleOrder(models.Model):
             item5 = ""
             item6 = ""
 
-            for line in record.line:
+            for line in record.order_line:
                 categ_name = line.product_id.categ_id.name if line.product_id.categ_id else ""
                 if categ_name not in ["Editorial", "Grafica"]:
                     #Divido en oraciones editables
