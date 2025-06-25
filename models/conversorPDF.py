@@ -5,7 +5,7 @@ Convierte archivos HTML a PDF manteniendo el renderizado exacto del navegador
 
 Uso:
     python html_to_pdf.py archivo.html salida.pdf
-    
+
 O importar las funciones:
     from html_to_pdf import convertir_html_a_pdf
     convertir_html_a_pdf('archivo.html', 'salida.pdf')
@@ -25,16 +25,16 @@ import argparse
 def convertir_html_a_pdf(archivo_html, archivo_pdf, configuracion=None):
     """
     Función principal - Convierte HTML a PDF con renderizado exacto
-    
+
     Args:
         archivo_html (str): Ruta al archivo HTML
         archivo_pdf (str): Ruta donde guardar el PDF
         configuracion (dict): Configuración personalizada (opcional)
-    
+
     Returns:
         bool: True si la conversión fue exitosa
     """
-    
+
     # Configuración por defecto
     config_defecto = {
         'viewport': (1920, 1080),
@@ -45,13 +45,13 @@ def convertir_html_a_pdf(archivo_html, archivo_pdf, configuracion=None):
         'escala': 1.0,
         'fondo': True
     }
-    
+
     # Combinar configuración
     if configuracion:
         config_defecto.update(configuracion)
-    
+
     config = config_defecto
-    
+
     # Configurar opciones de Chrome
     chrome_options = Options()
 
@@ -342,7 +342,7 @@ if __name__ == "__main__":
         }
 
         try:
-            resultado = convertir_html_a_pdf('S00003_presupuesto.html', 'S00003_presupuesto.pdf', config_landscape)
+            resultado = convertir_html_a_pdf('Nº02002_presupuesto.html', 'Nº02002_presupuesto.pdf', config_landscape)
             if resultado:
                 print("✅ ¡Conversión completada en formato landscape!")
             else:

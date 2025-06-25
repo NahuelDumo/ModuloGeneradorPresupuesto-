@@ -65,9 +65,9 @@ class SaleOrder(models.Model):
             precioTotal3 = ""
             # Impresion de Boletin, Libro, Pieza Editorial, Revista
             if nombre_servicio.startswith("Impresión"):
-                cantidad_unidades1 = record.order_line[0].product_uom_qty or 0
-                cantidad_unidades2 = record.order_line[1].product_uom_qty or 0
-                cantidad_unidades3 = record.order_line[2].product_uom_qty or 0
+                cantidad_unidades1 = round(record.order_line[0].product_uom_qty) or 0
+                cantidad_unidades2 = round(record.order_line[1].product_uom_qty) or 0
+                cantidad_unidades3 = round(record.order_line[2].product_uom_qty) or 0
 
                 precio1 = round(record.order_line[0].price_unit) or 0.0
                 precio2 = round(record.order_line[1].price_unit) or 0.0
@@ -84,14 +84,33 @@ class SaleOrder(models.Model):
             # Oraciones editables
             texto1 = record.text_pagina1
             texto2 = record.text_pagina2
+            # Inicializacion de variables para oraciones editables
+            oracion_editable1 = ""
+            oracion_editable2 = ""
+            item1 = ""
+            item2 = ""
+            item3 = ""
+            item4 = ""
+            item5 = ""
+            item6 = ""
 
-            #Divido en oraciones editables
-            oraciones_texto1 = dividir_en_items(texto1)
+            for line in record.line:
+                categ_name = line.product_id.categ_id.name if line.product_id.categ_id else ""
+                if categ_name not in ["Editorial", "Grafica"]:
+                    #Divido en oraciones editables
+                    oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
 
-            # Divido en oraciones editables
-            items = [oraciones_texto1[i] if len(oraciones_texto1) > i else "" for i in range(6)]
-            item1, item2, item3, item4, item5, item6 = items
-            
+                    # Divido en oraciones editables
+                    oracion_editable1 = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px;'>{oraciones_texto1[0]}</span>" if len(oraciones_texto1) > 0 else ""
+                    oracion_editable2 = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px;'>{oraciones_texto1[1]}</span>" if len(oraciones_texto1) > 1 else ""
+                
+                else:
+                    oraciones_texto1 = dividir_en_items(texto1)
+
+                    # Divido en oraciones editables
+                    items = [oraciones_texto1[i] if len(oraciones_texto1) > i else "" for i in range(6)]
+                    item1, item2, item3, item4, item5, item6 = items
+                
         
             oraciones_texto2 = dividir_en_oraciones(texto2, max_len=105)
 
@@ -164,6 +183,9 @@ class SaleOrder(models.Model):
                 "{{plazo_prederteminado}}": plazo_pago,
                 "{{numero-presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 #Horaciones editables PAGINA 1
+                "{{oracionEditable1_______________________________________________________}}": oracion_editable1,
+                "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
+
                 
                 "{{item1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item1}</span>",
                 "{{item2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item2}</span>",
