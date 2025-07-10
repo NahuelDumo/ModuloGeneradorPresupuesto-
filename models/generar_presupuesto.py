@@ -217,30 +217,55 @@ class SaleOrder(models.Model):
             for variable, placeholder in variables.items():
                 html_content = html_content.replace(variable.strip(), placeholder.strip())
 
-            # Guardar el HTML modificado
+                        # Guardar el HTML modificado
             modified_html_path = "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Hoja_Cotizaciones_Veo_para_Odoo_modificado4.html"
             with open(modified_html_path, "w", encoding="utf-8") as file:
                 file.write(html_content)
 
-            # Convertir HTML a PDF
-            output_pdf_path = "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Presupuesto.pdf"
+            # Convertir HTML a PDF usando API externa
+            import requests
+            try:
+                # Extraer IDs de página automáticamente (ej: pf1,pf2,pf3)
+                with open(modified_html_path, "r", encoding="utf-8") as html_file:
+                    content = html_file.read()
+                    import re
+                    page_ids = ",".join(re.findall(r'id="(pf\d+)"', content)) or "pf1"
 
-            #asyncio.run(cargarNavegador(modified_html_path, output_pdf_path))
-            # Crear el archivo HTML como adjunto en Odoo
+                with open(modified_html_path, "rb") as f:
+                    files = {'html_file': ('presupuesto.html', f, 'text/html')}
+                    data = {'page_ids': page_ids}
+
+                    response = requests.post("https://apiconversorpdf.onrender.com/convert-html-to-pdf", files=files, data=data)
+                    response.raise_for_status()
+                    pdf_content = response.content
+            except Exception as e:
+                raise UserError(f"Error al generar el PDF desde la API externa: {str(e)}")
+
+            # Guardar el HTML como adjunto
             with open(modified_html_path, "r", encoding="utf-8") as html_file:
-               attachment = self.env["ir.attachment"].create({
-                   "name": f"{record.name}_presupuesto.html",  # Nombre del archivo
-                   "type": "binary",
-                   "datas": base64.b64encode(html_file.read().encode("utf-8")).decode("utf-8"),  # Codificar el contenido HT>
-                   "res_model": "sale.order",  # Relacionar el adjunto con el modelo 'sale.order'
-                   "res_id": record.id,  # ID del registro relacionado
-                   "mimetype": "text/html",  # Tipo MIME para HTML
-               })
+                attachment_html = self.env["ir.attachment"].create({
+                    "name": f"{record.name}_presupuesto.html",
+                    "type": "binary",
+                    "datas": base64.b64encode(html_file.read().encode("utf-8")).decode("utf-8"),
+                    "res_model": "sale.order",
+                    "res_id": record.id,
+                    "mimetype": "text/html",
+                })
+
+            # Guardar el PDF como adjunto
+            attachment_pdf = self.env["ir.attachment"].create({
+                "name": f"{record.name}_presupuesto.pdf",
+                "type": "binary",
+                "datas": base64.b64encode(pdf_content).decode("utf-8"),
+                "res_model": "sale.order",
+                "res_id": record.id,
+                "mimetype": "application/pdf",
+            })
 
             # Enviar mensaje al chatter
             record.message_post(
                 body="Presupuesto generado correctamente.",
                 subject="Presupuesto Generado",
-                attachment_ids=[attachment.id],
+                attachment_ids=[attachment_html.id, attachment_pdf.id],
             )
-            return attachment
+            return attachment_pdf
