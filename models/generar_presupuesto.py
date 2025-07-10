@@ -217,7 +217,7 @@ class SaleOrder(models.Model):
             for variable, placeholder in variables.items():
                 html_content = html_content.replace(variable.strip(), placeholder.strip())
 
-                        # Guardar el HTML modificado
+            # Guardar el HTML modificado (pero no lo adjuntamos)
             modified_html_path = "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Hoja_Cotizaciones_Veo_para_Odoo_modificado4.html"
             with open(modified_html_path, "w", encoding="utf-8") as file:
                 file.write(html_content)
@@ -241,7 +241,7 @@ class SaleOrder(models.Model):
             except Exception as e:
                 raise UserError(f"Error al generar el PDF desde la API externa: {str(e)}")
 
-            # Guardar el PDF como adjunto
+            # Guardar solo el PDF como adjunto
             attachment_pdf = self.env["ir.attachment"].create({
                 "name": f"{record.name}_presupuesto.pdf",
                 "type": "binary",
@@ -251,10 +251,11 @@ class SaleOrder(models.Model):
                 "mimetype": "application/pdf",
             })
 
-            # Enviar mensaje al chatter
+            # Enviar mensaje al chatter con solo el PDF adjunto
             record.message_post(
                 body="Presupuesto generado correctamente.",
                 subject="Presupuesto Generado",
-                attachment_ids=[attachment_html.id, attachment_pdf.id],
+                attachment_ids=[attachment_pdf.id],
             )
+
             return attachment_pdf
