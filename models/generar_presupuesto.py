@@ -241,17 +241,6 @@ class SaleOrder(models.Model):
             except Exception as e:
                 raise UserError(f"Error al generar el PDF desde la API externa: {str(e)}")
 
-            # Guardar el HTML como adjunto
-            with open(modified_html_path, "r", encoding="utf-8") as html_file:
-                attachment_html = self.env["ir.attachment"].create({
-                    "name": f"{record.name}_presupuesto.html",
-                    "type": "binary",
-                    "datas": base64.b64encode(html_file.read().encode("utf-8")).decode("utf-8"),
-                    "res_model": "sale.order",
-                    "res_id": record.id,
-                    "mimetype": "text/html",
-                })
-
             # Guardar el PDF como adjunto
             attachment_pdf = self.env["ir.attachment"].create({
                 "name": f"{record.name}_presupuesto.pdf",
