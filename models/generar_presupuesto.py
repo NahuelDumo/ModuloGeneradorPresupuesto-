@@ -65,17 +65,28 @@ class SaleOrder(models.Model):
             precioTotal3 = ""
             # Impresion de Boletin, Libro, Pieza Editorial, Revista
             if nombre_servicio.startswith("Impresión"):
-                cantidad_unidades1 = round(record.order_line[0].product_uom_qty) or ""
-                cantidad_unidades2 = round(record.order_line[1].product_uom_qty) or ""
-                cantidad_unidades3 = round(record.order_line[2].product_uom_qty) or ""
+                def get_cantidad(line):
+                    val = round(line.product_uom_qty)
+                    return "" if val == 0 else val
 
-                precio1 = round(record.order_line[0].price_unit) or ""
-                precio2 = round(record.order_line[1].price_unit) or ""
-                precio3 = round(record.order_line[2].price_unit) or ""
-                # Calcular precios totales
+                def get_precio(line):
+                    val = round(line.price_unit)
+                    return "" if val < 2 else val
+
+                lineas = record.order_line
+
+                cantidad_unidades1 = get_cantidad(lineas[0])
+                cantidad_unidades2 = get_cantidad(lineas[1])
+                cantidad_unidades3 = get_cantidad(lineas[2])
+
+                precio1 = get_precio(lineas[0])
+                precio2 = get_precio(lineas[1])
+                precio3 = get_precio(lineas[2])
+
                 precioTotal1 = round(precio1 * cantidad_unidades1) if precio1 != "" and cantidad_unidades1 != "" else ""
                 precioTotal2 = round(precio2 * cantidad_unidades2) if precio2 != "" and cantidad_unidades2 != "" else ""
                 precioTotal3 = round(precio3 * cantidad_unidades3) if precio3 != "" and cantidad_unidades3 != "" else ""
+
 
 
             plazo_validez = record.validity_date or "No disponible"
