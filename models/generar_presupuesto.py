@@ -219,9 +219,9 @@ class SaleOrder(models.Model):
                 "{{ precio_cantidad_1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precio1)}</span>",
                 "{{ precio_cantidad_2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precio2)}</span>",
                 "{{ precio_cantidad_3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precio3)}</span>",
-                "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal1) + ' + IVA'}</span>",
-                "{{ precio_total2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal2) + ' + IVA'}</span>",
-                "{{ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal3) + ' + IVA'}</span>"
+                "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal1) + ' + IVA' if isinstance(precioTotal1, (int, float)) and precioTotal1 > 2 else ''}</span>",
+                "{{ precio_total2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal2) + ' + IVA' if isinstance(precioTotal2, (int, float)) and precioTotal2 > 2 else ''}</span>",
+                "{{ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal3) + ' + IVA' if isinstance(precioTotal3, (int, float)) and precioTotal3 > 2 else ''}</span>",
             }
 
 
