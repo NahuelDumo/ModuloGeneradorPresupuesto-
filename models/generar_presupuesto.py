@@ -41,7 +41,7 @@ class SaleOrder(models.Model):
                 contacto = f"<span style='font-family: Roboto, sans-serif;'>{(contacto)}</span>"
             else:
                 contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 80px;'>{cadena_reformada(contacto)}</span>"
-                nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;font-size: 75px; '><br>{record.partner_id.name or '-'}</span>"
+                nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;font-size: 75px; '><br>{record.partner_id.name or ''}</span>"
             
             numero_cotizacion = record.name
             forma_pago = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.payment_method}</span>"
