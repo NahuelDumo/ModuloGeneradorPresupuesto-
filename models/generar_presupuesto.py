@@ -67,7 +67,7 @@ class SaleOrder(models.Model):
             if nombre_servicio.startswith("Impresión"):
                 def get_cantidad(line):
                     val = round(line.product_uom_qty)
-                    return "" if val == 0 else val
+                    return "" if val < 2 else val
 
                 def get_precio(line):
                     val = round(line.price_unit)
