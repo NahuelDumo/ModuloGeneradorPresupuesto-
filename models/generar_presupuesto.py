@@ -95,7 +95,7 @@ class SaleOrder(models.Model):
 
 
             plazo_validez = record.validity_date or "No disponible"
-            plazo_pago = record.payment_term_id.name if record.payment_term_id else "A convenir"
+            plazo_ejecucion = record.plazo_ejecucion or "A convenir"
 
             # Oraciones editables
             texto1 = record.text_pagina1
@@ -196,7 +196,7 @@ class SaleOrder(models.Model):
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": str(plazo_validez),
                 "{{forma_pago}}": forma_pago,
-                "{{plazo_prederteminado}}": plazo_pago,
+                "{{plazo_prederteminado}}": plazo_ejecucion,
                 "{{numero-presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 #Horaciones editables PAGINA 1
                 "{{oracionEditable1_______________________________________________________}}": oracion_editable1,
