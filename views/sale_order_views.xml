@@ -9,6 +9,11 @@
                 <button name="generar_presupuesto_pdf" type="object" string="Generar Presupuesto PDF"/>
             </xpath>
 
+            <!-- Ocultar el campo original de plazo de pago -->
+            <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
             <!-- Agregar el campo "Forma de pago" después del campo "Plazos de pago" -->
             <xpath expr="//field[@name='validity_date']" position="after">
                 <field name="payment_method" placeholder="Especificar forma de pago" />
@@ -22,6 +27,11 @@
             <!-- Agregar el campo "Texto Editable Pagina 2" después del campo "texto pagina 1" -->
             <xpath expr="//field[@name='text_pagina1']" position="after">
                 <field name="text_pagina2" placeholder="Rellenar texto pagina 2" widget="char_length_counter" />
+            </xpath>
+
+            <!-- Insertar el nuevo campo en el mismo lugar -->
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="plazo_ejecucion"/>
             </xpath>
         </field>
     </record>

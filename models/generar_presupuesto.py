@@ -28,6 +28,11 @@ class SaleOrder(models.Model):
         help="Especifica el texto de la pagina 2. Condiciones editables",
     )
     
+    plazo_ejecucion = fields.Char(
+        string="Plazo de ejecución",
+        help="Tiempo estimado de ejecución del servicio."
+    )
+    
     def generar_presupuesto_pdf(self):
         for record in self:
             if not record.partner_id or not record.order_line:
@@ -90,7 +95,7 @@ class SaleOrder(models.Model):
 
 
             plazo_validez = record.validity_date or "No disponible"
-            plazo_pago = record.payment_term_id.name if record.payment_term_id else "No disponible"
+            plazo_pago = record.payment_term_id.name if record.payment_term_id else "A convenir"
 
             # Oraciones editables
             texto1 = record.text_pagina1
@@ -187,7 +192,7 @@ class SaleOrder(models.Model):
                 
                 "{{NOMBRE_CLIENTE}}": contacto,
                 "{{nombre_contacto}}": nombre_cliente,
-                "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio, 0)} + IVA</span>",
+                "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": str(plazo_validez),
                 "{{forma_pago}}": forma_pago,
@@ -198,12 +203,12 @@ class SaleOrder(models.Model):
                 "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
 
                 
-                "{{item1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item1}</span>",
-                "{{item2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item2}</span>",
-                "{{item3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item3}</span>",
-                "{{item4}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item4}</span>",
-                "{{item5}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item5}</span>",
-                "{{item6}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> {item6}</span>",
+                "{{item1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item1}</span>",
+                "{{item2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item2}</span>",
+                "{{item3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item3}</span>",
+                "{{item4}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item4}</span>",
+                "{{item5}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item5}</span>",
+                "{{item6}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item6}</span>",
                 #Horaciones editables PAGINA 2
                 "{{oracion_1______________________________________________________________________________________________}}": oracion_1,
                 "{{oracion_2______________________________________________________________________________________________}}": oracion_2,
