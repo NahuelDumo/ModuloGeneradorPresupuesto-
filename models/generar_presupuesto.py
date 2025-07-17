@@ -123,10 +123,11 @@ class SaleOrder(models.Model):
                 
                 else:
                     oraciones_texto1 = dividir_en_items(texto1)
-                    COLOCAR = "Entro por Items editables"
+                    
                     # Divido en oraciones editables
                     items = [oraciones_texto1[i] if len(oraciones_texto1) > i else "" for i in range(6)]
                     item1, item2, item3, item4, item5, item6 = items
+                    COLOCAR = str(items)
                 
 
             oraciones_texto2 = dividir_en_oraciones(texto2, max_len=105)
