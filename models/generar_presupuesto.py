@@ -260,20 +260,33 @@ class SaleOrder(models.Model):
                 raise UserError(f"Error al generar el PDF desde la API externa: {str(e)}")
 
             # Guardar solo el PDF como adjunto
-            attachment_pdf = self.env["ir.attachment"].create({
-                "name": f"{record.name}_presupuesto.pdf",
+            with open(modified_html_path, "rb") as html_file:
+                html_bytes = html_file.read()
+
+            attachment_html = self.env["ir.attachment"].create({
+                "name": f"{record.name}_presupuesto.html",
                 "type": "binary",
-                "datas": base64.b64encode(pdf_content).decode("utf-8"),
+                "datas": base64.b64encode(html_bytes).decode("utf-8"),
                 "res_model": "sale.order",
                 "res_id": record.id,
-                "mimetype": "application/pdf",
+                "mimetype": "text/html",
             })
 
+
+            # Agregar el html temporal como adjunto
+            attachment_html = self.env["ir.attachment"].create({
+                "name": f"{record.name}_presupuesto.html",
+                "type": "binary",
+                "datas": base64.b64encode(html_file).decode("utf-8"),
+                "res_model": "sale.order",
+                "res_id": record.id,
+                "mimetype": "text/html",
+            })
             # Enviar mensaje al chatter con solo el PDF adjunto
             record.message_post(
                 body="Presupuesto generado correctamente.",
                 subject="Presupuesto Generado",
-                attachment_ids=[attachment_pdf.id],
+                attachment_ids=[attachment_pdf.id, attachment_html.id],
             )
 
             return attachment_pdf
