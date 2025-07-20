@@ -115,7 +115,7 @@ class SaleOrder(models.Model):
                 if categ_name not in ["Editorial", "Grafica"]:
                     #Divido en oraciones editables
                     oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
-                    COLOCAR = "Entro por oraciones editables"
+                
 
                     # Divido en oraciones editables
                     oracion_editable1 = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px;'>{oraciones_texto1[0]}</span>" if len(oraciones_texto1) > 0 else ""
@@ -127,7 +127,6 @@ class SaleOrder(models.Model):
                     # Divido en oraciones editables
                     items = [oraciones_texto1[i] if len(oraciones_texto1) > i else "" for i in range(6)]
                     item1, item2, item3, item4, item5, item6 = items
-                    COLOCAR = str(item1  + item2 + item3 + item4 + item5 + item6)
                 
 
             oraciones_texto2 = dividir_en_oraciones(texto2, max_len=105)
@@ -135,7 +134,7 @@ class SaleOrder(models.Model):
 
             # Se asignan las oraciones editables a variables
             oracion_1 = oraciones_texto2[0] if len(oraciones_texto2) > 0 else ""
-            oracion_2 = oraciones_texto2[1] if len(oraciones_texto2) > 1 else "" + COLOCAR
+            oracion_2 = oraciones_texto2[1] if len(oraciones_texto2) > 1 else ""
             oracion_3 = oraciones_texto2[2] if len(oraciones_texto2) > 2 else ""
             # Se asignan las oraciones editables a variables
            
@@ -218,7 +217,7 @@ class SaleOrder(models.Model):
                 
                 ###########################################EXCEPCIONALES#######################################################
                 # Impresion de Boletin, Libro, Pieza Editorial, Revista
-                # Impresion de Boletin, Libro, Pieza Editorial, Revista
+               
 
                 "{{ cantidad_unidades1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
                 "{{ cantidad_unidades2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades2)}</span>",
