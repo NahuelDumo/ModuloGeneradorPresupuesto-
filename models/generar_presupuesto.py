@@ -204,13 +204,12 @@ class SaleOrder(models.Model):
                 "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
 
                 
-                "{{item1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item1}</span>",
-                "{{item2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item2}</span>",
-                "{{item3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item3}</span>",
-                "{{item4}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item4}</span>",
-                "{{item5}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item5}</span>",
-                "{{item6}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> •{item6}</span>",
-                #Horaciones editables PAGINA 2
+                "{{item1}}": formatear_item(item1),
+                "{{item2}}": formatear_item(item2),
+                "{{item3}}": formatear_item(item3),
+                "{{item4}}": formatear_item(item4),
+                "{{item5}}": formatear_item(item5),
+                "{{item6}}": formatear_item(item6),                #Horaciones editables PAGINA 2
                 "{{oracion_1______________________________________________________________________________________________}}": oracion_1,
                 "{{oracion_2______________________________________________________________________________________________}}": oracion_2,
                 "{{oracion_3______________________________________________________________________________________________}}": oracion_3,

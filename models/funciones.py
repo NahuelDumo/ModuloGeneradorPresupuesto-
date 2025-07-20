@@ -130,3 +130,7 @@ def verificarEspacios(oracion, max_len_total):
         oracion = oracion[:max_len_total]
     
     return oracion
+
+def formatear_item(item):
+    return f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> • {item}</span>" if item else ""
+
