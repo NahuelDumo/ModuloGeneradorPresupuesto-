@@ -193,6 +193,8 @@ class SaleOrder(models.Model):
                 
                 "{{NOMBRE_CLIENTE}}": contacto,
                 "{{nombre_contacto}}": nombre_cliente,
+
+                # Alternativas de precio con opciones
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": str(plazo_validez),
