@@ -67,7 +67,7 @@ class SaleOrder(models.Model):
                     total_iva = round(subtotal )  # redondeado sin decimales
 
                     texto_opcion = f"Opcion {i+1}: {descripcion}"
-                    texto_total = f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'> Total: ${total_iva} + IVA</span>"
+                    texto_total = f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'> Precio Total: ${total_iva} + IVA</span>"
 
                     if i == 0:
                         opcion1 = texto_opcion
