@@ -225,9 +225,9 @@ class SaleOrder(models.Model):
                 "{{ Opción 1 }}" : opcion1,
                 "{{ Opción 2 }}" : opcion2,
                 "{{ Opción 3 }}" : opcion3,
-                "{{  Precio Total 1 }}" : total1,
-                "{{  Precio Total 2 }}" : total2,
-                "{{  Precio Total 3 }}" : total3,
+                "{{ Precio Total 1 }}" : total1,
+                "{{ Precio Total 2 }}" : total2,
+                "{{ Precio Total 3 }}" : total3,
 
                 # "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
