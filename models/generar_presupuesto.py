@@ -302,7 +302,7 @@ class SaleOrder(models.Model):
                 "res_id": record.id,
                 "mimetype": "application/pdf",
             })
-
+            """
             # Agregar el html temporal como adjunto
             with open(modified_html_path, "rb") as html_file:
                 html_bytes = html_file.read()
@@ -315,12 +315,13 @@ class SaleOrder(models.Model):
                 "res_id": record.id,
                 "mimetype": "text/html",
             })
+            """
 
             # Enviar mensaje al chatter con solo el PDF adjunto
             record.message_post(
                 body="Presupuesto generado correctamente.",
                 subject="Presupuesto Generado",
-                attachment_ids=[attachment_pdf.id, attachment_html.id],
+                attachment_ids=[attachment_pdf.id] #, attachment_html.id],
             )
 
             return attachment_pdf
