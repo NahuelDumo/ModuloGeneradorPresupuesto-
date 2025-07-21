@@ -228,7 +228,8 @@ class SaleOrder(models.Model):
                 "{{  Precio Total 1 }}" : total1,
                 "{{  Precio Total 2 }}" : total2,
                 "{{  Precio Total 3 }}" : total3,
-                "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio)} + IVA</span>",
+
+                # "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": str(plazo_validez),
                 "{{forma_pago}}": forma_pago,
