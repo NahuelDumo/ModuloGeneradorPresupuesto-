@@ -51,11 +51,37 @@ class SaleOrder(models.Model):
             numero_cotizacion = record.name
             forma_pago = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.payment_method}</span>"
             nombre_servicio = record.order_line[0].product_id.name or "No disponible"
-            precio = record.order_line[0].price_unit
 
+            ################################################# Obtenemos las alternativas de precio ################################################# 
+            # Inicializar variables vacías para las 3 opciones
 
+            opcion1 = opcion2 = opcion3 = ""
+            total1 = total2 = total3 = ""
 
-            ##################################################### CASO EXCEPCIONAL #######################################################
+            if not nombre_servicio.startswith("Impresión"):
+                lineas = record.order_line[:3]  # hasta 3 opciones
+                
+                for i, line in enumerate(lineas):
+                    descripcion = line.name or ""  
+                    subtotal = line.price_subtotal or 0
+                    total_iva = round(subtotal )  # redondeado sin decimales
+
+                    texto_opcion = f"Opcion {i+1}: {descripcion}"
+                    texto_total = f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'> Total: ${total_iva} + IVA</span>"
+
+                    if i == 0:
+                        opcion1 = texto_opcion
+                        total1 = texto_total
+                    elif i == 1:
+                        opcion2 = texto_opcion
+                        total2 = texto_total
+                    elif i == 2:
+                        opcion3 = texto_opcion
+                        total3 = texto_total
+
+        
+
+            ##################################################### CASO EXCEPCIONAL IMPRESION #######################################################
             # Inicializar valores por defecto
             cantidad_unidades1 = ""
             cantidad_unidades2 = ""
@@ -92,6 +118,7 @@ class SaleOrder(models.Model):
                 precioTotal2 = round(precio2 * cantidad_unidades2) if precio2 != "" and cantidad_unidades2 != "" else ""
                 precioTotal3 = round(precio3 * cantidad_unidades3) if precio3 != "" and cantidad_unidades3 != "" else ""
 
+            ##################################################### FIN CASO EXCEPCIONAL IMPRESION #######################################################
 
 
             plazo_validez = record.validity_date or "No disponible"
@@ -195,6 +222,12 @@ class SaleOrder(models.Model):
                 "{{nombre_contacto}}": nombre_cliente,
 
                 # Alternativas de precio con opciones
+                "{{ Opción 1 }}" : opcion1,
+                "{{ Opción 2 }}" : opcion2,
+                "{{ Opción 3 }}" : opcion3,
+                "{{  Precio Total 1 }}" : total1,
+                "{{  Precio Total 2 }}" : total2,
+                "{{  Precio Total 3 }}" : total3,
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": str(plazo_validez),
