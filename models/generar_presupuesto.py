@@ -101,7 +101,7 @@ class SaleOrder(models.Model):
                     return "" if val < 2 else val
 
                 def get_precio(line):
-                    val = round(line.price_unit)
+                    val = round(line.price_unit, 2)
                     return "" if val < 2 else val
 
                 lineas = record.order_line
