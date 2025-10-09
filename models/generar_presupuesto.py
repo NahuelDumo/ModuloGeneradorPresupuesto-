@@ -64,7 +64,10 @@ class SaleOrder(models.Model):
                 for i, line in enumerate(lineas):
                     descripcion = line.name or ""  
                     subtotal = line.price_subtotal or 0
-                    total_iva = round(subtotal )  # redondeado sin decimales
+                    # Aseguramos que sea un entero para el formateo
+                    total_iva = int(round(float(subtotal)))
+                    # Formatear con separador de miles y forzar el tipo a string
+                    total_iva = format(total_iva, ',').replace(",",".")
 
                     texto_opcion = f"Opcion {i+1}: {descripcion}"
                     texto_total = f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'> Precio Total: ${total_iva} + IVA</span>"
@@ -117,6 +120,14 @@ class SaleOrder(models.Model):
                 precioTotal1 = round(precio1 * cantidad_unidades1) if precio1 != "" and cantidad_unidades1 != "" else ""
                 precioTotal2 = round(precio2 * cantidad_unidades2) if precio2 != "" and cantidad_unidades2 != "" else ""
                 precioTotal3 = round(precio3 * cantidad_unidades3) if precio3 != "" and cantidad_unidades3 != "" else ""
+                
+                # Formatear precios totales con separador de miles
+                if precioTotal1 != "": 
+                    precioTotal1 = format(int(round(float(precioTotal1))), ',').replace(',', '.')
+                if precioTotal2 != "": 
+                    precioTotal2 = format(int(round(float(precioTotal2))), ',').replace(',', '.')
+                if precioTotal3 != "": 
+                    precioTotal3 = format(int(round(float(precioTotal3))), ',').replace(',', '.')
 
             ##################################################### FIN CASO EXCEPCIONAL IMPRESION #######################################################
 
@@ -260,9 +271,9 @@ class SaleOrder(models.Model):
                 "{{ precio_cantidad_1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precio1)}</span>",
                 "{{ precio_cantidad_2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precio2)}</span>",
                 "{{ precio_cantidad_3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precio3)}</span>",
-                "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal1) + ' + IVA' if isinstance(precioTotal1, (int, float)) and precioTotal1 > 2 else ''}</span>",
-                "{{ precio_total2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal2) + ' + IVA' if isinstance(precioTotal2, (int, float)) and precioTotal2 > 2 else ''}</span>",
-                "{{ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(precioTotal3) + ' + IVA' if isinstance(precioTotal3, (int, float)) and precioTotal3 > 2 else ''}</span>",
+                "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
+                "{{ precio_total2 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal2 + ' + IVA' if precioTotal2 and precioTotal2 != '0' else ''}</span>",
+                "{{ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal3 + ' + IVA' if precioTotal3 and precioTotal3 != '0' else ''}</span>",
             }
 
 
