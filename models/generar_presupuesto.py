@@ -113,13 +113,13 @@ class SaleOrder(models.Model):
 
                 lineas = record.order_line
 
-                cantidad_unidades1 = get_cantidad(lineas[0])
-                cantidad_unidades2 = get_cantidad(lineas[1])
-                cantidad_unidades3 = get_cantidad(lineas[2])
+                cantidad_unidades1 = get_cantidad(lineas[0]) if len(lineas) > 0 else ""
+                cantidad_unidades2 = get_cantidad(lineas[1]) if len(lineas) > 1 else ""
+                cantidad_unidades3 = get_cantidad(lineas[2]) if len(lineas) > 2 else ""
 
-                precio1 = get_precio(lineas[0])
-                precio2 = get_precio(lineas[1])
-                precio3 = get_precio(lineas[2])
+                precio1 = get_precio(lineas[0]) if len(lineas) > 0 else ""
+                precio2 = get_precio(lineas[1]) if len(lineas) > 1 else ""
+                precio3 = get_precio(lineas[2]) if len(lineas) > 2 else ""
 
                 precioTotal1 = round(float(precio1) * float(cantidad_unidades1)) if precio1 != "" and cantidad_unidades1 != "" else ""
                 precioTotal2 = round(float(precio2) * float(cantidad_unidades2)) if precio2 != "" and cantidad_unidades2 != "" else ""
