@@ -271,9 +271,22 @@ class SaleOrder(models.Model):
     "{{ cantidad_unidades1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
     "{{ cantidad_unidades2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades2)}</span>",
     "{{ cantidad_unidades3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades3)}</span>",
-    "{{ precio_cantidad_1 }}": f"<span style='font-family: Roboto, sans-serif;'>{precio1}</span>" if precio1 else "",
-    "{{ precio_cantidad_2 }}": f"<span style='font-family: Roboto, sans-serif;'>{precio2}</span>" if precio2 else "",
-    "{{ precio_cantidad_3 }}": f"<span style='font-family: Roboto, sans-serif;'>{precio3}</span>" if precio3 else "",
+    # Formateo de Precio Unitario con separador de miles y '+ IVA'
+    "{{ precio_cantidad_1 }}": (
+        f"<span style='font-family: Roboto, sans-serif;'>"
+        f"{format(int(float(precio1)), ',').replace(',', '.')} + IVA"  # $ se deja a la plantilla si ya lo incluye
+        f"</span>" if precio1 else ""
+    ),
+    "{{ precio_cantidad_2 }}": (
+        f"<span style='font-family: Roboto, sans-serif;'>"
+        f"{format(int(float(precio2)), ',').replace(',', '.')} + IVA"
+        f"</span>" if precio2 else ""
+    ),
+    "{{ precio_cantidad_3 }}": (
+        f"<span style='font-family: Roboto, sans-serif;'>"
+        f"{format(int(float(precio3)), ',').replace(',', '.')} + IVA"
+        f"</span>" if precio3 else ""
+    ),
     "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
     "{{ precio_total2 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal2 + ' + IVA' if precioTotal2 and precioTotal2 != '0' else ''}</span>",
     "{{ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal3 + ' + IVA' if precioTotal3 and precioTotal3 != '0' else ''}</span>",
