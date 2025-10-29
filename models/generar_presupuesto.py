@@ -133,6 +133,12 @@ class SaleOrder(models.Model):
                 if precioTotal3 != "":
                     precioTotal3 = format(int(float(precioTotal3)), ',').replace(',', '.')
 
+        else: 
+            # Obtener el valor total del presupuesto
+            precio = record.amount_total
+             # redondear el precio al entero más cercano
+            precio = int(round(float(precio)))
+
             ##################################################### FIN CASO EXCEPCIONAL IMPRESION #######################################################
 
 
