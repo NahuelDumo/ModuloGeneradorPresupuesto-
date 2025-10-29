@@ -134,8 +134,8 @@ class SaleOrder(models.Model):
                     precioTotal3 = format(int(float(precioTotal3)), ',').replace(',', '.')
 
         else: 
-            # Obtener el valor total del presupuesto
-            precio = record.amount_total
+            # Obtener el valor del primer producto del presupuesto
+            precio = record.order_line[0].price_unit
              # redondear el precio al entero más cercano
             precio = int(round(float(precio)))
 
