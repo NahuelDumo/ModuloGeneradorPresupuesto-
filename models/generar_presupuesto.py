@@ -4,6 +4,7 @@ import base64
 from odoo.exceptions import UserError
 from .funciones import *
 import re
+from datetime import date
 
 
 
@@ -274,29 +275,30 @@ class SaleOrder(models.Model):
                 ###########################################EXCEPCIONALES#######################################################
                 # Impresion de Boletin, Libro, Pieza Editorial, Revista
 
-    "{{ cantidad_unidades1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
-    "{{ cantidad_unidades2 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades2)}</span>",
-    "{{ cantidad_unidades3 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades3)}</span>",
-    # Formateo de Precio Unitario con separador de miles y '+ IVA'
-    "{{ precio_cantidad_1 }}": (
-        f"<span style='font-family: Roboto, sans-serif;'>"
-        f"{format(int(float(precio1)), ',').replace(',', '.')} + IVA"  # $ se deja a la plantilla si ya lo incluye
-        f"</span>" if precio1 else ""
-    ),
-    "{{ precio_cantidad_2 }}": (
-        f"<span style='font-family: Roboto, sans-serif;'>"
-        f"{format(int(float(precio2)), ',').replace(',', '.')} + IVA"
-        f"</span>" if precio2 else ""
-    ),
-    "{{ precio_cantidad_3 }}": (
-        f"<span style='font-family: Roboto, sans-serif;'>"
-        f"{format(int(float(precio3)), ',').replace(',', '.')} + IVA"
-        f"</span>" if precio3 else ""
-    ),
-    "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
-    "{{ precio_total2 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal2 + ' + IVA' if precioTotal2 and precioTotal2 != '0' else ''}</span>",
-    "{{ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal3 + ' + IVA' if precioTotal3 and precioTotal3 != '0' else ''}</span>",
-}
+                "{{ cantidad_unidades1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
+                "{{Cantidad: cantidad_unidades2 }}": f"<span style='font-family: Roboto, sans-serif;'>{"Cantidad: " + str(cantidad_unidades2)}</span>",
+                "{{Cantidad: cantidad_unidades3 }}": f"<span style='font-family: Roboto, sans-serif;'>{"Cantidad: " + str(cantidad_unidades3)}</span>",
+                # Formateo de Precio Unitario con separador de miles y '+ IVA'
+                "{{ precio_cantidad_1 }}": (
+                    f"<span style='font-family: Roboto, sans-serif;'>"
+                    f"{format(int(float(precio1)), ',').replace(',', '.')} + IVA"  # $ se deja a la plantilla si ya lo incluye
+                    f"</span>" if precio1 else ""
+                ),
+                "{{Precio Unitario: $ precio_cantidad_2 }}": (
+                    f"<span style='font-family: Roboto, sans-serif;'>"
+                    f"{ "Precio Unitario: $ " + format(int(float(precio2)), ',').replace(',', '.')} + IVA"
+                    f"</span>" if precio2 else ""
+                ),
+                "{{Precio Unitario: $ precio_cantidad_3 }}": (
+                    f"<span style='font-family: Roboto, sans-serif;'>"
+                    f"{ "Precio Unitario: $ " + format(int(float(precio3)), ',').replace(',', '.')} + IVA"
+                    f"</span>" if precio3 else ""
+                ),
+                "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
+                "{{Precio Total: $ precio_total2 }}": f"<span style='font-family: Roboto, sans-serif;'>{"Precio Total: $ " + precioTotal2 + ' + IVA' if precioTotal2 and precioTotal2 != '0' else ''}</span>",
+                "{{Precio Total: $ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{"Precio Total: $ " + precioTotal3 + ' + IVA' if precioTotal3 and precioTotal3 != '0' else ''}</span>",
+                "{{fecha_hoy}}": f"<span style='font-family: Roboto, sans-serif;'>{date.today()}</span>",
+            }   
 
 
             for variable, placeholder in variables.items():
