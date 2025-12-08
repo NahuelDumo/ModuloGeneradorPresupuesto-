@@ -276,8 +276,8 @@ class SaleOrder(models.Model):
                 # Impresion de Boletin, Libro, Pieza Editorial, Revista
 
                 "{{ cantidad_unidades1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
-                "{{Cantidad: cantidad_unidades2 }}": f"<span style='font-family: Roboto, sans-serif;'>{'Cantidad: ' + str(cantidad_unidades2)}</span>",
-                "{{Cantidad: cantidad_unidades3 }}": f"<span style='font-family: Roboto, sans-serif;'>{'Cantidad: ' + str(cantidad_unidades3)}</span>",
+                "{{Cantidad: cantidad_unidades2 }}": "" if not cantidad_unidades2 or cantidad_unidades2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>{'Cantidad: ' + str(cantidad_unidades2)}</span>",
+                "{{Cantidad: cantidad_unidades3 }}": "" if not cantidad_unidades3 or cantidad_unidades3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>{'Cantidad: ' + str(cantidad_unidades3)}</span>",
                 # Formateo de Precio Unitario con separador de miles y '+ IVA'
                 "{{ precio_cantidad_1 }}": (
                     f"<span style='font-family: Roboto, sans-serif;'>"
@@ -295,8 +295,8 @@ class SaleOrder(models.Model):
                     f"</span>" if precio3 else ""
                 ),
                 "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
-                "{{Precio Total: $ precio_total2 }}": "" if not precioTotal2 or precioTotal2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal2} + IVA</span>",
-                "{{Precio Total: $ precio_total3 }}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
+                "{{Precio Total: $  precio_total2 }}": "" if not precioTotal2 or precioTotal2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal2} + IVA</span>",
+                "{{Precio Total: $  precio_total3 }}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
                 "{{fecha_hoy}}": f"<span style='font-family: Roboto, sans-serif;'>{date.today()}</span>",
             }   
 
