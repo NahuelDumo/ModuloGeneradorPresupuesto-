@@ -276,7 +276,7 @@ class SaleOrder(models.Model):
                 # Impresion de Boletin, Libro, Pieza Editorial, Revista
 
                 "{{ cantidad_unidades1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
-                "{{Cantidad: cantidad_unidades2 }}": f"<span style='font-family: Roboto, sans-serif;'>{"Cantidad: " + str(cantidad_unidades2)}</span>",
+                "{{Cantidad: cantidad_unidades2 }}": f"<span style='font-family: Roboto, sans-serif;'>{("Cantidad: " + str(cantidad_unidades2))}</span>",
                 "{{Cantidad: cantidad_unidades3 }}": f"<span style='font-family: Roboto, sans-serif;'>{"Cantidad: " + str(cantidad_unidades3)}</span>",
                 # Formateo de Precio Unitario con separador de miles y '+ IVA'
                 "{{ precio_cantidad_1 }}": (
