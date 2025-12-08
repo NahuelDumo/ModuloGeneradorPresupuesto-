@@ -295,8 +295,8 @@ class SaleOrder(models.Model):
                     f"</span>" if precio3 else ""
                 ),
                 "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
-                "{{Precio Total: $ precio_total2 }}": f"<span style='font-family: Roboto, sans-serif;'>{'Precio Total: $ ' + precioTotal2 + ' + IVA' if precioTotal2 and precioTotal2 != '0' else ''}</span>",
-                "{{Precio Total: $ precio_total3 }}": f"<span style='font-family: Roboto, sans-serif;'>{'Precio Total: $ ' + precioTotal3 + ' + IVA' if precioTotal3 and precioTotal3 != '0' else ''}</span>",
+                "{{Precio Total: $ precio_total2 }}": "" if not precioTotal2 or precioTotal2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal2} + IVA</span>",
+                "{{Precio Total: $ precio_total3 }}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
                 "{{fecha_hoy}}": f"<span style='font-family: Roboto, sans-serif;'>{date.today()}</span>",
             }   
 
