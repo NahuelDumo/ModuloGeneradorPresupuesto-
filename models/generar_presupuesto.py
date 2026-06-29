@@ -1,5 +1,4 @@
-
-from odoo import models, fields
+from odoo import models, fields, api
 import base64
 from odoo.exceptions import UserError
 from .funciones import *
@@ -33,6 +32,22 @@ class SaleOrder(models.Model):
         string="Plazo de ejecución",
         help="Tiempo estimado de ejecución del servicio."
     )
+
+    valor_cuota1 = fields.Float(string="Valor Cuota 1")
+    valor_cuota2 = fields.Float(string="Valor Cuota 2")
+    valor_cuota3 = fields.Float(string="Valor Cuota 3")
+
+    is_desarrollo_web = fields.Boolean(
+        string="¿Es Desarrollo Web?",
+        compute="_compute_is_desarrollo_web",
+        store=True,
+    )
+
+    @api.depends('order_line.product_id.categ_id')
+    def _compute_is_desarrollo_web(self):
+        for record in self:
+            categories = record.order_line.mapped('product_id.categ_id.name')
+            record.is_desarrollo_web = "Desarrollo Web" in categories
     
     def generar_presupuesto_pdf(self):
         for record in self:
@@ -158,10 +173,18 @@ class SaleOrder(models.Model):
             item4 = ""
             item5 = ""
             item6 = ""
+            oracion_1_web = ""
+            oracion_2_web = ""
+            oracion_3_web = ""
 
             for line in record.order_line:
                 categ_name = line.product_id.categ_id.name if line.product_id.categ_id else ""
-                if categ_name not in ["Editorial", "Grafica"]:
+                if categ_name == "Desarrollo Web":
+                    oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
+                    oracion_1_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px;'>{oraciones_texto1[0]}</span>" if len(oraciones_texto1) > 0 else ""
+                    oracion_2_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px;'>{oraciones_texto1[1]}</span>" if len(oraciones_texto1) > 1 else ""
+                    oracion_3_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px;'>{oraciones_texto1[2]}</span>" if len(oraciones_texto1) > 2 else ""
+                elif categ_name not in ["Editorial", "Grafica"]:
                     #Divido en oraciones editables
                     oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
                 
@@ -236,6 +259,18 @@ class SaleOrder(models.Model):
                 html_content = html_content.replace("<head>", font_style, 1)
             else:
                 html_content = font_style + html_content
+            # Formatear cuotas y totales para Desarrollo Web
+            def format_moneda(valor):
+                val_int = int(round(float(valor)))
+                return format(val_int, ',').replace(",", ".")
+
+            cuota1_str = format_moneda(record.valor_cuota1) if record.valor_cuota1 else ""
+            cuota2_str = format_moneda(record.valor_cuota2) if record.valor_cuota2 else ""
+            cuota3_str = format_moneda(record.valor_cuota3) if record.valor_cuota3 else ""
+
+            total1_str = format_moneda(record.valor_cuota1 * 2) if record.valor_cuota1 else ""
+            total2_str = format_moneda(record.valor_cuota2 * 3) if record.valor_cuota2 else ""
+            total3_str = format_moneda(record.valor_cuota3 * 6) if record.valor_cuota3 else ""
 
             # Reemplazar variables en el HTML
             variables = {
@@ -260,6 +295,17 @@ class SaleOrder(models.Model):
                 #Horaciones editables PAGINA 1
                 "{{oracionEditable1_______________________________________________________}}": oracion_editable1,
                 "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
+                
+                # Nuevas variables Desarrollo Web
+                "{{valor_cuota1}}": f"${cuota1_str} + IVA" if cuota1_str else "",
+                "{{valor_cuota2}}": f"${cuota2_str} + IVA" if cuota2_str else "",
+                "{{valor_cuota3}}": f"${cuota3_str} + IVA" if cuota3_str else "",
+                "{{total_1}}": f"${total1_str} + IVA" if total1_str else "",
+                "{{total_2}}": f"${total2_str} + IVA" if total2_str else "",
+                "{{total_3}}": f"${total3_str} + IVA" if total3_str else "",
+                "{{oracion_1_web}}": oracion_1_web,
+                "{{oracion_2_web}}": oracion_2_web,
+                "{{oracion_3_web}}": oracion_3_web,
 
                 
                 "{{item1}}": formatear_item(item1),

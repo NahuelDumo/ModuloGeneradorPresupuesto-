@@ -32,6 +32,10 @@
             <!-- Insertar el nuevo campo en el mismo lugar -->
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="plazo_ejecucion"/>
+                <field name="is_desarrollo_web" invisible="1"/>
+                <field name="valor_cuota1" invisible="not is_desarrollo_web"/>
+                <field name="valor_cuota2" invisible="not is_desarrollo_web"/>
+                <field name="valor_cuota3" invisible="not is_desarrollo_web"/>
             </xpath>
         </field>
     </record>

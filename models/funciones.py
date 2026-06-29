@@ -6,7 +6,9 @@ def buscarPlantillaPresupuesto(record):
             "Diseño Manual de Estilo": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaBranding/PlantillaDiseñoManualDeEstiloBRANDING.html",
             "Rediseño Isologotipo": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaBranding/PlantillaRediseñoIsologotipoBRANDING.html"
         },
-        "Desarrollo Web": {},
+        "Desarrollo Web": {
+            "Creación de Sitio Web Basico": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web.html"
+        },
         "Editorial": {
             "Diseño gráfico de Boletín o News":"/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDIseñoGraficoBoletin.html",
             "Diseño gráfico de Libro": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDIseñoGraficoLibro.html",
