@@ -351,7 +351,9 @@ class SaleOrder(models.Model):
                 html_content = html_content.replace(variable.strip(), placeholder.strip())
 
             # Guardar el HTML modificado (pero no lo adjuntamos)
-            modified_html_path = "/opt/odoo2/odoo/addons/GenerarPresupuesto/models/Hoja_Cotizaciones_Veo_para_Odoo_modificado4.html"
+            import os
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            modified_html_path = os.path.join(current_dir, "Hoja_Cotizaciones_Veo_para_Odoo_modificado4.html")
             with open(modified_html_path, "w", encoding="utf-8") as file:
                 file.write(html_content)
 
