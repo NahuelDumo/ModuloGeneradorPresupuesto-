@@ -33,9 +33,9 @@
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="plazo_ejecucion"/>
                 <field name="is_desarrollo_web" invisible="1"/>
-                <field name="valor_cuota1" invisible="not is_desarrollo_web"/>
-                <field name="valor_cuota2" invisible="not is_desarrollo_web"/>
-                <field name="valor_cuota3" invisible="not is_desarrollo_web"/>
+                <field name="valor_cuota1" attrs="{'invisible': [('is_desarrollo_web', '=', False)]}"/>
+                <field name="valor_cuota2" attrs="{'invisible': [('is_desarrollo_web', '=', False)]}"/>
+                <field name="valor_cuota3" attrs="{'invisible': [('is_desarrollo_web', '=', False)]}"/>
             </xpath>
         </field>
     </record>
