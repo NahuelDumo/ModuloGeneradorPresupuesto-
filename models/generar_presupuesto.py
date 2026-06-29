@@ -17,13 +17,16 @@ class SaleOrder(models.Model):
     )
     text_pagina1 = fields.Char(
         string="Esp. Técnicas editables.",
-        required=True,
-        size=240,
+        size=162,
         help="Especifica el texto de la pagina 1 ESPECIFICACIONES TECNICAS.",
+    )
+    text_pagina1_web = fields.Char(
+        string="Esp. Técnicas Web.",
+        size=240,
+        help="Especifica el texto de la pagina 1 para Desarrollo Web.",
     )
     text_pagina2 = fields.Char(
         string="Condiciones editables.",
-        required=True,
         size=315,
         help="Especifica el texto de la pagina 2. Condiciones editables",
     )
@@ -162,7 +165,7 @@ class SaleOrder(models.Model):
             plazo_ejecucion = record.plazo_ejecucion or "A convenir"
 
             # Oraciones editables
-            texto1 = record.text_pagina1
+            texto1 = record.text_pagina1_web if record.is_desarrollo_web else record.text_pagina1
             texto2 = record.text_pagina2
             # Inicializacion de variables para oraciones editables
             oracion_editable1 = ""

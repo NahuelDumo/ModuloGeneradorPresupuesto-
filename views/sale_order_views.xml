@@ -19,14 +19,15 @@
                 <field name="payment_method" placeholder="Especificar forma de pago" />
             </xpath>
 
-            <!-- Agregar el campo "Texto Editable Pagina 1" después del campo "Plazos de pago" con limite de caracteres de 164 caracteres -->
+            <!-- Agregar el campo "Texto Editable Pagina 1" después del campo "partner_id" -->
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="text_pagina1" placeholder="Rellenar texto pagina 1" widget="char_length_counter" />
+                <field name="text_pagina1" placeholder="Rellenar texto pagina 1" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', False)], 'invisible': [('is_desarrollo_web', '=', True)]}"/>
+                <field name="text_pagina1_web" placeholder="Rellenar especificaciones para Desarrollo Web (3 renglones)" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', True)], 'invisible': [('is_desarrollo_web', '=', False)]}"/>
             </xpath>
 
             <!-- Agregar el campo "Texto Editable Pagina 2" después del campo "texto pagina 1" -->
             <xpath expr="//field[@name='text_pagina1']" position="after">
-                <field name="text_pagina2" placeholder="Rellenar texto pagina 2" widget="char_length_counter" />
+                <field name="text_pagina2" placeholder="Rellenar texto pagina 2" widget="char_length_counter" required="1"/>
             </xpath>
 
             <!-- Insertar el nuevo campo en el mismo lugar -->
