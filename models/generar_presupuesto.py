@@ -353,10 +353,10 @@ class SaleOrder(models.Model):
             for variable, placeholder in variables.items():
                 html_content = html_content.replace(variable.strip(), placeholder.strip())
 
-            # Guardar el HTML modificado (pero no lo adjuntamos)
+            # Guardar el HTML modificado en el directorio temporal del sistema
+            import tempfile
             import os
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            modified_html_path = os.path.join(current_dir, "Hoja_Cotizaciones_Veo_para_Odoo_modificado4.html")
+            modified_html_path = os.path.join(tempfile.gettempdir(), "Hoja_Cotizaciones_Veo_para_Odoo_modificado4.html")
             with open(modified_html_path, "w", encoding="utf-8") as file:
                 file.write(html_content)
 
