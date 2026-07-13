@@ -300,17 +300,17 @@ class SaleOrder(models.Model):
                 "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
                 
                 # Nuevas variables Desarrollo Web
-                "{{cantidad_cuotas1}}": "En 2 pagos (seña y saldo)",
-                "{{valor_cuota1}}": f"Valor Cuota: ${cuota1_str} + IVA" if cuota1_str else "",
-                "{{total_1}}": f"Valor total: ${total1_str} + IVA" if total1_str else "",
+                "{{cantidad_cuotas1}}": f"<span style='font-family: Roboto, sans-serif;'>En 2 pagos (seña y saldo)</span>",
+                "{{valor_cuota1}}": f"<span style='font-family: Roboto, sans-serif;'>Valor Cuota: <span style='font-weight: bold;'>${cuota1_str}</span> + IVA</span>" if cuota1_str else "",
+                "{{total_1}}": f"<span style='font-family: Roboto, sans-serif;'>Valor total: <span style='font-weight: bold;'>${total1_str}</span> + IVA</span>" if total1_str else "",
 
-                "{{cantidad_cuotas2}}": "En 3 cuotas fijas" if cuota2_str else "",
-                "{{valor_cuota2}}": f"Valor Cuota: ${cuota2_str} + IVA" if cuota2_str else "",
-                "{{total_2}}": f"Valor total: ${total2_str} + IVA" if total2_str else "",
+                "{{cantidad_cuotas2}}": f"<span style='font-family: Roboto, sans-serif;'>En 3 cuotas fijas</span>" if cuota2_str else "",
+                "{{valor_cuota2}}": f"<span style='font-family: Roboto, sans-serif;'>Valor Cuota: <span style='font-weight: bold;'>${cuota2_str}</span> + IVA</span>" if cuota2_str else "",
+                "{{total_2}}": f"<span style='font-family: Roboto, sans-serif;'>Valor total: <span style='font-weight: bold;'>${total2_str}</span> + IVA</span>" if total2_str else "",
 
-                "{{cantidad_cuotas3}}": "En 6 cuotas sin interés" if cuota3_str else "",
-                "{{valor_cuota3}}": f"Valor Cuota: ${cuota3_str} + IVA" if cuota3_str else "",
-                "{{total_3}}": f"Valor total: ${total3_str} + IVA" if total3_str else "",
+                "{{cantidad_cuotas3}}": f"<span style='font-family: Roboto, sans-serif;'>En 6 cuotas sin interés</span>" if cuota3_str else "",
+                "{{valor_cuota3}}": f"<span style='font-family: Roboto, sans-serif;'>Valor Cuota: <span style='font-weight: bold;'>${cuota3_str}</span> + IVA</span>" if cuota3_str else "",
+                "{{total_3}}": f"<span style='font-family: Roboto, sans-serif;'>Valor total: <span style='font-weight: bold;'>${total3_str}</span> + IVA</span>" if total3_str else "",
                 "{{oracion_1_web}}": oracion_1_web,
                 "{{oracion_2_web}}": oracion_2_web,
                 "{{oracion_3_web}}": oracion_3_web,
