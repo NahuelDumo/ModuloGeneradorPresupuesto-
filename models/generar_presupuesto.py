@@ -312,25 +312,29 @@ class SaleOrder(models.Model):
                 #Horaciones editables PAGINA 1
                 "{{oracionEditable1_______________________________________________________}}": oracion_editable1,
                 "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
-                
-                # Nuevas variables Desarrollo Web
-                "{{cantidad_cuotas1}}": f"<span style='font-family: Roboto, sans-serif;'>En 2 pagos (seña y saldo)</span>",
-                "{{valor_cuota1}}": f"<span style='font-family: Roboto, sans-serif;'>Valor Cuota: <span style='font-weight: bold;'>${cuota1_str}</span> + IVA</span>" if cuota1_str else "",
-                "{{total_1}}": f"<span style='font-family: Roboto, sans-serif;'>Valor total: <span style='font-weight: bold;'>${total1_str}</span> + IVA</span>" if total1_str else "",
-
-                "{{cantidad_cuotas2}}": f"<span style='font-family: Roboto, sans-serif;'>En 3 cuotas fijas</span>" if cuota2_str else "",
-                "{{valor_cuota2}}": f"<span style='font-family: Roboto, sans-serif;'>Valor Cuota: <span style='font-weight: bold;'>${cuota2_str}</span> + IVA</span>" if cuota2_str else "",
-                "{{total_2}}": f"<span style='font-family: Roboto, sans-serif;'>Valor total: <span style='font-weight: bold;'>${total2_str}</span> + IVA</span>" if total2_str else "",
-
-                "{{cantidad_cuotas3}}": f"<span style='font-family: Roboto, sans-serif;'>En 6 cuotas sin interés</span>" if cuota3_str else "",
-                "{{valor_cuota3}}": f"<span style='font-family: Roboto, sans-serif;'>Valor Cuota: <span style='font-weight: bold;'>${cuota3_str}</span> + IVA</span>" if cuota3_str else "",
-                "{{total_3}}": f"<span style='font-family: Roboto, sans-serif;'>Valor total: <span style='font-weight: bold;'>${total3_str}</span> + IVA</span>" if total3_str else "",
-                "{{oracion_1_web}}": oracion_1_web,
-                "{{oracion_2_web}}": oracion_2_web,
-                "{{oracion_3_web}}": oracion_3_web,
-                "{{precio_Hostin}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${hosting_price_str}</span>",
-                "{{precio_ssl}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${ssl_price_str}</span>",
-                "{{precio_dominios}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${dominio_price_str}</span>",
+                   # Nuevas variables Desarrollo Web (con tabla fluida para evitar solapamientos)
+                 "{{valor_cuota1}}": f"${cuota1_str}" if cuota1_str else "",
+                 "{{total_1}}": f"${total1_str}" if total1_str else "",
+                 "{{fila_opcion2}}": (
+                     f"<tr style='height: 17px;'>"
+                     f"  <td style='padding: 0; margin: 0; vertical-align: top; text-align: left;'>En 3 cuotas fijas</td>"
+                     f"  <td style='padding: 0; margin: 0; vertical-align: top; text-align: left;'>Valor Cuota: <span style='font-weight: bold;'>${cuota2_str}</span> + IVA</td>"
+                     f"  <td style='padding: 0; margin: 0; vertical-align: top; text-align: left;'>Valor total: <span style='font-weight: bold;'>${total2_str}</span> + IVA</td>"
+                     f"</tr>"
+                 ) if cuota2_str else "",
+                 "{{fila_opcion3}}": (
+                     f"<tr style='height: 17px;'>"
+                     f"  <td style='padding: 0; margin: 0; vertical-align: top; text-align: left;'>En 6 cuotas sin inter&eacute;s</td>"
+                     f"  <td style='padding: 0; margin: 0; vertical-align: top; text-align: left;'>Valor Cuota: <span style='font-weight: bold;'>${cuota3_str}</span> + IVA</td>"
+                     f"  <td style='padding: 0; margin: 0; vertical-align: top; text-align: left;'>Valor total: <span style='font-weight: bold;'>${total3_str}</span> + IVA</td>"
+                     f"</tr>"
+                 ) if cuota3_str else "",
+                 "{{oracion_1_web}}": oracion_1_web,
+                 "{{oracion_2_web}}": oracion_2_web,
+                 "{{oracion_3_web}}": oracion_3_web,
+                 "{{precio_Hostin}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${hosting_price_str}</span>",
+                 "{{precio_ssl}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${ssl_price_str}</span>",
+                 "{{precio_dominios}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${dominio_price_str}</span>",
 
                 
                 "{{item1}}": formatear_item(item1),
