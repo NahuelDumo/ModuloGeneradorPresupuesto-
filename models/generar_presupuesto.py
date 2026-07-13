@@ -300,12 +300,17 @@ class SaleOrder(models.Model):
                 "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
                 
                 # Nuevas variables Desarrollo Web
-                "{{valor_cuota1}}": f"${cuota1_str} + IVA" if cuota1_str else "",
-                "{{valor_cuota2}}": f"${cuota2_str} + IVA" if cuota2_str else "",
-                "{{valor_cuota3}}": f"${cuota3_str} + IVA" if cuota3_str else "",
-                "{{total_1}}": f"${total1_str} + IVA" if total1_str else "",
-                "{{total_2}}": f"${total2_str} + IVA" if total2_str else "",
-                "{{total_3}}": f"${total3_str} + IVA" if total3_str else "",
+                "{{cantidad_cuotas1}}": "En 2 pagos (seña y saldo)",
+                "{{valor_cuota1}}": f"Valor Cuota: ${cuota1_str} + IVA" if cuota1_str else "",
+                "{{total_1}}": f"Valor total: ${total1_str} + IVA" if total1_str else "",
+
+                "{{cantidad_cuotas2}}": "En 3 cuotas fijas" if cuota2_str else "",
+                "{{valor_cuota2}}": f"Valor Cuota: ${cuota2_str} + IVA" if cuota2_str else "",
+                "{{total_2}}": f"Valor total: ${total2_str} + IVA" if total2_str else "",
+
+                "{{cantidad_cuotas3}}": "En 6 cuotas sin interés" if cuota3_str else "",
+                "{{valor_cuota3}}": f"Valor Cuota: ${cuota3_str} + IVA" if cuota3_str else "",
+                "{{total_3}}": f"Valor total: ${total3_str} + IVA" if total3_str else "",
                 "{{oracion_1_web}}": oracion_1_web,
                 "{{oracion_2_web}}": oracion_2_web,
                 "{{oracion_3_web}}": oracion_3_web,
