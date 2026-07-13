@@ -59,6 +59,10 @@ def buscarPlantillaPresupuesto(record):
 
             if ruta_plantilla:
                 return ruta_plantilla  # Devuelve la primera que encuentra
+            
+            # Fallback por categoría para Desarrollo Web
+            if etiqueta == "Desarrollo Web":
+                return "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web.html"
         else:
             return "No se encontro nada"
 
