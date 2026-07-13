@@ -414,7 +414,6 @@ class SaleOrder(models.Model):
                 # Extraer IDs de página automáticamente (ej: pf1,pf2,pf3)
                 with open(modified_html_path, "r", encoding="utf-8") as html_file:
                     content = html_file.read()
-                    import re
                     page_ids = ",".join(re.findall(r'id="(pf\d+)"', content)) or "pf1"
 
                 with open(modified_html_path, "rb") as f:
