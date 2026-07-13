@@ -328,9 +328,9 @@ class SaleOrder(models.Model):
                 "{{oracion_1_web}}": oracion_1_web,
                 "{{oracion_2_web}}": oracion_2_web,
                 "{{oracion_3_web}}": oracion_3_web,
-                "{{precio_hosting}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${hosting_price_str}</span>",
+                "{{precio_Hostin}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${hosting_price_str}</span>",
                 "{{precio_ssl}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${ssl_price_str}</span>",
-                "{{precio_dominio}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${dominio_price_str}</span>",
+                "{{precio_dominios}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${dominio_price_str}</span>",
 
                 
                 "{{item1}}": formatear_item(item1),
