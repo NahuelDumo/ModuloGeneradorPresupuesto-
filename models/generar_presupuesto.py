@@ -60,14 +60,26 @@ class SaleOrder(models.Model):
                 raise ValueError("La orden de venta no tiene cliente o líneas de productos.")
 
             # Datos necesarios para el PDF
-            nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.partner_id.name or '-'}</span>"
-            contacto = record.partner_id.parent_id.name or ""
-            
-            if len(contacto) <= 19:
-                contacto = f"<span style='font-family: Roboto, sans-serif;'>{(contacto)}</span>"
+            raw_nombre_cliente = record.partner_id.name or "-"
+            raw_contacto = record.partner_id.parent_id.name or ""
+
+            if raw_contacto:
+                if len(raw_contacto) <= 19:
+                    contacto = f"<span style='font-family: Roboto, sans-serif;'>{raw_contacto}</span>"
+                else:
+                    contacto = f"<span style='font-family: Roboto, sans-serif; font-size: 80px;'>{cadena_reformada(raw_contacto)}</span>"
+                
+                if len(raw_nombre_cliente) <= 19:
+                    nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{raw_nombre_cliente}</span>"
+                else:
+                    nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; font-size: 75px;'><br>{cadena_reformada(raw_nombre_cliente)}</span>"
             else:
-                contacto = f"<span style='font-family: Roboto, sans-serif ;font-size: 80px;'>{cadena_reformada(contacto)}</span>"
-                nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;font-size: 75px; '><br>{record.partner_id.name or ''}</span>"
+                contacto = ""
+                if len(raw_nombre_cliente) <= 19:
+                    nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{raw_nombre_cliente}</span>"
+                else:
+                    nombre_cliente = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; font-size: 80px;'>{cadena_reformada(raw_nombre_cliente)}</span>"
+
             
             numero_cotizacion = record.name
             forma_pago = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.payment_method}</span>"
@@ -225,6 +237,18 @@ class SaleOrder(models.Model):
 
             with open(html_path, "r", encoding="UTF-8") as file:
                 html_content = file.read()
+
+            # Limpiar etiquetas HTML basura que Word/PDF inserta DENTRO de las llaves {{ }}
+            # Ejemplo: convierte {{<span>NOMBRE</span>}} en {{NOMBRE}}
+            html_content = re.sub(r'\{\{(.*?)\}\}', lambda m: '{{' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + '}}', html_content)
+
+            # Limpiar espacios en blanco exagerados (y &nbsp;) entre "Valor Cuota:" y "{{valor_cuota1}}"
+            html_content = re.sub(
+                r'(Valor\s+Cuota:)([^\{]*?)\{\{valor_cuota1\}\}', 
+                lambda m: m.group(1) + m.group(2).replace('&nbsp;', '').replace(' ', '') + ' {{valor_cuota1}}', 
+                html_content, 
+                flags=re.IGNORECASE
+            )
 
             # Agregar estilo con Google Fonts
             font_style = """
