@@ -38,7 +38,9 @@ class SaleOrder(models.Model):
 
     valor_cuota1 = fields.Float(string="Valor Cuota 1")
     valor_cuota2 = fields.Float(string="Valor Cuota 2")
+    cantidad_cuotas2 = fields.Integer(string="Cant. Cuotas 2")
     valor_cuota3 = fields.Float(string="Valor Cuota 3")
+    cantidad_cuotas3 = fields.Integer(string="Cant. Cuotas 3")
 
     is_desarrollo_web = fields.Boolean(
         string="¿Es Desarrollo Web?",
@@ -272,8 +274,8 @@ class SaleOrder(models.Model):
             cuota3_str = format_moneda(record.valor_cuota3) if record.valor_cuota3 else ""
 
             total1_str = format_moneda(record.valor_cuota1 * 2) if record.valor_cuota1 else ""
-            total2_str = format_moneda(record.valor_cuota2 * 3) if record.valor_cuota2 else ""
-            total3_str = format_moneda(record.valor_cuota3 * 6) if record.valor_cuota3 else ""
+            total2_str = format_moneda(record.valor_cuota2 * record.cantidad_cuotas2) if record.valor_cuota2 and record.cantidad_cuotas2 else ""
+            total3_str = format_moneda(record.valor_cuota3 * record.cantidad_cuotas3) if record.valor_cuota3 and record.cantidad_cuotas3 else ""
 
             # Buscar precios para servicios regulares directamente en el catálogo de productos
             hosting_product = self.env['product.product'].search([('name', 'ilike', 'Hosting')], limit=1)
@@ -318,13 +320,13 @@ class SaleOrder(models.Model):
                 "{{valor_cuota1}}": f"<b>${cuota1_str}</b> + IVA" if cuota1_str else "",
                 "{{total_1}}": f"<b>${total1_str}</b> + IVA" if total1_str else "",
 
-                "{{cantidad_cuotas2}}": "En 3 cuotas fijas" if cuota2_str else "",
-                "{{valor_cuota2}}": f"Valor Cuota: <b>${cuota2_str}</b> + IVA" if cuota2_str else "",
-                "{{total_2}}": f"Valor total: <b>${total2_str}</b> + IVA" if total2_str else "",
+                "{{cantidad_cuotas2}}": f"En {record.cantidad_cuotas2} cuotas" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{valor_cuota2}}": f"Valor Cuota: <b>${cuota2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{total_2}}": f"Valor total: <b>${total2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
 
-                "{{cantidad_cuotas3}}": "En 6 cuotas sin interés" if cuota3_str else "",
-                "{{valor_cuota3}}": f"Valor Cuota: <b>${cuota3_str}</b> + IVA" if cuota3_str else "",
-                "{{total_3}}": f"Valor total: <b>${total3_str}</b> + IVA" if total3_str else "",
+                "{{cantidad_cuotas3}}": f"En {record.cantidad_cuotas3} cuotas" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{valor_cuota3}}": f"Valor Cuota: <b>${cuota3_str}</b> + IVA" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{total_3}}": f"Valor total: <b>${total3_str}</b> + IVA" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{oracion_1_web}}": oracion_1_web,
                 "{{oracion_2_web}}": oracion_2_web,
                 "{{oracion_3_web}}": oracion_3_web,
