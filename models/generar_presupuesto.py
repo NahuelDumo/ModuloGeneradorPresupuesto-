@@ -344,11 +344,11 @@ class SaleOrder(models.Model):
                 "{{valor_cuota1}}": f"<b>${cuota1_str}</b> + IVA" if cuota1_str else "",
                 "{{total_1}}": f"<b>${total1_str}</b> + IVA" if total1_str else "",
 
-                "{{cantidad_cuotas2}}": f"En {record.cantidad_cuotas2} cuotas" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{cantidad_cuotas2}}": f"En {record.cantidad_cuotas2} cuotas fijas" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
                 "{{valor_cuota2}}": f"Valor Cuota: <b>${cuota2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
                 "{{total_2}}": f"Valor total: <b>${total2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
 
-                "{{cantidad_cuotas3}}": f"En {record.cantidad_cuotas3} cuotas" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{cantidad_cuotas3}}": f"En {record.cantidad_cuotas3} cuotas fijas" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{valor_cuota3}}": f"Valor Cuota: <b>${cuota3_str}</b> + IVA" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{total_3}}": f"Valor total: <b>${total3_str}</b> + IVA" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{oracion_1_web}}": oracion_1_web,
