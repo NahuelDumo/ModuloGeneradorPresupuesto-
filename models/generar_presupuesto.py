@@ -275,33 +275,15 @@ class SaleOrder(models.Model):
             total2_str = format_moneda(record.valor_cuota2 * 3) if record.valor_cuota2 else ""
             total3_str = format_moneda(record.valor_cuota3 * 6) if record.valor_cuota3 else ""
 
-            # Buscar precios para servicios regulares en las líneas de presupuesto
-            hosting_price = 200000
-            ssl_price = 200000
-            dominio_price = 200000
+            # Buscar precios para servicios regulares directamente en el catálogo de productos
+            hosting_product = self.env['product.product'].search([('name', 'ilike', 'Hosting')], limit=1)
+            hosting_price = hosting_product.lst_price if hosting_product else 200000
 
-            for line in record.order_line:
-                name_lower = (line.product_id.name or "").lower()
-                if "hosting" in name_lower:
-                    hosting_price = line.price_unit
-                elif "ssl" in name_lower:
-                    ssl_price = line.price_unit
-                elif "dominio" in name_lower:
-                    dominio_price = line.price_unit
+            ssl_product = self.env['product.product'].search([('name', 'ilike', 'SSL')], limit=1)
+            ssl_price = ssl_product.lst_price if ssl_product else 200000
 
-            # Si no se encontraron en las líneas, buscar en el catálogo
-            if hosting_price == 200000:
-                hosting_product = self.env['product.product'].search([('name', 'ilike', 'Hosting')], limit=1)
-                if hosting_product:
-                    hosting_price = hosting_product.lst_price
-            if ssl_price == 200000:
-                ssl_product = self.env['product.product'].search([('name', 'ilike', 'SSL')], limit=1)
-                if ssl_product:
-                    ssl_price = ssl_product.lst_price
-            if dominio_price == 200000:
-                dominio_product = self.env['product.product'].search([('name', 'ilike', 'dominio')], limit=1)
-                if dominio_product:
-                    dominio_price = dominio_product.lst_price
+            dominio_product = self.env['product.product'].search([('name', 'ilike', 'dominio')], limit=1)
+            dominio_price = dominio_product.lst_price if dominio_product else 200000
 
             hosting_price_str = format_moneda(hosting_price)
             ssl_price_str = format_moneda(ssl_price)
