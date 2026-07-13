@@ -339,18 +339,19 @@ class SaleOrder(models.Model):
                 "{{oracionEditable1_______________________________________________________}}": oracion_editable1,
                 "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
                 
-                # Nuevas variables Desarrollo Web (con formato simplificado sin spans anidados)
-                "{{cantidad_cuotas1}}": "En 2 pagos (seña y saldo)",
-                "{{valor_cuota1}}": f"Valor Cuota: <b>${cuota1_str}</b> + IVA" if cuota1_str else "",
-                "{{total_1}}": f"Valor total: <b>${total1_str}</b> + IVA" if total1_str else "",
+                # Nuevas variables Desarrollo Web
+                # Fila 1: "Valor Cuota:" y "Valor total:" ya son texto fijo en el HTML, solo inyectamos valores
+                "{{valor_cuota1}}": f"<b>${cuota1_str}</b> + IVA" if cuota1_str else "",
+                "{{total_1}}": f"<b>${total1_str}</b> + IVA" if total1_str else "",
 
+                # Filas 2 y 3: sin prefijos para no desbordar el layout de pdf2htmlEX
                 "{{cantidad_cuotas2}}": f"En {record.cantidad_cuotas2} cuotas fijas" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
-                "{{valor_cuota2}}": f"Valor Cuota: <b>${cuota2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
-                "{{total_2}}": f"Valor total: <b>${total2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{valor_cuota2}}": f"<b>${cuota2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{total_2}}": f"<b>${total2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
 
                 "{{cantidad_cuotas3}}": f"En {record.cantidad_cuotas3} cuotas fijas" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
-                "{{valor_cuota3}}": f"Valor Cuota: <b>${cuota3_str}</b> + IVA" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
-                "{{total_3}}": f"Valor total: <b>${total3_str}</b> + IVA" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{valor_cuota3}}": f"<b>${cuota3_str}</b> + IVA" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{total_3}}": f"<b>${total3_str}</b> + IVA" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{oracion_1_web}}": oracion_1_web,
                 "{{oracion_2_web}}": oracion_2_web,
                 "{{oracion_3_web}}": oracion_3_web,
