@@ -341,8 +341,8 @@ class SaleOrder(models.Model):
                 
                 # Nuevas variables Desarrollo Web (con formato simplificado sin spans anidados)
                 "{{cantidad_cuotas1}}": "En 2 pagos (seña y saldo)",
-                "{{valor_cuota1}}": f"<b>${cuota1_str}</b> + IVA" if cuota1_str else "",
-                "{{total_1}}": f"<b>${total1_str}</b> + IVA" if total1_str else "",
+                "{{valor_cuota1}}": f"Valor Cuota: <b>${cuota1_str}</b> + IVA" if cuota1_str else "",
+                "{{total_1}}": f"Valor total: <b>${total1_str}</b> + IVA" if total1_str else "",
 
                 "{{cantidad_cuotas2}}": f"En {record.cantidad_cuotas2} cuotas fijas" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
                 "{{valor_cuota2}}": f"Valor Cuota: <b>${cuota2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
