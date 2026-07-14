@@ -198,9 +198,9 @@ class SaleOrder(models.Model):
                 categ_name = line.product_id.categ_id.name if line.product_id.categ_id else ""
                 if categ_name == "Desarrollo Web":
                     oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
-                    oracion_1_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px; color: #7baf42; font-style: italic;'>{oraciones_texto1[0]}</span>" if len(oraciones_texto1) > 0 else ""
-                    oracion_2_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px; color: #7baf42; font-style: italic;'>{oraciones_texto1[1]}</span>" if len(oraciones_texto1) > 1 else ""
-                    oracion_3_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px; color: #7baf42; font-style: italic;'>{oraciones_texto1[2]}</span>" if len(oraciones_texto1) > 2 else ""
+                    oracion_1_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px; color: #58887E; font-style: italic;'>{oraciones_texto1[0]}</span>" if len(oraciones_texto1) > 0 else ""
+                    oracion_2_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px; color: #58887E; font-style: italic;'>{oraciones_texto1[1]}</span>" if len(oraciones_texto1) > 1 else ""
+                    oracion_3_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px; color: #58887E; font-style: italic;'>{oraciones_texto1[2]}</span>" if len(oraciones_texto1) > 2 else ""
                 elif categ_name not in ["Editorial", "Grafica"]:
                     #Divido en oraciones editables
                     oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
@@ -247,6 +247,9 @@ class SaleOrder(models.Model):
                 '<div class="t m0 x5 ha y18 ff2 fs8 fc3 sc0 lsb ws7">Valor Cuota:',
                 '<div class="t m0 x5 ha y18 ff1 fs9 fc3 sc0 lsb ws7">{{valor_cuota1_overlay}}</div>\n<div class="t m0 x5 ha y18 ff2 fs8 fc3 sc0 lsb ws7"><span style="color: transparent;">Valor Cuota:</span>'
             )
+            
+            # Correr un poco a la izquierda el Valor total de la primera linea para alinear con las de abajo
+            html_content = html_content.replace('Valor total: {{total_1}}', '<span style="position: relative; left: -28px;">Valor total: {{total_1}}</span>')
 
             # Agregar estilo con Google Fonts
             font_style = """
