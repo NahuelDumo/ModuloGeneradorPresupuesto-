@@ -242,9 +242,8 @@ class SaleOrder(models.Model):
             # Ejemplo: convierte {{<span>NOMBRE</span>}} en {{NOMBRE}}
             html_content = re.sub(r'\{\{(.*?)\}\}', lambda m: '{{' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + '}}', html_content)
 
-            # Cambiar el tamaño de fuente de Valor Cuota 1 para que coincida con las demás (fs8 -> fs9)
-            html_content = html_content.replace('fs8 fc3 sc0 lsb ws7">Valor Cuota:', 'fs9 fc3 sc0 lsb ws7">Valor Cuota:')
-            html_content = html_content.replace('ff3 fs8 lsb ws3">{{valor_cuota1}}', 'ff3 fs9 lsb ws3">{{valor_cuota1}}')
+            # Ocultar "Valor Cuota:" original para inyectarlo entero desde python y evitar desalineaciones
+            html_content = html_content.replace('fs8 fc3 sc0 lsb ws7">Valor Cuota:', 'fs8 fc3 sc0 lsb ws7"><span style="color: transparent;">Valor Cuota:</span>')
 
             # Limpiar espacios en blanco exagerados (y &nbsp;) entre "Valor Cuota:" y "{{valor_cuota1}}"
             html_content = re.sub(
@@ -345,16 +344,16 @@ class SaleOrder(models.Model):
                 
                 # Nuevas variables Desarrollo Web
                 # Fila 1: "Valor Cuota:" y "Valor total:" ya son texto fijo en el HTML, solo inyectamos valores
-                "{{valor_cuota1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; position: relative; left: -125px;'><b>${cuota1_str}</b> + IVA</span>" if cuota1_str else "",
+                "{{valor_cuota1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; position: absolute; left: 0px; top: 0px; font-size: 48px; color: inherit;'>Valor Cuota: <b>${cuota1_str}</b> + IVA</span>" if cuota1_str else "",
                 "{{total_1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>${total1_str} + IVA</span>" if total1_str else "",
 
                 # Filas 2 y 3: sin prefijos para no desbordar el layout de pdf2htmlEX
-                "{{cantidad_cuotas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>En {record.cantidad_cuotas2} cuotas fijas</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
-                "{{valor_cuota2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor Cuota: <b>${cuota2_str}</b> + IVA</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{cantidad_cuotas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 280px;'>En {record.cantidad_cuotas2} cuotas fijas</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{valor_cuota2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; font-size: 48px;'>Valor Cuota: <b>${cuota2_str}</b> + IVA</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
                 "{{total_2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor total: ${total2_str} + IVA</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
 
-                "{{cantidad_cuotas3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>En {record.cantidad_cuotas3} cuotas fijas</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
-                "{{valor_cuota3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor Cuota: <b>${cuota3_str}</b> + IVA</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{cantidad_cuotas3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 280px;'>En {record.cantidad_cuotas3} cuotas fijas</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{valor_cuota3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; font-size: 48px;'>Valor Cuota: <b>${cuota3_str}</b> + IVA</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{total_3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor total: ${total3_str} + IVA</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{oracion_1_web}}": oracion_1_web,
                 "{{oracion_2_web}}": oracion_2_web,
