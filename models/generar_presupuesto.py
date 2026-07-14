@@ -341,17 +341,17 @@ class SaleOrder(models.Model):
                 
                 # Nuevas variables Desarrollo Web
                 # Fila 1: "Valor Cuota:" y "Valor total:" ya son texto fijo en el HTML, solo inyectamos valores
-                "{{valor_cuota1}}": f"<b>${cuota1_str}</b> + IVA" if cuota1_str else "",
-                "{{total_1}}": f"<b>${total1_str}</b> + IVA" if total1_str else "",
+                "{{valor_cuota1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'><b>${cuota1_str}</b> + IVA</span>" if cuota1_str else "",
+                "{{total_1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'><b>${total1_str}</b> + IVA</span>" if total1_str else "",
 
                 # Filas 2 y 3: sin prefijos para no desbordar el layout de pdf2htmlEX
-                "{{cantidad_cuotas2}}": f"En {record.cantidad_cuotas2} cuotas fijas" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
-                "{{valor_cuota2}}": f"<b>${cuota2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
-                "{{total_2}}": f"<b>${total2_str}</b> + IVA" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{cantidad_cuotas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>En {record.cantidad_cuotas2} cuotas fijas</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{valor_cuota2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'><b>${cuota2_str}</b> + IVA</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{total_2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'><b>${total2_str}</b> + IVA</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
 
-                "{{cantidad_cuotas3}}": f"En {record.cantidad_cuotas3} cuotas fijas" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
-                "{{valor_cuota3}}": f"<b>${cuota3_str}</b> + IVA" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
-                "{{total_3}}": f"<b>${total3_str}</b> + IVA" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{cantidad_cuotas3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>En {record.cantidad_cuotas3} cuotas fijas</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{valor_cuota3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'><b>${cuota3_str}</b> + IVA</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{total_3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'><b>${total3_str}</b> + IVA</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{oracion_1_web}}": oracion_1_web,
                 "{{oracion_2_web}}": oracion_2_web,
                 "{{oracion_3_web}}": oracion_3_web,
