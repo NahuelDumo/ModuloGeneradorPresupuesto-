@@ -242,16 +242,12 @@ class SaleOrder(models.Model):
             # Ejemplo: convierte {{<span>NOMBRE</span>}} en {{NOMBRE}}
             html_content = re.sub(r'\{\{(.*?)\}\}', lambda m: '{{' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + '}}', html_content)
 
-            # Ocultar "Valor Cuota:" original y crear divs superpuestos limpios para inyectar los valores sin problemas de espacios ni alineación
+            # Ocultar "Valor Cuota:" original y crear un div superpuesto limpio para inyectar Valor Cuota sin problemas de espacios
             html_content = html_content.replace(
                 '<div class="t m0 x5 ha y18 ff2 fs8 fc3 sc0 lsb ws7">Valor Cuota:',
                 '<div class="t m0 x5 ha y18 ff1 fs9 fc3 sc0 lsb ws7">{{valor_cuota1_overlay}}</div>\n' +
-                '<div class="t m0 x2 ha y18 ff1 fs9 fc3 sc0 lsb ws7"><span style="display: inline-block; width: 280px;"></span> Valor total: {{total_1_overlay}}</div>\n' +
                 '<div class="t m0 x5 ha y18 ff2 fs8 fc3 sc0 lsb ws7"><span style="color: transparent;">Valor Cuota:</span>'
             )
-            
-            # Ocultar también el Valor total original de la primera línea (mantiene el espacio estructural para que nada se rompa)
-            html_content = html_content.replace('Valor total: {{total_1}}', '<span style="color: transparent;">Valor total: {{total_1}}</span>')
 
             # Agregar estilo con Google Fonts
             font_style = """
@@ -346,8 +342,7 @@ class SaleOrder(models.Model):
                 # Fila 1: "Valor Cuota:" y "Valor total:" ya son texto fijo en el HTML, solo inyectamos valores
                 "{{valor_cuota1_overlay}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor Cuota: <b>${cuota1_str}</b> + IVA</span>" if cuota1_str else "",
                 "{{valor_cuota1}}": "",
-                "{{total_1_overlay}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>${total1_str} + IVA</span>" if total1_str else "",
-                "{{total_1}}": "",
+                "{{total_1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>${total1_str} + IVA</span>" if total1_str else "",
 
                 # Filas 2 y 3: sin prefijos para no desbordar el layout de pdf2htmlEX
                 "{{cantidad_cuotas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 280px;'>En {record.cantidad_cuotas2} cuotas fijas</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
