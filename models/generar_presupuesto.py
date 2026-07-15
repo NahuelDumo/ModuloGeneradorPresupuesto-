@@ -245,8 +245,12 @@ class SaleOrder(models.Model):
             # Reestructurar la primera línea por completo para que sea idéntica a la segunda y tercera (dos divs separados y alineados)
             html_content = re.sub(
                 r'<div class="t m0 x5 ha y18 ff2 fs8 fc3 sc0 lsb ws7">Valor Cuota:<span class="_ _3"></span><span class="fs9 lsa">(En 2 pagos [^<]*)<span class="_ _4"> </span>Valor total: \{\{total_1\}\}<span class="_ _5"></span><span class="ff3 fs8 lsb ws3">\{\{valor_cuota1\}\}</span></span></div>',
-                r'<div class="t m0 x2 hc y18 ff2 fs9 fc3 sc0 lsa ws2"><span style="display: inline-block; width: 340px; white-space: nowrap;">\1</span><span class="_"> </span>{{total_1}}</div>\n' +
-                r'<div class="t m0 x5 h11 y18 ff1 fs9 fc3 sc0 lsb ws6">{{valor_cuota1_overlay}}</div>',
+                lambda m: (
+                    r'<div class="t m0 x2 hc y18 ff2 fs9 fc3 sc0 lsa ws2"><span style="display: inline-block; width: 340px; white-space: nowrap;">' + 
+                    m.group(1).replace('sea', 'seña') + 
+                    r'</span><span class="_"> </span>{{total_1}}</div>\n' +
+                    r'<div class="t m0 x5 ha y18 ff2 fs9 fc3 sc0 lsb ws6">{{valor_cuota1_overlay}}</div>'
+                ),
                 html_content
             )
 
