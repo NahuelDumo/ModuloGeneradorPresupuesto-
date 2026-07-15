@@ -312,7 +312,7 @@ class SaleOrder(models.Model):
             ssl_product = self.env['product.product'].search([('name', 'ilike', 'SSL')], limit=1)
             ssl_price = ssl_product.lst_price if ssl_product else 200000
 
-            dominio_product = self.env['product.product'].search([('name', 'ilike', 'dominio')], limit=1)
+            dominio_product = self.env['product.product'].search([('name', 'ilike', 'Registro o actualización de dominios')], limit=1)
             dominio_price = dominio_product.lst_price if dominio_product else 200000
 
             hosting_price_str = format_moneda(hosting_price)
