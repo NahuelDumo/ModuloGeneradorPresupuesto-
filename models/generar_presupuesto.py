@@ -256,6 +256,9 @@ class SaleOrder(models.Model):
                 html_content
             )
 
+            # Aplicar la tipografia Roboto al texto "Valor total: " de la primera linea para que tenga el mismo estilo y tamaño que las lineas 2 y 3
+            html_content = html_content.replace('Valor total: {{total_1}}', '<span style="font-family: Roboto, sans-serif;">Valor total: {{total_1}}</span>')
+
             # Agregar estilo con Google Fonts
             font_style = """
 <head>
