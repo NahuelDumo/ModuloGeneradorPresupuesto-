@@ -250,7 +250,7 @@ class SaleOrder(models.Model):
             )
 
             # Ajustar alineacion del Valor total de la primera linea (el texto transparente de 56px desplaza ligeramente hacia la derecha)
-            html_content = html_content.replace('Valor total: {{total_1}}', '<span style="position: relative; left: -15px;">Valor total: {{total_1}}</span>')
+            html_content = html_content.replace('Valor total: {{total_1}}', '<span style="position: relative; left: -53px;">Valor total: {{total_1}}</span>')
 
             # Agregar estilo con Google Fonts
             font_style = """
