@@ -175,7 +175,7 @@ class SaleOrder(models.Model):
             ##################################################### FIN CASO EXCEPCIONAL IMPRESION #######################################################
 
 
-            plazo_validez = record.validity_date or "No disponible"
+            plazo_validez = record.validity_date.strftime('%d-%m-%Y') if record.validity_date else "No disponible"
             plazo_ejecucion = record.plazo_ejecucion or "A convenir"
 
             # Oraciones editables
@@ -335,7 +335,7 @@ class SaleOrder(models.Model):
 
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
-                "{{plazo_validez}}": str(plazo_validez),
+                "{{plazo_validez}}": plazo_validez,
                 "{{forma_pago}}": forma_pago,
                 "{{plazo_prederteminado}}": plazo_ejecucion,
                 "{{numero-presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
@@ -400,7 +400,7 @@ class SaleOrder(models.Model):
                 "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
                 "{{Precio Total: $  precio_total2 }}": "" if not precioTotal2 or precioTotal2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal2} + IVA</span>",
                 "{{Precio Total: $  precio_total3 }}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
-                "{{fecha_hoy}}": f"<span style='font-family: Roboto, sans-serif;'>{date.today()}</span>",
+                "{{fecha_hoy}}": f"<span style='font-family: Roboto, sans-serif;'>{date.today().strftime('%d-%m-%Y')}</span>",
             }   
 
 
