@@ -7,7 +7,7 @@ from datetime import date
 
 
 def formatear_item_web(item):
-    return f"<span style='font-family: Roboto, sans-serif; font-style: italic; color: #58887e; word-spacing: 0px; display:inline-block; width: 680px;'> • {item}</span>" if item else ""
+    return f"• <span style='font-family: Roboto, sans-serif; font-size: 36px; font-style: italic; color: #58887e; word-spacing: 0px;'>{item}</span>" if item else ""
 
 
 
