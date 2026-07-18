@@ -270,10 +270,10 @@ class SaleOrder(models.Model):
             html_content = re.sub(
                 r'<div class="t m0 x5 ha (y18|yf) ff2 fs8 fc3 sc0 lsb ws7">Valor Cuota:<span class="_ _3"></span><span class="fs9 lsa">(En 2 pagos [^<]*)<span class="_ _4"> </span>Valor total: \{\{total_1\}\}<span class="_ _5"></span><span class="ff3 fs8 lsb ws3">\{\{valor_cuota1\}\}</span></span></div>',
                 lambda m: (
-                    r'<div class="t m0 x2 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 lsa ws2"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 340px; white-space: nowrap;">' + 
+                    r'<div class="t m0 x2 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 lsa ws2"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 370px; white-space: nowrap;">' + 
                     m.group(2) + 
                     r'</span><span class="_"> </span>{{total_1}}</div>\n' +
-                    r'<div class="t m0 x5 ha ' + m.group(1) + r' ff2 fs9 fc3 sc0 lsb ws6">{{valor_cuota1_overlay}}</div>'
+                    r'<div class="t m0 x5 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 lsa ws2">{{valor_cuota1_overlay}}</div>'
                 ),
                 html_content
             )
@@ -374,11 +374,11 @@ class SaleOrder(models.Model):
                 "{{total_1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor total: ${total1_str} + IVA</span>" if total1_str else "",
 
                 # Filas 2 y 3: sin prefijos para no desbordar el layout de pdf2htmlEX
-                "{{cantidad_cuotas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 340px; white-space: nowrap;'>En {record.cantidad_cuotas2} cuotas fijas</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
+                "{{cantidad_cuotas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 370px; white-space: nowrap;'>En {record.cantidad_cuotas2} cuotas fijas</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
                 "{{valor_cuota2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; font-size: 48px;'>Valor Cuota: <b>${cuota2_str}</b> + IVA</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
                 "{{total_2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor total: ${total2_str} + IVA</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
 
-                "{{cantidad_cuotas3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 340px; white-space: nowrap;'>En {record.cantidad_cuotas3} cuotas fijas</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                "{{cantidad_cuotas3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 370px; white-space: nowrap;'>En {record.cantidad_cuotas3} cuotas fijas</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{valor_cuota3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; font-size: 48px;'>Valor Cuota: <b>${cuota3_str}</b> + IVA</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{total_3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor total: ${total3_str} + IVA</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
                 "{{oracion_1_web}}": oracion_1_web,
