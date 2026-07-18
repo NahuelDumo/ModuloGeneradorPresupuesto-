@@ -270,9 +270,9 @@ class SaleOrder(models.Model):
             html_content = re.sub(
                 r'<div class="t m0 x5 ha (y18|yf) ff2 fs8 fc3 sc0 lsb ws7">Valor Cuota:<span class="_ _3"></span><span class="fs9 lsa">(En 2 pagos [^<]*)<span class="_ _4"> </span>Valor total: \{\{total_1\}\}<span class="_ _5"></span><span class="ff3 fs8 lsb ws3">\{\{valor_cuota1\}\}</span></span></div>',
                 lambda m: (
-                    r'<div class="t m0 x2 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 lsa ws2">' + m.group(2) + r'</div>\n' +
-                    r'<div class="t m0 x5 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 lsa ws2">{{valor_cuota1_overlay}}</div>\n' +
-                    r'<div class="t m0 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 lsa ws2" style="left: 710px;">{{total_1}}</div>'
+                    r'<div class="t m0 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 ls2 ws7" style="left: 290px;">' + m.group(2) + r'</div>\n' +
+                    r'<div class="t m0 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 ls2 ws7" style="left: 490px;">{{valor_cuota1_overlay}}</div>\n' +
+                    r'<div class="t m0 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 ls2 ws7" style="left: 670px;">{{total_1}}</div>'
                 ),
                 html_content
             )
