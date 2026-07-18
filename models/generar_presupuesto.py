@@ -6,6 +6,10 @@ import re
 from datetime import date
 
 
+def formatear_item_web(item):
+    return f"<span style='font-family: Roboto, sans-serif; font-style: italic; color: #58887e; word-spacing: 0px; display:inline-block; width: 680px;'> • {item}</span>" if item else ""
+
+
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -422,9 +426,9 @@ class SaleOrder(models.Model):
                 "{{Precio Total: $  precio_total3}}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
                 "{{fecha_hoy}}": f"<span style='font-family: Roboto, sans-serif;'>{date.today().strftime('%d-%m-%Y')}</span>",
                 "{{paginas}}": str(record.paginas),
-                "{{editable1}}": formatear_item(editable1_val),
-                "{{editable2}}": formatear_item(editable2_val),
-                "{{editable3}}": formatear_item(editable3_val),
+                "{{editable1}}": formatear_item_web(editable1_val),
+                "{{editable2}}": formatear_item_web(editable2_val),
+                "{{editable3}}": formatear_item_web(editable3_val),
             }   
 
 
