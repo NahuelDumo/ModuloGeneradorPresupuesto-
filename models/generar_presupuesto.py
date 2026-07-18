@@ -268,12 +268,12 @@ class SaleOrder(models.Model):
 
             # Reestructurar la primera línea por completo para que sea idéntica a la segunda y tercera (dos divs separados y alineados)
             html_content = re.sub(
-                r'<div class="t m0 x5 ha y18 ff2 fs8 fc3 sc0 lsb ws7">Valor Cuota:<span class="_ _3"></span><span class="fs9 lsa">(En 2 pagos [^<]*)<span class="_ _4"> </span>Valor total: \{\{total_1\}\}<span class="_ _5"></span><span class="ff3 fs8 lsb ws3">\{\{valor_cuota1\}\}</span></span></div>',
+                r'<div class="t m0 x5 ha (y18|yf) ff2 fs8 fc3 sc0 lsb ws7">Valor Cuota:<span class="_ _3"></span><span class="fs9 lsa">(En 2 pagos [^<]*)<span class="_ _4"> </span>Valor total: \{\{total_1\}\}<span class="_ _5"></span><span class="ff3 fs8 lsb ws3">\{\{valor_cuota1\}\}</span></span></div>',
                 lambda m: (
-                    r'<div class="t m0 x2 hc y18 ff2 fs9 fc3 sc0 lsa ws2"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 340px; white-space: nowrap;">' + 
-                    m.group(1) + 
+                    r'<div class="t m0 x2 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 lsa ws2"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 340px; white-space: nowrap;">' + 
+                    m.group(2) + 
                     r'</span><span class="_"> </span>{{total_1}}</div>\n' +
-                    r'<div class="t m0 x5 ha y18 ff2 fs9 fc3 sc0 lsb ws6">{{valor_cuota1_overlay}}</div>'
+                    r'<div class="t m0 x5 ha ' + m.group(1) + r' ff2 fs9 fc3 sc0 lsb ws6">{{valor_cuota1_overlay}}</div>'
                 ),
                 html_content
             )
