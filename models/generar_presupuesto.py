@@ -42,6 +42,8 @@ class SaleOrder(models.Model):
     valor_cuota3 = fields.Float(string="Valor Cuota 3")
     cantidad_cuotas3 = fields.Integer(string="Cant. Cuotas 3")
 
+    paginas = fields.Integer(string="Cantidad de páginas", default=5)
+
     is_desarrollo_web = fields.Boolean(
         string="¿Es Desarrollo Web?",
         compute="_compute_is_desarrollo_web",
@@ -53,6 +55,17 @@ class SaleOrder(models.Model):
         for record in self:
             categories = record.order_line.mapped('product_id.categ_id.name')
             record.is_desarrollo_web = "Desarrollo Web" in categories
+
+    is_actualizacion_web = fields.Boolean(
+        string="¿Es Actualización de Sitio Web?",
+        compute="_compute_is_actualizacion_web",
+    )
+
+    @api.depends('order_line.product_id')
+    def _compute_is_actualizacion_web(self):
+        for record in self:
+            products = record.order_line.mapped('product_id.name')
+            record.is_actualizacion_web = "Actualización Sitio Web" in products
     
     def generar_presupuesto_pdf(self):
         for record in self:
@@ -84,6 +97,13 @@ class SaleOrder(models.Model):
             numero_cotizacion = record.name
             forma_pago = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.payment_method}</span>"
             nombre_servicio = record.order_line[0].product_id.name or "No disponible"
+
+            # Para la plantilla de Actualización, dividimos text_pagina1_web por punto (.)
+            texto_web = record.text_pagina1_web or ""
+            oraciones_web = [o.strip() + "." for o in texto_web.split(".") if o.strip()]
+            editable1_val = oraciones_web[0] if len(oraciones_web) > 0 else ""
+            editable2_val = oraciones_web[1] if len(oraciones_web) > 1 else ""
+            editable3_val = oraciones_web[2] if len(oraciones_web) > 2 else ""
 
             ################################################# Obtenemos las alternativas de precio ################################################# 
             # Inicializar variables vacías para las 3 opciones
@@ -401,6 +421,10 @@ class SaleOrder(models.Model):
                 "{{Precio Total: $  precio_total2}}": "" if not precioTotal2 or precioTotal2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal2} + IVA</span>",
                 "{{Precio Total: $  precio_total3}}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
                 "{{fecha_hoy}}": f"<span style='font-family: Roboto, sans-serif;'>{date.today().strftime('%d-%m-%Y')}</span>",
+                "{{paginas}}": str(record.paginas),
+                "{{editable1}}": formatear_item(editable1_val),
+                "{{editable2}}": formatear_item(editable2_val),
+                "{{editable3}}": formatear_item(editable3_val),
             }   
 
 
