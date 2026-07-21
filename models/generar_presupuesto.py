@@ -266,13 +266,19 @@ class SaleOrder(models.Model):
             # Ejemplo: convierte {{<span>NOMBRE</span>}} en {{NOMBRE}}
             html_content = re.sub(r'\{\{(.*?)\}\}', lambda m: '{{' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + '}}', html_content)
 
-            # Reestructurar la primera línea por completo para que sea idéntica a la segunda y tercera (tres divs separados y alineados)
+            # Reestructurar la primera línea preservando la posición original (clases x y espaciadores) e inyectando la tipografía correcta
             html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*">Valor Cuota:<span class="[^"]*"></span><span class="[^"]*">(En 2 pagos [^<]*)<span class="[^"]*"> </span>Valor total: \{\{total_1\}\}<span class="[^"]*"></span><span class="[^"]*">\{\{valor_cuota1\}\}</span></span></div>',
+                r'(<div class=\"[^\"]*\b(y[a-zA-Z0-9]+)\b[^\"]*\">)Valor Cuota:(<span class=\"[^\"]*\"><\/span><span class=\"[^\"]*\">)(En 2 pagos [^<]*)(<span class=\"[^\"]*\"> <\/span>)Valor total: \{\{total_1\}\}(<span class=\"[^\"]*\"><\/span><span class=\"[^\"]*\">)\{\{valor_cuota1\}\}(<\/span><\/span><\/div>)',
                 lambda m: (
-                    r'<div class="t m0 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 ls2 ws7" style="left: 330px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">' + m.group(2) + r'</span></div>\n' +
-                    r'<div class="t m0 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 ls2 ws7" style="left: 490px;">{{valor_cuota1_overlay}}</div>\n' +
-                    r'<div class="t m0 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 ls2 ws7" style="left: 670px;">{{total_1}}</div>'
+                    m.group(1) + 
+                    r'<span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor Cuota:</span>' + 
+                    m.group(3) + 
+                    r'<span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">' + m.group(4) + r'</span>' + 
+                    m.group(5) + 
+                    r'<span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: {{total_1}}</span>' + 
+                    m.group(6) + 
+                    r'<span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">{{valor_cuota1}}</span>' + 
+                    m.group(7)
                 ),
                 html_content
             )
@@ -368,9 +374,9 @@ class SaleOrder(models.Model):
                 
                 # Nuevas variables Desarrollo Web
                 # Fila 1: "Valor Cuota:" y "Valor total:" ya son texto fijo en el HTML, solo inyectamos valores
-                "{{valor_cuota1_overlay}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;'>Valor Cuota: <b>${cuota1_str}</b> + IVA</span>" if cuota1_str else "",
-                "{{valor_cuota1}}": "",
-                "{{total_1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;'>Valor total: ${total1_str} + IVA</span>" if total1_str else "",
+                "{{valor_cuota1_overlay}}": "",
+                "{{valor_cuota1}}": f"<b>${cuota1_str}</b> + IVA" if cuota1_str else "",
+                "{{total_1}}": f"${total1_str} + IVA" if total1_str else "",
 
                 # Filas 2 y 3: sin prefijos para no desbordar el layout de pdf2htmlEX
                 "{{cantidad_cuotas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;'>En {record.cantidad_cuotas2} cuotas fijas</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
