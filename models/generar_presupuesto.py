@@ -266,6 +266,20 @@ class SaleOrder(models.Model):
             # Ejemplo: convierte {{<span>NOMBRE</span>}} en {{NOMBRE}}
             html_content = re.sub(r'\{\{(.*?)\}\}', lambda m: '{{' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + '}}', html_content)
 
+            # Formatear cuotas y totales para Desarrollo Web (necesarios para inyectar en las líneas reestructuradas)
+            def format_moneda(valor):
+                val_int = int(round(float(valor)))
+                return format(val_int, ',').replace(",", ".")
+
+            cuota1_str = format_moneda(record.valor_cuota1) if record.valor_cuota1 else ""
+            cuota2_str = format_moneda(record.valor_cuota2) if record.valor_cuota2 else ""
+            cuota3_str = format_moneda(record.valor_cuota3) if record.valor_cuota3 else ""
+
+            total1_str = format_moneda(record.valor_cuota1 * 2) if record.valor_cuota1 else ""
+            total2_str = format_moneda(record.valor_cuota2 * record.cantidad_cuotas2) if record.valor_cuota2 and record.cantidad_cuotas2 else ""
+            total3_str = format_moneda(record.valor_cuota3 * record.cantidad_cuotas3) if record.valor_cuota3 and record.cantidad_cuotas3 else ""
+
+
             # Reestructurar COMPLETAMENTE las tres líneas para usar divs absolutos y alinear todo perfectamente en las dos plantillas
             # Línea 1
             html_content = re.sub(
@@ -364,18 +378,7 @@ class SaleOrder(models.Model):
                 html_content = html_content.replace("<head>", font_style, 1)
             else:
                 html_content = font_style + html_content
-            # Formatear cuotas y totales para Desarrollo Web
-            def format_moneda(valor):
-                val_int = int(round(float(valor)))
-                return format(val_int, ',').replace(",", ".")
 
-            cuota1_str = format_moneda(record.valor_cuota1) if record.valor_cuota1 else ""
-            cuota2_str = format_moneda(record.valor_cuota2) if record.valor_cuota2 else ""
-            cuota3_str = format_moneda(record.valor_cuota3) if record.valor_cuota3 else ""
-
-            total1_str = format_moneda(record.valor_cuota1 * 2) if record.valor_cuota1 else ""
-            total2_str = format_moneda(record.valor_cuota2 * record.cantidad_cuotas2) if record.valor_cuota2 and record.cantidad_cuotas2 else ""
-            total3_str = format_moneda(record.valor_cuota3 * record.cantidad_cuotas3) if record.valor_cuota3 and record.cantidad_cuotas3 else ""
 
             # Buscar precios para servicios regulares directamente en el catálogo de productos
             hosting_product = self.env['product.product'].search([('name', 'ilike', 'Hosting')], limit=1)
