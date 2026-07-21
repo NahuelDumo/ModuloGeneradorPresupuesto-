@@ -294,7 +294,7 @@ class SaleOrder(models.Model):
 
             # Línea 2
             html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*">.*?\{\{cantidad_cuotas2\}\}.*?<\/div>',
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>.*?\{\{cantidad_cuotas2\}\}.*?<\/div>',
                 lambda m: (
                     r'<div class="t m0 ' + m.group(1) + r'" style="left: 330px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">En ' + str(record.cantidad_cuotas2) + r' cuotas fijas</span></div>\n' +
                     (r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total2_str + r' + IVA</span></div>' if 'total_2' in m.group(0) else '')
@@ -302,14 +302,14 @@ class SaleOrder(models.Model):
                 html_content
             )
             html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*">.*?\{\{valor_cuota2\}\}.*?<\/div>',
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>.*?\{\{valor_cuota2\}\}.*?<\/div>',
                 lambda m: (
                     r'<div class="t m0 ' + m.group(1) + r'" style="left: 490px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor Cuota: <b>$' + cuota2_str + r'</b> + IVA</span></div>'
                 ) if cuota2_str else "",
                 html_content
             )
             html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*">.*?\{\{total_2\}\}.*?<\/div>',
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>.*?\{\{total_2\}\}.*?<\/div>',
                 lambda m: (
                     r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total2_str + r' + IVA</span></div>'
                 ) if total2_str else "",
@@ -318,7 +318,7 @@ class SaleOrder(models.Model):
 
             # Línea 3
             html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*">.*?\{\{cantidad_cuotas3\}\}.*?<\/div>',
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>.*?\{\{cantidad_cuotas3\}\}.*?<\/div>',
                 lambda m: (
                     r'<div class="t m0 ' + m.group(1) + r'" style="left: 330px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">En ' + str(record.cantidad_cuotas3) + r' cuotas fijas</span></div>\n' +
                     (r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total3_str + r' + IVA</span></div>' if 'total_3' in m.group(0) else '')
@@ -326,14 +326,14 @@ class SaleOrder(models.Model):
                 html_content
             )
             html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*">.*?\{\{valor_cuota3\}\}.*?<\/div>',
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>.*?\{\{valor_cuota3\}\}.*?<\/div>',
                 lambda m: (
                     r'<div class="t m0 ' + m.group(1) + r'" style="left: 490px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor Cuota: <b>$' + cuota3_str + r'</b> + IVA</span></div>'
                 ) if cuota3_str else "",
                 html_content
             )
             html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*">.*?\{\{total_3\}\}.*?<\/div>',
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>.*?\{\{total_3\}\}.*?<\/div>',
                 lambda m: (
                     r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total3_str + r' + IVA</span></div>'
                 ) if total3_str else "",
