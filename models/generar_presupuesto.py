@@ -268,11 +268,11 @@ class SaleOrder(models.Model):
 
             # Reestructurar la primera línea por completo para que sea idéntica a la segunda y tercera (tres divs separados y alineados)
             html_content = re.sub(
-                r'<div class="t m0 x5 ha (y18|yf) ff2 fs8 fc3 sc0 lsb ws7">Valor Cuota:<span class="_ _3"></span><span class="fs9 lsa">(En 2 pagos [^<]*)<span class="_ _4"> </span>Valor total: \{\{total_1\}\}<span class="_ _5"></span><span class="ff3 fs8 lsb ws3">\{\{valor_cuota1\}\}</span></span></div>',
+                r'<div class="[^"]*">Valor Cuota:<span class="[^"]*"></span><span class="[^"]*">(En 2 pagos [^<]*)<span class="[^"]*"> </span>Valor total: \{\{total_1\}\}<span class="[^"]*"></span><span class="[^"]*">\{\{valor_cuota1\}\}</span></span></div>',
                 lambda m: (
-                    r'<div class="t m0 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 ls2 ws7" style="left: 330px;">' + m.group(2) + r'</div>\n' +
-                    r'<div class="t m0 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 ls2 ws7" style="left: 490px;">{{valor_cuota1_overlay}}</div>\n' +
-                    r'<div class="t m0 hc ' + m.group(1) + r' ff2 fs9 fc3 sc0 ls2 ws7" style="left: 670px;">{{total_1}}</div>'
+                    r'<div class="t m0 hc yf ff2 fs9 fc3 sc0 ls2 ws7" style="left: 330px;">' + m.group(1) + r'</div>\n' +
+                    r'<div class="t m0 hc yf ff2 fs9 fc3 sc0 ls2 ws7" style="left: 490px;">{{valor_cuota1_overlay}}</div>\n' +
+                    r'<div class="t m0 hc yf ff2 fs9 fc3 sc0 ls2 ws7" style="left: 670px;">{{total_1}}</div>'
                 ),
                 html_content
             )
@@ -358,7 +358,7 @@ class SaleOrder(models.Model):
 
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
-                "{{plazo_validez}}": f"<span style='font-family: Roboto, sans-serif;'>{plazo_validez}</span>",
+                "{{plazo_validez}}": plazo_validez,
                 "{{forma_pago}}": forma_pago,
                 "{{plazo_prederteminado}}": plazo_ejecucion,
                 "{{numero-presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
@@ -423,7 +423,7 @@ class SaleOrder(models.Model):
                 "{{precio_total1}}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
                 "{{Precio Total: $  precio_total2}}": "" if not precioTotal2 or precioTotal2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal2} + IVA</span>",
                 "{{Precio Total: $  precio_total3}}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
-                "{{fecha_hoy}}": f"<span style='font-family: Roboto, sans-serif;'>{date.today().strftime('%d-%m-%Y')}</span>",
+                "{{fecha_hoy}}": date.today().strftime('%d-%m-%Y'),
                 "{{paginas}}": str(record.paginas),
                 "{{editable1}}": formatear_item_web(editable1_val),
                 "{{editable2}}": formatear_item_web(editable2_val),
