@@ -29,6 +29,11 @@ class SaleOrder(models.Model):
         size=240,
         help="Especifica el texto de la pagina 1 para Desarrollo Web.",
     )
+    text_pagina2_web = fields.Char(
+        string="Caract. Web Pág. 2",
+        size=240,
+        help="Especifica las características de la página 2 para Desarrollo Web Especial.",
+    )
     text_pagina2 = fields.Char(
         string="Condiciones editables.",
         size=315,
@@ -450,9 +455,9 @@ class SaleOrder(models.Model):
 "{{oracion1_web_espcial}}": oracion_1_web,
                 "{{oracion2_web_espcial}}": oracion_2_web,
                 "{{oracion3_web_especial}}": oracion_3_web,
-                "{{caracteristicas1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{dividir_en_oraciones(record.text_pagina1 or '', max_len=85)[0]}</span>" if len(dividir_en_oraciones(record.text_pagina1 or "", max_len=85)) > 0 else "",
-                "{{caracteristicas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{dividir_en_oraciones(record.text_pagina1 or '', max_len=85)[1]}</span>" if len(dividir_en_oraciones(record.text_pagina1 or "", max_len=85)) > 1 else "",
-                "{{caracteristicas3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{dividir_en_oraciones(record.text_pagina1 or '', max_len=85)[2]}</span>" if len(dividir_en_oraciones(record.text_pagina1 or "", max_len=85)) > 2 else "",
+                "{{caracteristicas1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or '', max_len=85)[0]}</span>" if len(dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or "", max_len=85)) > 0 else "",
+                "{{caracteristicas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or '', max_len=85)[1]}</span>" if len(dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or "", max_len=85)) > 1 else "",
+                "{{caracteristicas3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or '', max_len=85)[2]}</span>" if len(dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or "", max_len=85)) > 2 else "",
                 "{{precio_Hostin}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${hosting_price_str}</span>",
                 "{{precio_hosting}}": precio_hosting_str,
                 "{{hosting_editable1}}": hosting_editable1,

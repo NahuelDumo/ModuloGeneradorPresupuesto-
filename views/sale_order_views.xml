@@ -23,6 +23,7 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="text_pagina1" placeholder="Rellenar texto pagina 1" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', False)], 'invisible': [('is_desarrollo_web', '=', True)]}"/>
                 <field name="text_pagina1_web" placeholder="Rellenar especificaciones para Desarrollo Web (3 renglones)" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', True)], 'invisible': [('is_desarrollo_web', '=', False)]}"/>
+                <field name="text_pagina2_web" placeholder="Rellenar características Pag. 2 para Desarrollo Web (3 renglones)" widget="char_length_counter" attrs="{'invisible': [('is_desarrollo_web', '=', False)]}"/>
             </xpath>
 
             <!-- Agregar el campo "Texto Editable Pagina 2" después del campo "texto pagina 1" -->
