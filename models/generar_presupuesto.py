@@ -400,15 +400,22 @@ class SaleOrder(models.Model):
                 "{{NOMBRE_CLIENTE}}": contacto,
                 "{{nombre_contacto}}": nombre_cliente,
 
-                # Alternativas de precio con opciones
+                # Alternativas de precio con opciones (soporta con y sin espacios internos)
                 "{{ Opción 1 }}" : opcion1,
+                "{{Opción 1}}" : opcion1,
                 "{{ Opción 2 }}" : opcion2,
+                "{{Opción 2}}" : opcion2,
                 "{{ Opción 3 }}" : opcion3,
+                "{{Opción 3}}" : opcion3,
                 "{{ Precio Total 1 }}" : total1,
+                "{{Precio Total 1}}" : total1,
                 "{{ Precio Total 2 }}" : total2,
+                "{{Precio Total 2}}" : total2,
                 "{{ Precio Total 3 }}" : total3,
+                "{{Precio Total 3}}" : total3,
 
                 "{{ precio_total }}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio)} + IVA</span>",
+                "{{precio_total}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{round(precio)} + IVA</span>",
                 "{{numero_presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 "{{plazo_validez}}": plazo_validez,
                 "{{forma_pago}}": forma_pago,
@@ -470,7 +477,12 @@ class SaleOrder(models.Model):
 
 
             for variable, placeholder in variables.items():
-                html_content = html_content.replace(variable.strip(), placeholder.strip())
+                key_with_space = variable.strip()
+                html_content = html_content.replace(key_with_space, placeholder.strip())
+                m_var = re.match(r'\{\{\s*(.*?)\s*\}\}', key_with_space)
+                if m_var:
+                    key_no_space = '{{' + m_var.group(1) + '}}'
+                    html_content = html_content.replace(key_no_space, placeholder.strip())
 
             # Guardar el HTML modificado en el directorio temporal del sistema
             import tempfile
