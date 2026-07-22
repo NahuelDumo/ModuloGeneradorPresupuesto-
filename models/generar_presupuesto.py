@@ -6,6 +6,10 @@ import re
 from datetime import date
 
 
+def formatear_item_web(item):
+    return f"• <span style='font-family: Roboto, sans-serif; font-style: italic; color: #58887e; word-spacing: 0px;'>{item}</span>" if item else ""
+
+
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -42,6 +46,8 @@ class SaleOrder(models.Model):
     valor_cuota3 = fields.Float(string="Valor Cuota 3")
     cantidad_cuotas3 = fields.Integer(string="Cant. Cuotas 3")
 
+    paginas = fields.Integer(string="Cantidad de páginas", default=5)
+
     is_desarrollo_web = fields.Boolean(
         string="¿Es Desarrollo Web?",
         compute="_compute_is_desarrollo_web",
@@ -53,6 +59,17 @@ class SaleOrder(models.Model):
         for record in self:
             categories = record.order_line.mapped('product_id.categ_id.name')
             record.is_desarrollo_web = "Desarrollo Web" in categories
+
+    is_actualizacion_web = fields.Boolean(
+        string="¿Es Actualización de Sitio Web?",
+        compute="_compute_is_actualizacion_web",
+    )
+
+    @api.depends('order_line.product_id')
+    def _compute_is_actualizacion_web(self):
+        for record in self:
+            products = record.order_line.mapped('product_id.name')
+            record.is_actualizacion_web = "Actualización Sitio Web" in products
     
     def generar_presupuesto_pdf(self):
         for record in self:
@@ -84,6 +101,13 @@ class SaleOrder(models.Model):
             numero_cotizacion = record.name
             forma_pago = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.payment_method}</span>"
             nombre_servicio = record.order_line[0].product_id.name or "No disponible"
+
+            # Para la plantilla de Actualización, dividimos text_pagina1_web por punto (.)
+            texto_web = record.text_pagina1_web or ""
+            oraciones_web = [o.strip() + "." for o in texto_web.split(".") if o.strip()]
+            editable1_val = oraciones_web[0] if len(oraciones_web) > 0 else ""
+            editable2_val = oraciones_web[1] if len(oraciones_web) > 1 else ""
+            editable3_val = oraciones_web[2] if len(oraciones_web) > 2 else ""
 
             ################################################# Obtenemos las alternativas de precio ################################################# 
             # Inicializar variables vacías para las 3 opciones
@@ -242,15 +266,77 @@ class SaleOrder(models.Model):
             # Ejemplo: convierte {{<span>NOMBRE</span>}} en {{NOMBRE}}
             html_content = re.sub(r'\{\{(.*?)\}\}', lambda m: '{{' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + '}}', html_content)
 
-            # Reestructurar la primera línea por completo para que sea idéntica a la segunda y tercera (dos divs separados y alineados)
+            # Formatear cuotas y totales para Desarrollo Web (necesarios para inyectar en las líneas reestructuradas)
+            def format_moneda(valor):
+                val_int = int(round(float(valor)))
+                return format(val_int, ',').replace(",", ".")
+
+            cuota1_str = format_moneda(record.valor_cuota1) if record.valor_cuota1 else ""
+            cuota2_str = format_moneda(record.valor_cuota2) if record.valor_cuota2 else ""
+            cuota3_str = format_moneda(record.valor_cuota3) if record.valor_cuota3 else ""
+
+            total1_str = format_moneda(record.valor_cuota1 * 2) if record.valor_cuota1 else ""
+            total2_str = format_moneda(record.valor_cuota2 * record.cantidad_cuotas2) if record.valor_cuota2 and record.cantidad_cuotas2 else ""
+            total3_str = format_moneda(record.valor_cuota3 * record.cantidad_cuotas3) if record.valor_cuota3 and record.cantidad_cuotas3 else ""
+
+
+            # Reestructurar COMPLETAMENTE las tres líneas para usar divs absolutos y alinear todo perfectamente en las dos plantillas
+            # Línea 1
             html_content = re.sub(
-                r'<div class="t m0 x5 ha y18 ff2 fs8 fc3 sc0 lsb ws7">Valor Cuota:<span class="_ _3"></span><span class="fs9 lsa">(En 2 pagos [^<]*)<span class="_ _4"> </span>Valor total: \{\{total_1\}\}<span class="_ _5"></span><span class="ff3 fs8 lsb ws3">\{\{valor_cuota1\}\}</span></span></div>',
+                r'(<div class=\"[^\"]*\b(y[a-zA-Z0-9]+)\b[^\"]*\">)Valor Cuota:(<span class=\"[^\"]*\"><\/span><span class=\"[^\"]*\">)(En 2 pagos [^<]*)(<span class=\"[^\"]*\"> <\/span>)Valor total: \{\{total_1\}\}(<span class=\"[^\"]*\"><\/span><span class=\"[^\"]*\">)\{\{valor_cuota1\}\}(<\/span><\/span><\/div>)',
                 lambda m: (
-                    r'<div class="t m0 x2 hc y18 ff2 fs9 fc3 sc0 lsa ws2"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 340px; white-space: nowrap;">' + 
-                    m.group(1) + 
-                    r'</span><span class="_"> </span>{{total_1}}</div>\n' +
-                    r'<div class="t m0 x5 ha y18 ff2 fs9 fc3 sc0 lsb ws6">{{valor_cuota1_overlay}}</div>'
-                ),
+                    r'<div class="t m0 ' + m.group(2) + r'" style="left: 330px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">' + m.group(4) + r'</span></div>\n' +
+                    r'<div class="t m0 ' + m.group(2) + r'" style="left: 490px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor Cuota: <b>$' + cuota1_str + r'</b> + IVA</span></div>\n' +
+                    r'<div class="t m0 ' + m.group(2) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total1_str + r' + IVA</span></div>'
+                ) if cuota1_str else "",
+                html_content
+            )
+
+            # Línea 2
+            html_content = re.sub(
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{cantidad_cuotas2\}\}.*?<\/div>',
+                lambda m: (
+                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 330px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">En ' + str(record.cantidad_cuotas2) + r' cuotas fijas</span></div>\n' +
+                    (r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total2_str + r' + IVA</span></div>' if 'total_2' in m.group(0) else '')
+                ) if record.cantidad_cuotas2 else "",
+                html_content
+            )
+            html_content = re.sub(
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{valor_cuota2\}\}.*?<\/div>',
+                lambda m: (
+                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 490px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor Cuota: <b>$' + cuota2_str + r'</b> + IVA</span></div>'
+                ) if cuota2_str else "",
+                html_content
+            )
+            html_content = re.sub(
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{total_2\}\}.*?<\/div>',
+                lambda m: (
+                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total2_str + r' + IVA</span></div>'
+                ) if total2_str else "",
+                html_content
+            )
+
+            # Línea 3
+            html_content = re.sub(
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{cantidad_cuotas3\}\}.*?<\/div>',
+                lambda m: (
+                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 330px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">En ' + str(record.cantidad_cuotas3) + r' cuotas fijas</span></div>\n' +
+                    (r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total3_str + r' + IVA</span></div>' if 'total_3' in m.group(0) else '')
+                ) if record.cantidad_cuotas3 else "",
+                html_content
+            )
+            html_content = re.sub(
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{valor_cuota3\}\}.*?<\/div>',
+                lambda m: (
+                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 490px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor Cuota: <b>$' + cuota3_str + r'</b> + IVA</span></div>'
+                ) if cuota3_str else "",
+                html_content
+            )
+            html_content = re.sub(
+                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{total_3\}\}.*?<\/div>',
+                lambda m: (
+                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total3_str + r' + IVA</span></div>'
+                ) if total3_str else "",
                 html_content
             )
 
@@ -292,18 +378,7 @@ class SaleOrder(models.Model):
                 html_content = html_content.replace("<head>", font_style, 1)
             else:
                 html_content = font_style + html_content
-            # Formatear cuotas y totales para Desarrollo Web
-            def format_moneda(valor):
-                val_int = int(round(float(valor)))
-                return format(val_int, ',').replace(",", ".")
 
-            cuota1_str = format_moneda(record.valor_cuota1) if record.valor_cuota1 else ""
-            cuota2_str = format_moneda(record.valor_cuota2) if record.valor_cuota2 else ""
-            cuota3_str = format_moneda(record.valor_cuota3) if record.valor_cuota3 else ""
-
-            total1_str = format_moneda(record.valor_cuota1 * 2) if record.valor_cuota1 else ""
-            total2_str = format_moneda(record.valor_cuota2 * record.cantidad_cuotas2) if record.valor_cuota2 and record.cantidad_cuotas2 else ""
-            total3_str = format_moneda(record.valor_cuota3 * record.cantidad_cuotas3) if record.valor_cuota3 and record.cantidad_cuotas3 else ""
 
             # Buscar precios para servicios regulares directamente en el catálogo de productos
             hosting_product = self.env['product.product'].search([('name', 'ilike', 'Hosting')], limit=1)
@@ -342,21 +417,7 @@ class SaleOrder(models.Model):
                 #Horaciones editables PAGINA 1
                 "{{oracionEditable1_______________________________________________________}}": oracion_editable1,
                 "{{oracionEditable2_______________________________________________________}}": oracion_editable2, 
-                
-                # Nuevas variables Desarrollo Web
-                # Fila 1: "Valor Cuota:" y "Valor total:" ya son texto fijo en el HTML, solo inyectamos valores
-                "{{valor_cuota1_overlay}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor Cuota: <b>${cuota1_str}</b> + IVA</span>" if cuota1_str else "",
-                "{{valor_cuota1}}": "",
-                "{{total_1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor total: ${total1_str} + IVA</span>" if total1_str else "",
-
-                # Filas 2 y 3: sin prefijos para no desbordar el layout de pdf2htmlEX
-                "{{cantidad_cuotas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 340px; white-space: nowrap;'>En {record.cantidad_cuotas2} cuotas fijas</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
-                "{{valor_cuota2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; font-size: 48px;'>Valor Cuota: <b>${cuota2_str}</b> + IVA</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
-                "{{total_2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor total: ${total2_str} + IVA</span>" if record.cantidad_cuotas2 and record.valor_cuota2 else "",
-
-                "{{cantidad_cuotas3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; display: inline-block; width: 340px; white-space: nowrap;'>En {record.cantidad_cuotas3} cuotas fijas</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
-                "{{valor_cuota3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; font-size: 48px;'>Valor Cuota: <b>${cuota3_str}</b> + IVA</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
-                "{{total_3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal;'>Valor total: ${total3_str} + IVA</span>" if record.cantidad_cuotas3 and record.valor_cuota3 else "",
+                # Nuevas variables Desarrollo Web (procesadas dinámicamente arriba)
                 "{{oracion_1_web}}": oracion_1_web,
                 "{{oracion_2_web}}": oracion_2_web,
                 "{{oracion_3_web}}": oracion_3_web,
@@ -378,29 +439,33 @@ class SaleOrder(models.Model):
                 ###########################################EXCEPCIONALES#######################################################
                 # Impresion de Boletin, Libro, Pieza Editorial, Revista
 
-                "{{ cantidad_unidades1 }}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
-                "{{Cantidad: cantidad_unidades2 }}": "" if not cantidad_unidades2 or cantidad_unidades2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>{'Cantidad: ' + str(cantidad_unidades2)}</span>",
-                "{{Cantidad: cantidad_unidades3 }}": "" if not cantidad_unidades3 or cantidad_unidades3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>{'Cantidad: ' + str(cantidad_unidades3)}</span>",
+                "{{cantidad_unidades1}}": f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
+                "{{Cantidad: cantidad_unidades2}}": "" if not cantidad_unidades2 or cantidad_unidades2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>{'Cantidad: ' + str(cantidad_unidades2)}</span>",
+                "{{Cantidad: cantidad_unidades3}}": "" if not cantidad_unidades3 or cantidad_unidades3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>{'Cantidad: ' + str(cantidad_unidades3)}</span>",
                 # Formateo de Precio Unitario con separador de miles y '+ IVA'
-                "{{ precio_cantidad_1 }}": (
+                "{{precio_cantidad_1}}": (
                     f"<span style='font-family: Roboto, sans-serif;'>"
                     f"{format(int(float(precio1)), ',').replace(',', '.')} + IVA"  # $ se deja a la plantilla si ya lo incluye
                     f"</span>" if precio1 else ""
                 ),
-                "{{Precio Unitario: $ precio_cantidad_2 }}": (
+                "{{Precio Unitario: $ precio_cantidad_2}}": (
                     f"<span style='font-family: Roboto, sans-serif;'>"
                     f"{ 'Precio Unitario: $ ' + format(int(float(precio2)), ',').replace(',', '.')} + IVA"
                     f"</span>" if precio2 else ""
                 ),
-                "{{Precio Unitario: $ precio_cantidad_3 }}": (
+                "{{Precio Unitario: $ precio_cantidad_3}}": (
                     f"<span style='font-family: Roboto, sans-serif;'>"
                     f"{ 'Precio Unitario: $ ' + format(int(float(precio3)), ',').replace(',', '.')} + IVA"
                     f"</span>" if precio3 else ""
                 ),
-                "{{ precio_total1 }}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
-                "{{Precio Total: $  precio_total2 }}": "" if not precioTotal2 or precioTotal2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal2} + IVA</span>",
-                "{{Precio Total: $  precio_total3 }}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
-                "{{fecha_hoy}}": f"<span style='font-family: Roboto, sans-serif;'>{date.today().strftime('%d-%m-%Y')}</span>",
+                "{{precio_total1}}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
+                "{{Precio Total: $  precio_total2}}": "" if not precioTotal2 or precioTotal2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal2} + IVA</span>",
+                "{{Precio Total: $  precio_total3}}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
+                "{{fecha_hoy}}": date.today().strftime('%d-%m-%Y'),
+                "{{paginas}}": str(record.paginas),
+                "{{editable1}}": formatear_item_web(editable1_val),
+                "{{editable2}}": formatear_item_web(editable2_val),
+                "{{editable3}}": formatear_item_web(editable3_val),
             }   
 
 
