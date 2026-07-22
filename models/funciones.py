@@ -8,7 +8,13 @@ def buscarPlantillaPresupuesto(record):
         },
         "Desarrollo Web": {
             "Creación de Sitio Web Basico": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web.html",
-            "Actualización Sitio Web": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Actualizacion-de-Sitio-Web.html"
+            "Actualización Sitio Web": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Actualizacion-de-Sitio-Web.html",
+            "Creación de Landing page": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Creación-Landing-Page.html",
+            "Creación de sitio web especial": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web-Especial.html",
+            "Creación de tienda on-line": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web-Especial.html",
+            "Hosting": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Hosting.html",
+            "Servicio de Hosting": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Hosting.html",
+            "Espacio de Hosting cloud": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Hosting.html"
         },
         "Editorial": {
             "Diseño gráfico de Boletín o News":"/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaEditorial/PlantillaDIseñoGraficoBoletin.html",

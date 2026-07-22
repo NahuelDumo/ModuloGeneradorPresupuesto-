@@ -217,6 +217,9 @@ class SaleOrder(models.Model):
             oracion_1_web = ""
             oracion_2_web = ""
             oracion_3_web = ""
+            oracion_1_esp = ""
+            oracion_2_esp = ""
+            oracion_3_esp = ""
 
             for line in record.order_line:
                 categ_name = line.product_id.categ_id.name if line.product_id.categ_id else ""
@@ -225,6 +228,11 @@ class SaleOrder(models.Model):
                     oracion_1_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px; color: #58887E; font-style: italic;'>{oraciones_texto1[0]}</span>" if len(oraciones_texto1) > 0 else ""
                     oracion_2_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px; color: #58887E; font-style: italic;'>{oraciones_texto1[1]}</span>" if len(oraciones_texto1) > 1 else ""
                     oracion_3_web = f"<span style='font-family: Roboto, sans-serif ; word-spacing: 0px; color: #58887E; font-style: italic;'>{oraciones_texto1[2]}</span>" if len(oraciones_texto1) > 2 else ""
+
+                    oraciones_esp = dividir_en_oraciones(record.text_pagina1 or "", max_len=85)
+                    oracion_1_esp = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_esp[0]}</span>" if len(oraciones_esp) > 0 else ""
+                    oracion_2_esp = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_esp[1]}</span>" if len(oraciones_esp) > 1 else ""
+                    oracion_3_esp = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_esp[2]}</span>" if len(oraciones_esp) > 2 else ""
                 elif categ_name not in ["Editorial", "Grafica"]:
                     #Divido en oraciones editables
                     oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
@@ -394,6 +402,16 @@ class SaleOrder(models.Model):
             ssl_price_str = format_moneda(ssl_price)
             dominio_price_str = format_moneda(dominio_price)
 
+            hosting_price_unit = record.order_line[0].price_unit if record.order_line else 0
+            precio_hosting_str = format_moneda(hosting_price_unit)
+
+            oraciones_h = dividir_en_oraciones(record.text_pagina1 or "", max_len=85)
+            hosting_editable1 = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_h[0]}</span>" if len(oraciones_h) > 0 else ""
+            hosting_editable2 = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_h[1]}</span>" if len(oraciones_h) > 1 else ""
+            hosting_editable3 = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_h[2]}</span>" if len(oraciones_h) > 2 else ""
+            hosting_editable4 = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_h[3]}</span>" if len(oraciones_h) > 3 else ""
+            hosting_editable5 = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_h[4]}</span>" if len(oraciones_h) > 4 else ""
+
             # Reemplazar variables en el HTML
             variables = {
                 
@@ -420,6 +438,7 @@ class SaleOrder(models.Model):
                 "{{plazo_validez}}": plazo_validez,
                 "{{forma_pago}}": forma_pago,
                 "{{plazo_prederteminado}}": plazo_ejecucion,
+                "{{plazo_ejecucion}}": plazo_ejecucion,
                 "{{numero-presupuesto}}": f"<span style='font-family: Roboto, sans-serif; font-weight: 700;'>{numero_cotizacion}</span>",
                 #Horaciones editables PAGINA 1
                 "{{oracionEditable1_______________________________________________________}}": oracion_editable1,
@@ -428,7 +447,16 @@ class SaleOrder(models.Model):
                 "{{oracion_1_web}}": oracion_1_web,
                 "{{oracion_2_web}}": oracion_2_web,
                 "{{oracion_3_web}}": oracion_3_web,
+                "{{oracion_1_esp}}": oracion_1_esp,
+                "{{oracion_2_esp}}": oracion_2_esp,
+                "{{oracion_3_esp}}": oracion_3_esp,
                 "{{precio_Hostin}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${hosting_price_str}</span>",
+                "{{precio_hosting}}": precio_hosting_str,
+                "{{hosting_editable1}}": hosting_editable1,
+                "{{hosting_editable2}}": hosting_editable2,
+                "{{hosting_editable3}}": hosting_editable3,
+                "{{hosting_editable4}}": hosting_editable4,
+                "{{hosting_editable5}}": hosting_editable5,
                 "{{precio_ssl}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${ssl_price_str}</span>",
                 "{{precio_dominios}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${dominio_price_str}</span>",
 
