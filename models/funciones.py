@@ -4,7 +4,7 @@ def buscarPlantillaPresupuesto(record):
         "Branding": {
             "Creación isologotipo": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaBranding/PlantillaCreacionDeIsologotipoBRANDING.html",
             "Diseño Manual de Estilo": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaBranding/PlantillaDiseñoManualDeEstiloBRANDING.html",
-            "Rediseño Isologotipo": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaBranding/PlantillaRediseñoIsologotipoBRANDING.html"
+            "Rediseño Isologotipo": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaBranding/PlantillaRediseñoDeIsologotipoBRANDING.html"
         },
         "Desarrollo Web": {
             "Creación de Sitio Web Basico": "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web.html"
