@@ -543,9 +543,12 @@ class SaleOrder(models.Model):
                 "{{1}}": "si" if record.incluye_multilenguaje else "no",
                 "{{2}}": "si" if record.incluye_tienda else "no",
                 "{{3}}": "si" if record.incluye_portal else "no",
-                "{{idiomas}}": record.idiomas or "Inglés y Español",
-                "{{n}}": str(obtener_cantidad_idiomas(record.idiomas or "Inglés y Español")),
+                "{{idiomas}}": record.idiomas or "Inglés y Español" if record.incluye_multilenguaje else "",
+                "{{n}}": str(obtener_cantidad_idiomas(record.idiomas or "Inglés y Español")) if record.incluye_multilenguaje else "",
             }   
+
+            if not record.incluye_multilenguaje:
+                html_content = html_content.replace('idiomas diferentes: <span class="fc9">{{idiomas}}</span>', 'diferentes idiomas.')
 
 
             for variable, placeholder in variables.items():
