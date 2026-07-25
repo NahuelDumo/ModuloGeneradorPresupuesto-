@@ -1,3 +1,5 @@
+import re
+
 def buscarPlantillaPresupuesto(record):
     # Diccionario con rutas por categoría y nombre del producto
     productoCategoria = {
@@ -142,4 +144,17 @@ def verificarEspacios(oracion, max_len_total):
 
 def formatear_item(item):
     return f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; display:inline-block; width: 680px;'> • {item}</span>" if item else ""
+
+
+def obtener_cantidad_idiomas(idiomas_str):
+    if not idiomas_str:
+        return 0
+    text = str(idiomas_str).strip()
+    if not text:
+        return 0
+    cleaned = re.sub(r'\b(y|e|and)\b', ',', text, flags=re.IGNORECASE)
+    cleaned = re.sub(r'[/;&\-]', ',', cleaned)
+    parts = [p.strip() for p in cleaned.split(',') if p.strip()]
+    return len(parts)
+
 

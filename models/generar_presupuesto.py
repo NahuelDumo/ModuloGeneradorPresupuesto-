@@ -53,6 +53,37 @@ class SaleOrder(models.Model):
 
     paginas = fields.Integer(string="Cantidad de páginas", default=5)
 
+    idiomas = fields.Char(
+        string="Idiomas",
+        default="Inglés y Español",
+        help="Especifica los idiomas disponibles para el sitio web.",
+    )
+    incluye_multilenguaje = fields.Boolean(
+        string="Plataforma Multi lenguaje",
+        default=True,
+    )
+    incluye_tienda = fields.Boolean(
+        string="Tienda On-line",
+        default=True,
+    )
+    incluye_portal = fields.Boolean(
+        string="Portal de usuarios",
+        default=True,
+    )
+
+    is_desarrollo_web_especial = fields.Boolean(
+        string="¿Es Desarrollo Web Especial?",
+        compute="_compute_is_desarrollo_web_especial",
+    )
+
+    @api.depends('order_line.product_id')
+    def _compute_is_desarrollo_web_especial(self):
+        for record in self:
+            products = record.order_line.mapped('product_id.name')
+            record.is_desarrollo_web_especial = any(
+                p in ["Creación de sitio web especial", "Creación de tienda on-line"] for p in products
+            )
+
     is_desarrollo_web = fields.Boolean(
         string="¿Es Desarrollo Web?",
         compute="_compute_is_desarrollo_web",
@@ -509,6 +540,11 @@ class SaleOrder(models.Model):
                 "{{editable1}}": formatear_item_web(editable1_val),
                 "{{editable2}}": formatear_item_web(editable2_val),
                 "{{editable3}}": formatear_item_web(editable3_val),
+                "{{1}}": "si" if record.incluye_multilenguaje else "no",
+                "{{2}}": "si" if record.incluye_tienda else "no",
+                "{{3}}": "si" if record.incluye_portal else "no",
+                "{{idiomas}}": record.idiomas or "Inglés y Español",
+                "{{n}}": str(obtener_cantidad_idiomas(record.idiomas or "Inglés y Español")),
             }   
 
 
