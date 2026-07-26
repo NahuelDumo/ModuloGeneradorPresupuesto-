@@ -77,41 +77,42 @@ class SaleOrder(models.Model):
         default=True,
     )
 
-    is_desarrollo_web_especial = fields.Boolean(
-        string="¿Es Desarrollo Web Especial?",
-        compute="_compute_is_desarrollo_web_especial",
-    )
-
-    @api.depends('order_line.product_id')
-    def _compute_is_desarrollo_web_especial(self):
-        for record in self:
-            products = record.order_line.mapped('product_id.name')
-            record.is_desarrollo_web_especial = any(
-                p in ["Creación de sitio web especial", "Creación de tienda on-line"] for p in products
-            )
-
     is_desarrollo_web = fields.Boolean(
         string="¿Es Desarrollo Web?",
-        compute="_compute_is_desarrollo_web",
+        compute="_compute_web_product_flags",
         store=True,
     )
-
-    @api.depends('order_line.product_id.categ_id')
-    def _compute_is_desarrollo_web(self):
-        for record in self:
-            categories = record.order_line.mapped('product_id.categ_id.name')
-            record.is_desarrollo_web = "Desarrollo Web" in categories
-
     is_actualizacion_web = fields.Boolean(
         string="¿Es Actualización de Sitio Web?",
-        compute="_compute_is_actualizacion_web",
+        compute="_compute_web_product_flags",
+    )
+    is_desarrollo_web_especial = fields.Boolean(
+        string="¿Es Desarrollo Web Especial?",
+        compute="_compute_web_product_flags",
+    )
+    is_hosting = fields.Boolean(
+        string="¿Es Hosting?",
+        compute="_compute_web_product_flags",
+    )
+    is_landing_page = fields.Boolean(
+        string="¿Es Landing Page?",
+        compute="_compute_web_product_flags",
     )
 
-    @api.depends('order_line.product_id')
-    def _compute_is_actualizacion_web(self):
+    @api.depends('order_line.product_id', 'order_line.product_id.categ_id')
+    def _compute_web_product_flags(self):
         for record in self:
+            categories = record.order_line.mapped('product_id.categ_id.name')
             products = record.order_line.mapped('product_id.name')
-            record.is_actualizacion_web = "Actualización Sitio Web" in products
+
+            record.is_desarrollo_web = "Desarrollo Web" in categories
+            record.is_actualizacion_web = any("Actualización Sitio Web" in p for p in products)
+            record.is_desarrollo_web_especial = any(
+                p in ["Creación de sitio web especial", "Creación de tienda on-line"] or "especial" in p.lower() or "tienda" in p.lower()
+                for p in products
+            )
+            record.is_hosting = any("hosting" in p.lower() for p in products)
+            record.is_landing_page = any("landing" in p.lower() for p in products)
     
     def generar_presupuesto_pdf(self):
         for record in self:
