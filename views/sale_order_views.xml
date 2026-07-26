@@ -33,6 +33,7 @@
 
             <!-- Agregar el campo "Texto Editable Pagina 2" después del campo "texto pagina 1" -->
             <xpath expr="//field[@name='text_pagina1']" position="after">
+                <field name="cantidad_minima" placeholder="Ej: 6 meses" help="Mínimo de meses que tiene que ser contratado el servicio" attrs="{'invisible': [('is_desarrollo_web', '=', False)]}"/>
                 <field name="text_pagina2" placeholder="Rellenar texto pagina 2" widget="char_length_counter" required="1"/>
             </xpath>
 

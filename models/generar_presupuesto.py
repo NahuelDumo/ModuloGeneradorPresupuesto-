@@ -53,6 +53,12 @@ class SaleOrder(models.Model):
 
     paginas = fields.Integer(string="Cantidad de páginas", default=5)
 
+    cantidad_minima = fields.Char(
+        string="Cantidad meses",
+        default="6 meses",
+        help="Mínimo de meses que tiene que ser contratado el servicio",
+    )
+
     idiomas = fields.Char(
         string="Idiomas",
         default="Inglés y Español",
@@ -138,12 +144,13 @@ class SaleOrder(models.Model):
             forma_pago = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.payment_method}</span>"
             nombre_servicio = record.order_line[0].product_id.name or "No disponible"
 
-            # Para la plantilla de Actualización, dividimos text_pagina1_web por punto (.)
-            texto_web = record.text_pagina1_web or ""
+            # Para la plantilla de Actualización, Hosting y Landing Page, dividimos text_pagina1_web por punto (.)
+            texto_web = record.text_pagina1_web or record.text_pagina1 or ""
             oraciones_web = [o.strip() + "." for o in texto_web.split(".") if o.strip()]
             editable1_val = oraciones_web[0] if len(oraciones_web) > 0 else ""
             editable2_val = oraciones_web[1] if len(oraciones_web) > 1 else ""
             editable3_val = oraciones_web[2] if len(oraciones_web) > 2 else ""
+            editable4_val = oraciones_web[3] if len(oraciones_web) > 3 else ""
 
             ################################################# Obtenemos las alternativas de precio ################################################# 
             # Inicializar variables vacías para las 3 opciones
@@ -500,8 +507,13 @@ class SaleOrder(models.Model):
                 "{{precio_dominios}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${dominio_price_str}</span>",
 
                 
-                "{{item1}}": formatear_item(item1),
-                "{{item2}}": formatear_item(item2),
+                "{{oracion1_hosting}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; color: #58887E; font-style: italic;'>{editable1_val}</span>" if editable1_val else "",
+                "{{oracion2_hosting}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; color: #58887E; font-style: italic;'>{editable2_val}</span>" if editable2_val else "",
+                "{{oracion3_hosting}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; color: #58887E; font-style: italic;'>{editable3_val}</span>" if editable3_val else "",
+                "{{oracion4_hosting}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; color: #58887E; font-style: italic;'>{editable4_val}</span>" if editable4_val else "",
+                "{{cantidad_minima}}": str(record.cantidad_minima or "6 meses"),
+                "{{item1}}": formatear_item_web(editable1_val) if record.is_desarrollo_web else formatear_item(item1),
+                "{{item2}}": formatear_item_web(editable2_val) if record.is_desarrollo_web else formatear_item(item2),
                 "{{item3}}": formatear_item(item3),
                 "{{item4}}": formatear_item(item4),
                 "{{item5}}": formatear_item(item5),
