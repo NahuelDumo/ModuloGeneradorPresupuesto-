@@ -332,65 +332,7 @@ class SaleOrder(models.Model):
             total3_str = format_moneda(record.valor_cuota3 * record.cantidad_cuotas3) if record.valor_cuota3 and record.cantidad_cuotas3 else ""
 
 
-            # Reestructurar COMPLETAMENTE las tres líneas para usar divs absolutos y alinear todo perfectamente en las dos plantillas
-            # Línea 1
-            html_content = re.sub(
-                r'(<div class=\"[^\"]*\b(y[a-zA-Z0-9]+)\b[^\"]*\">)Valor Cuota:(<span class=\"[^\"]*\"><\/span><span class=\"[^\"]*\">)(En 2 pagos [^<]*)(<span class=\"[^\"]*\"> <\/span>)Valor total: \{\{total_1\}\}(<span class=\"[^\"]*\"><\/span><span class=\"[^\"]*\">)\{\{valor_cuota1\}\}(<\/span><\/span><\/div>)',
-                lambda m: (
-                    r'<div class="t m0 ' + m.group(2) + r'" style="left: 330px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">' + m.group(4) + r'</span></div>\n' +
-                    r'<div class="t m0 ' + m.group(2) + r'" style="left: 490px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor Cuota: <b>$' + cuota1_str + r'</b> + IVA</span></div>\n' +
-                    r'<div class="t m0 ' + m.group(2) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total1_str + r' + IVA</span></div>'
-                ) if cuota1_str else "",
-                html_content
-            )
 
-            # Línea 2
-            html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{cantidad_cuotas2\}\}.*?<\/div>',
-                lambda m: (
-                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 330px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">En ' + str(record.cantidad_cuotas2) + r' cuotas fijas</span></div>\n' +
-                    (r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total2_str + r' + IVA</span></div>' if 'total_2' in m.group(0) else '')
-                ) if record.cantidad_cuotas2 else "",
-                html_content
-            )
-            html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{valor_cuota2\}\}.*?<\/div>',
-                lambda m: (
-                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 490px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor Cuota: <b>$' + cuota2_str + r'</b> + IVA</span></div>'
-                ) if cuota2_str else "",
-                html_content
-            )
-            html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{total_2\}\}.*?<\/div>',
-                lambda m: (
-                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total2_str + r' + IVA</span></div>'
-                ) if total2_str else "",
-                html_content
-            )
-
-            # Línea 3
-            html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{cantidad_cuotas3\}\}.*?<\/div>',
-                lambda m: (
-                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 330px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">En ' + str(record.cantidad_cuotas3) + r' cuotas fijas</span></div>\n' +
-                    (r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total3_str + r' + IVA</span></div>' if 'total_3' in m.group(0) else '')
-                ) if record.cantidad_cuotas3 else "",
-                html_content
-            )
-            html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{valor_cuota3\}\}.*?<\/div>',
-                lambda m: (
-                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 490px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor Cuota: <b>$' + cuota3_str + r'</b> + IVA</span></div>'
-                ) if cuota3_str else "",
-                html_content
-            )
-            html_content = re.sub(
-                r'<div class="[^"]*\b(y[a-zA-Z0-9]+)\b[^"]*"[^>]*>(?:(?!<div).)*?\{\{total_3\}\}.*?<\/div>',
-                lambda m: (
-                    r'<div class="t m0 ' + m.group(1) + r'" style="left: 670px;"><span style="font-family: Roboto, sans-serif; word-spacing: 0px; letter-spacing: normal; color: #000000; font-size: 39px;">Valor total: $' + total3_str + r' + IVA</span></div>'
-                ) if total3_str else "",
-                html_content
-            )
 
             # Agregar estilo con Google Fonts
             font_style = """
@@ -506,6 +448,17 @@ class SaleOrder(models.Model):
                 "{{hosting_editable5}}": hosting_editable5,
                 "{{precio_ssl}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${ssl_price_str}</span>",
                 "{{precio_dominios}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${dominio_price_str}</span>",
+
+                "{{valor_cuota1}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${cuota1_str}</span> + IVA" if cuota1_str else "",
+                "{{total_1}}": f"${total1_str} + IVA" if total1_str else "",
+
+                "{{cantidad_cuotas2}}": f"En {record.cantidad_cuotas2} cuotas fijas" if record.cantidad_cuotas2 else "",
+                "{{valor_cuota2}}": f"Valor Cuota: <span style='font-family: Roboto, sans-serif; font-weight: bold;'>${cuota2_str}</span> + IVA" if cuota2_str and record.cantidad_cuotas2 else "",
+                "{{total_2}}": f"Valor total: ${total2_str} + IVA" if total2_str and record.cantidad_cuotas2 else "",
+
+                "{{cantidad_cuotas3}}": f"En {record.cantidad_cuotas3} cuotas fijas" if record.cantidad_cuotas3 else "",
+                "{{valor_cuota3}}": f"Valor Cuota: <span style='font-family: Roboto, sans-serif; font-weight: bold;'>${cuota3_str}</span> + IVA" if cuota3_str and record.cantidad_cuotas3 else "",
+                "{{total_3}}": f"Valor total: ${total3_str} + IVA" if total3_str and record.cantidad_cuotas3 else "",
 
                 
                 "{{oracion1_hosting}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; color: #58887E; font-style: italic;'>{editable1_val}</span>" if editable1_val else "",
