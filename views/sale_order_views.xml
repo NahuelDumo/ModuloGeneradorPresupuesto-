@@ -19,11 +19,13 @@
                 <field name="payment_method" placeholder="Especificar forma de pago" />
             </xpath>
 
-            <!-- Agregar el campo "Texto Editable Pagina 1" después del campo "partner_id" -->
+            <!-- Agregar campos editables después del campo "partner_id" en orden correcto -->
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="text_pagina1" placeholder="Rellenar texto pagina 1" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', False)], 'invisible': [('is_desarrollo_web', '=', True)]}"/>
                 <field name="text_pagina1_web" placeholder="Rellenar especificaciones para Desarrollo Web (3 renglones)" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', True)], 'invisible': [('is_desarrollo_web', '=', False)]}"/>
                 <field name="text_pagina2_web" placeholder="Rellenar características Pag. 2 para Desarrollo Web (3 renglones)" widget="char_length_counter" attrs="{'invisible': ['|', '|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_landing_page', '=', True), ('is_actualizacion_web', '=', True)]}"/>
+                <field name="cantidad_minima" placeholder="Ej: 6 meses" help="Mínimo de meses que tiene que ser contratado el servicio" attrs="{'invisible': [('is_hosting', '=', False)]}"/>
+                <field name="text_pagina2" placeholder="Rellenar texto pagina 2" widget="char_length_counter" required="1"/>
                 <field name="is_desarrollo_web_especial" invisible="1"/>
                 <field name="is_hosting" invisible="1"/>
                 <field name="is_landing_page" invisible="1"/>
@@ -31,12 +33,6 @@
                 <field name="idiomas" placeholder="Ej: Inglés y Español" attrs="{'invisible': ['|', ('is_desarrollo_web_especial', '=', False), ('incluye_multilenguaje', '=', False)]}"/>
                 <field name="incluye_tienda" widget="boolean_toggle" attrs="{'invisible': [('is_desarrollo_web_especial', '=', False)]}"/>
                 <field name="incluye_portal" widget="boolean_toggle" attrs="{'invisible': [('is_desarrollo_web_especial', '=', False)]}"/>
-            </xpath>
-
-            <!-- Agregar el campo "Texto Editable Pagina 2" después del campo "texto pagina 1" -->
-            <xpath expr="//field[@name='text_pagina1']" position="after">
-                <field name="cantidad_minima" placeholder="Ej: 6 meses" help="Mínimo de meses que tiene que ser contratado el servicio" attrs="{'invisible': [('is_hosting', '=', False)]}"/>
-                <field name="text_pagina2" placeholder="Rellenar texto pagina 2" widget="char_length_counter" required="1"/>
             </xpath>
 
             <!-- Insertar el nuevo campo en el mismo lugar -->

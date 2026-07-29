@@ -315,8 +315,8 @@ class SaleOrder(models.Model):
                 html_content = file.read()
 
             # Limpiar etiquetas HTML basura que Word/PDF inserta DENTRO de las llaves {{ }}
-            # Ejemplo: convierte {{<span>NOMBRE</span>}} en {{NOMBRE}}
-            html_content = re.sub(r'\{\{(.*?)\}\}', lambda m: '{{' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + '}}', html_content)
+            # Ejemplo: convierte {{<span>NOMBRE</span>}} en {{NOMBRE}} y normaliza espacios dobles
+            html_content = re.sub(r'\{\{(.*?)\}\}', lambda m: '{{' + re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', m.group(1))).strip() + '}}', html_content)
 
             # Formatear cuotas y totales para Desarrollo Web (necesarios para inyectar en las líneas reestructuradas)
             def format_moneda(valor):
@@ -472,9 +472,9 @@ class SaleOrder(models.Model):
                 "{{item4}}": formatear_item(item4),
                 "{{item5}}": formatear_item(item5),
                 "{{item6}}": formatear_item(item6),                #Horaciones editables PAGINA 2
-                "{{oracion_1______________________________________________________________________________________________}}": oracion_1,
-                "{{oracion_2______________________________________________________________________________________________}}": oracion_2,
-                "{{oracion_3______________________________________________________________________________________________}}": oracion_3,
+                "{{oracion_1______________________________________________________________________________________________}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oracion_1}</span>" if oracion_1 else "",
+                "{{oracion_2______________________________________________________________________________________________}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oracion_2}</span>" if oracion_2 else "",
+                "{{oracion_3______________________________________________________________________________________________}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oracion_3}</span>" if oracion_3 else "",
                 
                 ###########################################EXCEPCIONALES#######################################################
                 # Impresion de Boletin, Libro, Pieza Editorial, Revista
@@ -493,14 +493,26 @@ class SaleOrder(models.Model):
                     f"{ 'Precio Unitario: $ ' + format(int(float(precio2)), ',').replace(',', '.')} + IVA"
                     f"</span>" if precio2 else ""
                 ),
+                "{{Precio Unitario: $  precio_cantidad_2}}": (
+                    f"<span style='font-family: Roboto, sans-serif;'>"
+                    f"{ 'Precio Unitario: $ ' + format(int(float(precio2)), ',').replace(',', '.')} + IVA"
+                    f"</span>" if precio2 else ""
+                ),
                 "{{Precio Unitario: $ precio_cantidad_3}}": (
+                    f"<span style='font-family: Roboto, sans-serif;'>"
+                    f"{ 'Precio Unitario: $ ' + format(int(float(precio3)), ',').replace(',', '.')} + IVA"
+                    f"</span>" if precio3 else ""
+                ),
+                "{{Precio Unitario: $  precio_cantidad_3}}": (
                     f"<span style='font-family: Roboto, sans-serif;'>"
                     f"{ 'Precio Unitario: $ ' + format(int(float(precio3)), ',').replace(',', '.')} + IVA"
                     f"</span>" if precio3 else ""
                 ),
                 "{{precio_total1}}": f"<span style='font-family: Roboto, sans-serif;'>{precioTotal1 + ' + IVA' if precioTotal1 and precioTotal1 != '0' else ''}</span>",
                 "{{Precio Total: $  precio_total2}}": "" if not precioTotal2 or precioTotal2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal2} + IVA</span>",
+                "{{Precio Total: $ precio_total2}}": "" if not precioTotal2 or precioTotal2 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal2} + IVA</span>",
                 "{{Precio Total: $  precio_total3}}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
+                "{{Precio Total: $ precio_total3}}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
                 "{{fecha_hoy}}": date.today().strftime('%d-%m-%Y'),
                 "{{paginas}}": str(record.paginas),
                 "{{editable1}}": formatear_item_web(editable1_val),
