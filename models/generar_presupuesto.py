@@ -85,18 +85,22 @@ class SaleOrder(models.Model):
     is_actualizacion_web = fields.Boolean(
         string="¿Es Actualización de Sitio Web?",
         compute="_compute_web_product_flags",
+        store=True,
     )
     is_desarrollo_web_especial = fields.Boolean(
         string="¿Es Desarrollo Web Especial?",
         compute="_compute_web_product_flags",
+        store=True,
     )
     is_hosting = fields.Boolean(
         string="¿Es Hosting?",
         compute="_compute_web_product_flags",
+        store=True,
     )
     is_landing_page = fields.Boolean(
         string="¿Es Landing Page?",
         compute="_compute_web_product_flags",
+        store=True,
     )
 
     @api.depends('order_line.product_id', 'order_line.product_id.categ_id')
@@ -106,7 +110,7 @@ class SaleOrder(models.Model):
             products = record.order_line.mapped('product_id.name')
 
             record.is_desarrollo_web = "Desarrollo Web" in categories
-            record.is_actualizacion_web = any("Actualización Sitio Web" in p for p in products)
+            record.is_actualizacion_web = any("actualizac" in p.lower() for p in products)
             record.is_desarrollo_web_especial = any(
                 p in ["Creación de sitio web especial", "Creación de tienda on-line"] or "especial" in p.lower() or "tienda" in p.lower()
                 for p in products

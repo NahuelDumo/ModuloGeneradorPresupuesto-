@@ -21,14 +21,16 @@
 
             <!-- Agregar campos editables después del campo "partner_id" en orden correcto -->
             <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="is_desarrollo_web" invisible="1"/>
+                <field name="is_actualizacion_web" invisible="1"/>
+                <field name="is_desarrollo_web_especial" invisible="1"/>
+                <field name="is_hosting" invisible="1"/>
+                <field name="is_landing_page" invisible="1"/>
                 <field name="text_pagina1" placeholder="Rellenar texto pagina 1" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', False)], 'invisible': [('is_desarrollo_web', '=', True)]}"/>
                 <field name="text_pagina1_web" placeholder="Rellenar especificaciones para Desarrollo Web (3 renglones)" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', True)], 'invisible': [('is_desarrollo_web', '=', False)]}"/>
                 <field name="text_pagina2_web" placeholder="Rellenar características Pag. 2 para Desarrollo Web (3 renglones)" widget="char_length_counter" attrs="{'invisible': ['|', '|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_landing_page', '=', True), ('is_actualizacion_web', '=', True)]}"/>
                 <field name="cantidad_minima" placeholder="Ej: 6 meses" help="Mínimo de meses que tiene que ser contratado el servicio" attrs="{'invisible': [('is_hosting', '=', False)]}"/>
                 <field name="text_pagina2" placeholder="Rellenar texto pagina 2" widget="char_length_counter" required="1"/>
-                <field name="is_desarrollo_web_especial" invisible="1"/>
-                <field name="is_hosting" invisible="1"/>
-                <field name="is_landing_page" invisible="1"/>
                 <field name="incluye_multilenguaje" widget="boolean_toggle" attrs="{'invisible': [('is_desarrollo_web_especial', '=', False)]}"/>
                 <field name="idiomas" placeholder="Ej: Inglés y Español" attrs="{'invisible': ['|', ('is_desarrollo_web_especial', '=', False), ('incluye_multilenguaje', '=', False)]}"/>
                 <field name="incluye_tienda" widget="boolean_toggle" attrs="{'invisible': [('is_desarrollo_web_especial', '=', False)]}"/>
@@ -38,13 +40,11 @@
             <!-- Insertar el nuevo campo en el mismo lugar -->
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="plazo_ejecucion"/>
-                <field name="is_desarrollo_web" invisible="1"/>
-                <field name="is_actualizacion_web" invisible="1"/>
-                <field name="valor_cuota1" attrs="{'invisible': ['|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_actualizacion_web', '=', True)]}"/>
-                <field name="cantidad_cuotas2" attrs="{'invisible': ['|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_actualizacion_web', '=', True)]}"/>
-                <field name="valor_cuota2" attrs="{'invisible': ['|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_actualizacion_web', '=', True)]}"/>
-                <field name="cantidad_cuotas3" attrs="{'invisible': ['|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_actualizacion_web', '=', True)]}"/>
-                <field name="valor_cuota3" attrs="{'invisible': ['|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_actualizacion_web', '=', True)]}"/>
+                <field name="valor_cuota1" attrs="{'invisible': ['|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True)]}"/>
+                <field name="cantidad_cuotas2" attrs="{'invisible': ['|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True)]}"/>
+                <field name="valor_cuota2" attrs="{'invisible': ['|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True)]}"/>
+                <field name="cantidad_cuotas3" attrs="{'invisible': ['|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True)]}"/>
+                <field name="valor_cuota3" attrs="{'invisible': ['|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True)]}"/>
                 <field name="paginas" attrs="{'invisible': [('is_actualizacion_web', '=', False)]}"/>
             </xpath>
         </field>
