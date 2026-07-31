@@ -15,13 +15,8 @@ def buscarPlantillaPresupuesto(record):
             "Creación de Sitio Web Basico": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web.html",
             "Actualización Sitio Web": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Actualizacion-de-Sitio-Web.html",
             "Creación de sitio web especial": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web-Especial.html",
-            "Creación de tienda on-line": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web-Especial.html",
             "Servicio de Hosting": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Hosting.html",
-            "Espacio de Hosting": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Hosting.html",
-            "Hosting": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Hosting.html",
             "Creación de Landing Page": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Creación-Landing-Page.html",
-            "Creación de Landing page": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Creación-Landing-Page.html",
-            "Landing Page": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Creación-Landing-Page.html",
         },
         "Editorial": {
             "Diseño gráfico de Boletín o News": f"{base_dir}/PlantillaEditorial/PlantillaDIseñoGraficoBoletin.html",
