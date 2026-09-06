@@ -17,6 +17,7 @@
             <!-- Agregar el campo "Forma de pago" después del campo "Plazos de pago" -->
             <xpath expr="//field[@name='validity_date']" position="after">
                 <field name="payment_method" placeholder="Especificar forma de pago" />
+                <field name="forma_entrega" placeholder="Especificar forma de entrega (ej: A convenir)" />
             </xpath>
 
             <!-- Agregar campos editables después del campo "partner_id" en orden correcto -->
@@ -26,6 +27,7 @@
                 <field name="is_desarrollo_web_especial" invisible="1"/>
                 <field name="is_hosting" invisible="1"/>
                 <field name="is_landing_page" invisible="1"/>
+                <field name="is_productos" invisible="1"/>
                 <field name="text_pagina1" placeholder="Rellenar texto página 1" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', False)], 'invisible': [('is_desarrollo_web', '=', True)]}"/>
                 <field name="text_pagina1_web" placeholder="Ej: Incluye login de usuarios y roles. Integraciones con APIs externas y redes sociales. Tiempo de respuesta cliente: max 48hs." widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', True)], 'invisible': [('is_desarrollo_web', '=', False)]}"/>
                 <field name="text_pagina2_web" placeholder="Ej: Hasta 5 páginas/módulos. Incluye diseño a medida (2 propuestas, 3 revisiones). Responsive design (mobile, tablet, desktop)." widget="char_length_counter" attrs="{'invisible': ['|', '|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_landing_page', '=', True), ('is_actualizacion_web', '=', True)]}"/>
@@ -35,6 +37,9 @@
                 <field name="idiomas" placeholder="Ej: Inglés y Español" attrs="{'invisible': ['|', ('is_desarrollo_web_especial', '=', False), ('incluye_multilenguaje', '=', False)]}"/>
                 <field name="incluye_tienda" widget="boolean_toggle" attrs="{'invisible': [('is_desarrollo_web_especial', '=', False)]}"/>
                 <field name="incluye_portal" widget="boolean_toggle" attrs="{'invisible': [('is_desarrollo_web_especial', '=', False)]}"/>
+                <field name="incluye_diseno_tapas" widget="boolean_toggle" attrs="{'invisible': [('is_productos', '=', False)]}"/>
+                <field name="incluye_diseno_insert" widget="boolean_toggle" attrs="{'invisible': [('is_productos', '=', False)]}"/>
+                <field name="incluye_diseno_interior" widget="boolean_toggle" attrs="{'invisible': [('is_productos', '=', False)]}"/>
             </xpath>
 
             <!-- Insertar el nuevo campo en el mismo lugar -->

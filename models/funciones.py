@@ -52,6 +52,14 @@ def buscarPlantillaPresupuesto(record):
             "Impresión de Sobres": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G2_DGSobres.html",
             "Impresión de Tarjetas": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G2_DGTarjetas.html",
             "Impresión de pieza gráfica especial": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G2_DGPiezaGEspecial.html"
+        },
+        "Productos": {
+            "Agendas personalizadas": f"{base_dir}/PlantillaProductos/Agendas-personalizadas-Plantilla.html",
+            "Cuadernos personalizados": f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html",
+        },
+        "Productos Promocionales": {
+            "Agendas personalizadas": f"{base_dir}/PlantillaProductos/Agendas-personalizadas-Plantilla.html",
+            "Cuadernos personalizados": f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html",
         }
     }
 
@@ -76,6 +84,10 @@ def buscarPlantillaPresupuesto(record):
 
             # Fallback por palabras clave en el nombre del producto
             prod_lower = producto_nombre.lower()
+            if "agenda" in prod_lower:
+                return f"{base_dir}/PlantillaProductos/Agendas-personalizadas-Plantilla.html"
+            if "cuaderno" in prod_lower:
+                return f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html"
             if "hosting" in prod_lower:
                 return f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Hosting.html"
             if "landing" in prod_lower:

@@ -77,6 +77,27 @@ class SaleOrder(models.Model):
         default=True,
     )
 
+    forma_entrega = fields.Char(
+        string="Forma de entrega",
+        default="A convenir",
+        help="Especifica la forma de entrega para este presupuesto.",
+    )
+    incluye_diseno_tapas = fields.Boolean(
+        string="Diseño de Tapas",
+        default=True,
+        help="Especifica si el presupuesto incluye el diseño gráfico de las tapas.",
+    )
+    incluye_diseno_insert = fields.Boolean(
+        string="Diseño Insert",
+        default=False,
+        help="Especifica si el presupuesto incluye el diseño gráfico de las hojas especiales insertas.",
+    )
+    incluye_diseno_interior = fields.Boolean(
+        string="Diseño Interior Especial",
+        default=False,
+        help="Especifica si el presupuesto incluye diseño gráfico especial de las hojas del interior.",
+    )
+
     is_desarrollo_web = fields.Boolean(
         string="¿Es Desarrollo Web?",
         compute="_compute_web_product_flags",
@@ -102,6 +123,11 @@ class SaleOrder(models.Model):
         compute="_compute_web_product_flags",
         store=True,
     )
+    is_productos = fields.Boolean(
+        string="¿Es Productos Promocionales?",
+        compute="_compute_web_product_flags",
+        store=True,
+    )
 
     @api.depends('order_line.product_id', 'order_line.product_id.categ_id')
     def _compute_web_product_flags(self):
@@ -110,13 +136,20 @@ class SaleOrder(models.Model):
             products = record.order_line.mapped('product_id.name')
 
             record.is_desarrollo_web = "Desarrollo Web" in categories
-            record.is_actualizacion_web = any("actualizac" in p.lower() for p in products)
+            record.is_actualizacion_web = any("actualizac" in (p or "").lower() for p in products)
             record.is_desarrollo_web_especial = any(
-                p in ["Creación de sitio web especial", "Creación de tienda on-line"] or "especial" in p.lower() or "tienda" in p.lower()
+                p in ["Creación de sitio web especial", "Creación de tienda on-line"] or "especial" in (p or "").lower() or "tienda" in (p or "").lower()
                 for p in products
             )
-            record.is_hosting = any("hosting" in p.lower() for p in products)
-            record.is_landing_page = any("landing" in p.lower() for p in products)
+            record.is_hosting = any("hosting" in (p or "").lower() for p in products)
+            record.is_landing_page = any("landing" in (p or "").lower() for p in products)
+            record.is_productos = any(
+                c and ("producto" in c.lower() or "merchandising" in c.lower())
+                for c in categories
+            ) or any(
+                p and ("agenda" in p.lower() or "cuaderno" in p.lower())
+                for p in products
+            )
     
     def generar_presupuesto_pdf(self):
         for record in self:
@@ -246,6 +279,53 @@ class SaleOrder(models.Model):
 
             ##################################################### FIN CASO EXCEPCIONAL IMPRESION #######################################################
 
+            # Variables para cálculo de productos (Agendas y Cuadernos)
+            cant1_prod = cant2_prod = cant3_prod = ""
+            precio1_prod = precio2_prod = precio3_prod = ""
+            total1_prod = total2_prod = total3_prod = ""
+
+            if record.is_productos:
+                def get_rango_cantidad(line):
+                    name = (line.name or "").strip()
+                    if " - " in name:
+                        partes = name.split(" - ", 1)
+                        if any(c.isdigit() for c in partes[1]):
+                            return partes[1].strip()
+                    if any(c.isdigit() for c in name):
+                        return name
+                    qty = int(round(line.product_uom_qty)) if line.product_uom_qty else 0
+                    return f"{qty} uu." if qty > 0 else ""
+
+                def format_num_moneda(val):
+                    if not val:
+                        return ""
+                    val_int = int(round(float(val)))
+                    return format(val_int, ',').replace(",", ".")
+
+                lineas_prod = record.order_line[:3]
+                if len(lineas_prod) > 0:
+                    l = lineas_prod[0]
+                    cant1_prod = get_rango_cantidad(l)
+                    p_unit = l.price_unit or 0
+                    p_tot = l.price_subtotal or (l.product_uom_qty * p_unit if l.product_uom_qty else 0)
+                    precio1_prod = format_num_moneda(p_unit)
+                    total1_prod = format_num_moneda(p_tot)
+
+                if len(lineas_prod) > 1:
+                    l = lineas_prod[1]
+                    cant2_prod = get_rango_cantidad(l)
+                    p_unit = l.price_unit or 0
+                    p_tot = l.price_subtotal or (l.product_uom_qty * p_unit if l.product_uom_qty else 0)
+                    precio2_prod = format_num_moneda(p_unit)
+                    total2_prod = format_num_moneda(p_tot)
+
+                if len(lineas_prod) > 2:
+                    l = lineas_prod[2]
+                    cant3_prod = get_rango_cantidad(l)
+                    p_unit = l.price_unit or 0
+                    p_tot = l.price_subtotal or (l.product_uom_qty * p_unit if l.product_uom_qty else 0)
+                    precio3_prod = format_num_moneda(p_unit)
+                    total3_prod = format_num_moneda(p_tot)
 
             plazo_validez = record.validity_date.strftime('%d-%m-%Y') if record.validity_date else "No disponible"
             plazo_ejecucion = record.plazo_ejecucion or "A convenir"
@@ -281,7 +361,7 @@ class SaleOrder(models.Model):
                     oracion_1_esp = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_esp[0]}</span>" if len(oraciones_esp) > 0 else ""
                     oracion_2_esp = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_esp[1]}</span>" if len(oraciones_esp) > 1 else ""
                     oracion_3_esp = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_esp[2]}</span>" if len(oraciones_esp) > 2 else ""
-                elif categ_name not in ["Editorial", "Grafica"]:
+                elif categ_name not in ["Editorial", "Grafica"] and not record.is_productos:
                     #Divido en oraciones editables
                     oraciones_texto1 = dividir_en_oraciones(texto1, max_len=75)
                 
@@ -522,14 +602,29 @@ class SaleOrder(models.Model):
                 "{{editable1}}": formatear_item_web(editable1_val),
                 "{{editable2}}": formatear_item_web(editable2_val),
                 "{{editable3}}": formatear_item_web(editable3_val),
-                "{{1}}": "si" if record.incluye_multilenguaje else "no",
-                "{{2}}": "si" if record.incluye_tienda else "no",
-                "{{3}}": "si" if record.incluye_portal else "no",
+                "{{1}}": ("si" if record.incluye_diseno_tapas else "no") if record.is_productos else ("si" if record.incluye_multilenguaje else "no"),
+                "{{2}}": ("si" if record.incluye_diseno_insert else "no") if record.is_productos else ("si" if record.incluye_tienda else "no"),
+                "{{3}}": ("si" if record.incluye_diseno_interior else "no") if record.is_productos else ("si" if record.incluye_portal else "no"),
                 "{{idiomas}}": record.idiomas or "Inglés y Español" if record.incluye_multilenguaje else "",
                 "{{n}}": str(obtener_cantidad_idiomas(record.idiomas or "Inglés y Español")) if record.incluye_multilenguaje else "",
+
+                # Variables para Productos (Agendas y Cuadernos)
+                "{{forma_entrega}}": f"<span style='font-family: Roboto, sans-serif;'>{record.forma_entrega or 'A convenir'}</span>",
+                "{{cant1}}": f"<span style='font-family: Roboto, sans-serif;'>{cant1_prod}</span>" if record.is_productos else f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
+                "{{cant2}}": f"<span style='font-family: Roboto, sans-serif;'>Cantidad: {cant2_prod}</span>" if (record.is_productos and cant2_prod) else "",
+                "{{cant3}}": f"<span style='font-family: Roboto, sans-serif;'>Cantidad: {cant3_prod}</span>" if (record.is_productos and cant3_prod) else "",
+                "{{precio1}}": f"<span style='font-family: Roboto, sans-serif;'>$ {precio1_prod} + IVA</span>" if (record.is_productos and precio1_prod) else "",
+                "{{precio2}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Unit: $ {precio2_prod} + IVA</span>" if (record.is_productos and precio2_prod) else "",
+                "{{precio3}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Unit: $ {precio3_prod} + IVA</span>" if (record.is_productos and precio3_prod) else "",
+                "{{valor1}}": f"<span style='font-family: Roboto, sans-serif;'>$ {precio1_prod} + IVA</span>" if (record.is_productos and precio1_prod) else "",
+                "{{valor2}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Unit: $ {precio2_prod} + IVA</span>" if (record.is_productos and precio2_prod) else "",
+                "{{valor3}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Unit: $ {precio3_prod} + IVA</span>" if (record.is_productos and precio3_prod) else "",
+                "{{total1}}": f"<span style='font-family: Roboto, sans-serif;'>$ {total1_prod} + IVA</span>" if (record.is_productos and total1_prod) else "",
+                "{{total2}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {total2_prod} + IVA</span>" if (record.is_productos and total2_prod) else "",
+                "{{total3}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {total3_prod} + IVA</span>" if (record.is_productos and total3_prod) else "",
             }   
 
-            if not record.incluye_multilenguaje:
+            if not record.incluye_multilenguaje and record.is_desarrollo_web_especial:
                 html_content = html_content.replace('idiomas diferentes: <span class="fc9">{{idiomas}}</span>', 'diferentes idiomas.')
 
 
