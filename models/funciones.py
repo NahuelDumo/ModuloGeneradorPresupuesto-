@@ -54,11 +54,15 @@ def buscarPlantillaPresupuesto(record):
             "Impresión de pieza gráfica especial": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G2_DGPiezaGEspecial.html"
         },
         "Productos": {
+            "Agendas": f"{base_dir}/PlantillaProductos/Agendas-personalizadas-Plantilla.html",
             "Agendas personalizadas": f"{base_dir}/PlantillaProductos/Agendas-personalizadas-Plantilla.html",
+            "Cuadernos": f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html",
             "Cuadernos personalizados": f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html",
         },
         "Productos Promocionales": {
+            "Agendas": f"{base_dir}/PlantillaProductos/Agendas-personalizadas-Plantilla.html",
             "Agendas personalizadas": f"{base_dir}/PlantillaProductos/Agendas-personalizadas-Plantilla.html",
+            "Cuadernos": f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html",
             "Cuadernos personalizados": f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html",
         }
     }
