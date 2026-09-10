@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tutorial: Generador de Presupuestos - Agendas y Cuadernos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm 14mm 12mm 14mm;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #1e293b;
+            background-color: #ffffff;
+            line-height: 1.45;
+            font-size: 11.5px;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .page {
+            height: 272mm;
+            max-height: 272mm;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            page-break-after: always;
+            padding: 0;
+        }
+
+        .page:last-child {
+            page-break-after: avoid;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0f5144;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .header-logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, #0f5144 0%, #177361 100%);
+            color: white;
+            font-weight: 800;
+            font-size: 18px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            letter-spacing: 1px;
+        }
+
+        .header-titles h1 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 800;
+            color: #0f5144;
+            line-height: 1.2;
+        }
+
+        .header-titles p {
+            margin: 2px 0 0 0;
+            font-size: 10.5px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .header-meta {
+            text-align: right;
+            font-size: 10px;
+            color: #475569;
+        }
+
+        .header-meta span {
+            display: block;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            background-color: #e6f4f1;
+            color: #0f5144;
+            padding: 2px 7px;
+            border-radius: 9999px;
+            font-size: 9.5px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #0f5144;
+            border-left: 3.5px solid #177361;
+            padding-left: 8px;
+            margin-top: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-title .step-num {
+            background-color: #0f5144;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10.5px;
+            font-weight: 700;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .card.highlight {
+            border-color: #99d5c9;
+            background-color: #f0fdfa;
+        }
+
+        .card-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #0f5144;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 8px 0;
+            background-color: #ffffff;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .table-custom th {
+            background-color: #0f5144;
+            color: white;
+            text-align: left;
+            padding: 6px 8px;
+            font-weight: 600;
+            font-size: 10.5px;
+        }
+
+        .table-custom td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #edf2f7;
+            color: #334155;
+        }
+
+        .table-custom tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-custom tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .pill-field {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #e2e8f0;
+            color: #0f172a;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .pill-val {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .callout {
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 11px;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .callout-info {
+            background-color: #f0fdfa;
+            border-left: 3.5px solid #0f5144;
+            color: #134e4a;
+        }
+
+        .callout-warning {
+            background-color: #fffbeb;
+            border-left: 3.5px solid #f59e0b;
+            color: #78350f;
+        }
+
+        .callout-tip {
+            background-color: #eff6ff;
+            border-left: 3.5px solid #3b82f6;
+            color: #1e3a8a;
+        }
+
+        .callout-icon {
+            font-size: 14px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .example-box {
+            background-color: #1e293b;
+            color: #f1f5f9;
+            border-radius: 5px;
+            padding: 8px 10px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10.5px;
+            margin: 5px 0 0 0;
+            line-height: 1.35;
+        }
+
+        .example-box .hl-red { color: #f87171; font-weight: 700; }
+        .example-box .hl-green { color: #4ade80; font-weight: 700; }
+        .example-box .hl-blue { color: #60a5fa; font-weight: 700; }
+
+        .preview-scale {
+            background-color: #ffffff;
+            border: 1px dashed #0f5144;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 6px;
+            font-size: 11px;
+        }
+
+        .preview-scale-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .preview-scale-row:last-child {
+            border-bottom: none;
+        }
+
+        .footer-note {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 6px;
+            font-size: 9.5px;
+            color: #94a3b8;
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .tag-yes {
+            color: #166534;
+            background-color: #dcfce7;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 9.5px;
+        }
+
+        .tag-no {
+            color: #991b1b;
+            background-color: #fee2e2;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 9.5px;
+        }
+
+        .step-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin-bottom: 6px;
+        }
+
+        .step-circle {
+            background-color: #0f5144;
+            color: white;
+            font-weight: 800;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== PÁGINA 1 ==================== -->
+    <div class="page">
+        <div>
+            <div class="header">
+                <div class="header-logo-area">
+                    <div class="brand-badge">VEO</div>
+                    <div class="header-titles">
+                        <h1>Manual de Presupuestación: Agendas y Cuadernos</h1>
+                        <p>Módulo Generador de Presupuestos Odoo • Guía Práctica de Operación</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <span><strong>Módulo:</strong> Generador PDF</span>
+                    <span><strong>Categoría:</strong> Productos Promocionales</span>
+                    <span class="badge-pill">Página 1 de 3</span>
+                </div>
+            </div>
+
+            <p style="font-size: 11.5px; color: #475569; margin-bottom: 8px;">
+                Este instructivo detalla el proceso completo para emitir propuestas comerciales automatizadas de 
+                <strong>Agendas personalizadas</strong> y <strong>Cuadernos personalizados</strong> en Odoo, generando un presupuesto formal en PDF de 4 páginas.
+            </p>
+
+            <!-- 1. DETECCIÓN -->
+            <div class="section-title">
+                <span class="step-num">1</span> Selección del Producto en Odoo
+            </div>
+            <p>
+                Al crear un presupuesto de venta, el sistema detecta de forma automática qué plantilla debe utilizar según el nombre del producto seleccionado en las líneas:
+            </p>
+
+            <div class="grid-2">
+                <div class="card highlight">
+                    <div class="card-title">📖 Agendas Personalizadas</div>
+                    <p style="font-size: 10.5px; margin-bottom: 4px;">
+                        Seleccionar producto <strong>Agendas</strong> (o que contenga <em>"Agenda"</em>).
+                    </p>
+                    <span class="pill-field">Plantilla:</span> <span style="font-size: 10px; color: #0f5144; font-weight: 600;">Agendas-personalizadas-Plantilla.html</span>
+                </div>
+                <div class="card highlight">
+                    <div class="card-title">📓 Cuadernos Personalizados</div>
+                    <p style="font-size: 10.5px; margin-bottom: 4px;">
+                        Seleccionar producto <strong>Cuadernos</strong> (o que contenga <em>"Cuaderno"</em>).
+                    </p>
+                    <span class="pill-field">Plantilla:</span> <span style="font-size: 10px; color: #0f5144; font-weight: 600;">Cuadernos-personalizados-Plantilla.html</span>
+                </div>
+            </div>
+
+            <!-- 2. CABECERA -->
+            <div class="section-title">
+                <span class="step-num">2</span> Campos de Cabecera y Textos Editables
+            </div>
+            <p>
+                En la parte superior de la orden de venta (formulario del presupuesto), completar los siguientes datos clave:
+            </p>
+
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Campo en Odoo</th>
+                        <th style="width: 45%;">Qué debes ingresar / Formato requerido</th>
+                        <th style="width: 30%;">Destino en el PDF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Forma de pago</strong></td>
+                        <td>Texto libre. Ej: <span class="pill-val">50% seña y 50% saldo contra entrega</span></td>
+                        <td>Página 3 (Condiciones)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Forma de entrega</strong></td>
+                        <td>Texto libre. Ej: <span class="pill-val">A convenir</span> o <span class="pill-val">Flete a cargo del cliente</span></td>
+                        <td>Página 3 (Condiciones)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Plazo de ejecución</strong></td>
+                        <td>Tiempo de producción. Ej: <span class="pill-val">20 a 30 días hábiles</span></td>
+                        <td>Página 3 (Condiciones)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Esp. Técnicas editables</strong><br><span style="font-size: 9.5px; color: #64748b;">(Página 1)</span></td>
+                        <td>
+                            <strong>REGLA CRÍTICA:</strong> Escribir hasta <strong>6 oraciones separadas por punto (.)</strong>. Cada oración se convertirá automáticamente en una de las 6 viñetas rojas de la Pág. 1.
+                        </td>
+                        <td>Página 1 (Especificaciones técnicas)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Condiciones editables</strong><br><span style="font-size: 9.5px; color: #64748b;">(Página 3)</span></td>
+                        <td>
+                            Condiciones comerciales particulares. Se divide en hasta 3 oraciones separadas por punto.
+                        </td>
+                        <td>Página 3 (Condiciones Generales)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-tip">
+                <div class="callout-icon">💡</div>
+                <div>
+                    <strong>Ejemplo para copiar y pegar en "Esp. Técnicas editables":</strong>
+                    <div class="example-box">
+                        Formato A5 = 21 x 14,85 cm<span class="hl-red">.</span> Agenda anual 2027/ perpetua<span class="hl-red">.</span> Semana a la vista en dos páginas<span class="hl-red">.</span> Tapas plastificadas con OPP mate/brillante<span class="hl-red">.</span> Con/Sin 1/2 Insert en ilustración full color<span class="hl-red">.</span> Frases para reflexionar y aportar valor<span class="hl-red">.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <span>VEO Imagen y Comunicación S.A.S. — Sistema Generador de Presupuestos Odoo</span>
+            <span>Página 1 de 3</span>
+        </div>
+    </div>
+
+    <!-- ==================== PÁGINA 2 ==================== -->
+    <div class="page">
+        <div>
+            <div class="header">
+                <div class="header-logo-area">
+                    <div class="brand-badge">VEO</div>
+                    <div class="header-titles">
+                        <h1>Manual de Presupuestación: Agendas y Cuadernos</h1>
+                        <p>Selectores de Diseño Gráfico & Carga de Alternativas por Escala</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <span><strong>Módulo:</strong> Generador PDF</span>
+                    <span><strong>Operación:</strong> Precios y Alcances</span>
+                    <span class="badge-pill">Página 2 de 3</span>
+                </div>
+            </div>
+
+            <!-- 3. SELECTORES SÍ/NO -->
+            <div class="section-title">
+                <span class="step-num">3</span> Selectores Sí/No de Diseño Gráfico (Página 2)
+            </div>
+            <p>
+                En el formulario de Odoo se presentan 3 interruptores directos para definir si el presupuesto incluye el desarrollo de diseño gráfico:
+            </p>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">⚙️ Interruptores en Odoo</div>
+                    <ul style="margin: 0; padding-left: 16px; font-size: 11px; line-height: 1.6;">
+                        <li><strong>Diseño de Tapas:</strong> <span class="tag-yes">Sí</span> (por defecto) o <span class="tag-no">No</span></li>
+                        <li><strong>Diseño Insert:</strong> <span class="tag-no">No</span> (por defecto) o <span class="tag-yes">Sí</span></li>
+                        <li><strong>Diseño Interior Especial:</strong> <span class="tag-no">No</span> (por defecto) o <span class="tag-yes">Sí</span></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title">📄 Cómo se imprime en la Página 2 del PDF</div>
+                    <div style="font-size: 10.5px; line-height: 1.5; color: #334155;">
+                        • Diseño de Tapas: Este presupuesto <span style="color: #dc2626; font-weight: 700;">si/no</span> incluye el diseño gráfico de las tapas.<br>
+                        • Diseño Insert: Este presupuesto <span style="color: #dc2626; font-weight: 700;">si/no</span> incluye el diseño gráfico de las hojas especiales insertas full color.<br>
+                        • Diseño Interior: Este presupuesto <span style="color: #dc2626; font-weight: 700;">si/no</span> incluye un diseño gráfico especial (no estándar) de las hojas del interior.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. LÍNEAS DE PEDIDO -->
+            <div class="section-title">
+                <span class="step-num">4</span> Carga de Líneas del Pedido (Escalas "Desde / Hasta")
+            </div>
+            <p>
+                Las agendas y cuadernos se presupuestan típicamente en <strong>escalas de cantidad</strong> (ej: 25 a 50 uu., 50 a 100 uu., 100+ uu.). Cargas <strong>hasta 3 líneas</strong> en la tabla <em>Líneas del pedido</em>:
+            </p>
+
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th style="width: 14%;">Opción</th>
+                        <th style="width: 18%;">Producto</th>
+                        <th style="width: 26%;">Descripción (Rango)</th>
+                        <th style="width: 14%;">Cantidad (Ref.)</th>
+                        <th style="width: 14%;">Precio Unit.</th>
+                        <th style="width: 14%;">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Línea 1</strong></td>
+                        <td>Agendas</td>
+                        <td><span class="pill-val">25 a 50 uu.</span></td>
+                        <td>50</td>
+                        <td>$ 15.000</td>
+                        <td>$ 750.000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Línea 2</strong></td>
+                        <td>Agendas</td>
+                        <td><span class="pill-val">50 a 100 uu.</span></td>
+                        <td>100</td>
+                        <td>$ 13.500</td>
+                        <td>$ 1.350.000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Línea 3</strong></td>
+                        <td>Agendas</td>
+                        <td><span class="pill-val">100+ uu.</span></td>
+                        <td>150</td>
+                        <td>$ 12.000</td>
+                        <td>$ 1.800.000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-info">
+                <div class="callout-icon">📌</div>
+                <div>
+                    <strong>Reglas de carga en cada línea:</strong><br>
+                    • <strong>Columna "Descripción":</strong> Escribí exactamente el rango que verá el cliente (ej: <code>25 a 50 uu.</code>).<br>
+                    • <strong>Columna "Precio unitario":</strong> El valor por unidad sin IVA correspondiente a ese volumen.<br>
+                    • <strong>Columna "Cantidad":</strong> La cantidad tope de la escala (50, 100, etc.) para que Odoo calcule el Subtotal que se imprimirá como <em>Precio Total</em>.
+                </div>
+            </div>
+
+            <p style="font-weight: 700; color: #0f5144; margin-top: 8px; margin-bottom: 3px;">
+                Resultado visual impreso en la Página 1 del PDF:
+            </p>
+            <div class="preview-scale">
+                <div class="preview-scale-row">
+                    <span><strong>Cantidad:</strong> 25 a 50 uu.</span>
+                    <span><strong>Precio Unit:</strong> $ 15.000 + IVA</span>
+                    <span><strong>Precio Total:</strong> $ 750.000 + IVA</span>
+                </div>
+                <div class="preview-scale-row">
+                    <span><strong>Cantidad:</strong> 50 a 100 uu.</span>
+                    <span><strong>Precio Unit:</strong> $ 13.500 + IVA</span>
+                    <span><strong>Precio Total:</strong> $ 1.350.000 + IVA</span>
+                </div>
+                <div class="preview-scale-row">
+                    <span><strong>Cantidad:</strong> 100+ uu.</span>
+                    <span><strong>Precio Unit:</strong> $ 12.000 + IVA</span>
+                    <span><strong>Precio Total:</strong> $ 1.800.000 + IVA</span>
+                </div>
+            </div>
+
+            <div class="callout callout-warning" style="margin-top: 8px;">
+                <div class="callout-icon">✨</div>
+                <div>
+                    <strong>¿Qué sucede si cotizas solo 1 o 2 opciones?</strong><br>
+                    El sistema es completamente dinámico: si cargas solo 1 línea (o 2), las filas restantes se <strong>ocultan automáticamente</strong> en el PDF, sin dejar renglones vacíos ni textos residuales.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <span>VEO Imagen y Comunicación S.A.S. — Sistema Generador de Presupuestos Odoo</span>
+            <span>Página 2 de 3</span>
+        </div>
+    </div>
+
+    <!-- ==================== PÁGINA 3 ==================== -->
+    <div class="page">
+        <div>
+            <div class="header">
+                <div class="header-logo-area">
+                    <div class="brand-badge">VEO</div>
+                    <div class="header-titles">
+                        <h1>Manual de Presupuestación: Agendas y Cuadernos</h1>
+                        <p>Generación del Documento, Anatomía de Páginas y Preguntas Frecuentes</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <span><strong>Módulo:</strong> Generador PDF</span>
+                    <span><strong>Cierre:</strong> Emisión & Control</span>
+                    <span class="badge-pill">Página 3 de 3</span>
+                </div>
+            </div>
+
+            <!-- 5. GENERACIÓN -->
+            <div class="section-title">
+                <span class="step-num">5</span> Emisión del Presupuesto PDF
+            </div>
+
+            <div class="grid-2" style="margin-bottom: 8px;">
+                <div class="step-box">
+                    <div class="step-circle">1</div>
+                    <div>
+                        <strong style="color: #0f5144;">Hacer clic en el botón de cabecera:</strong><br>
+                        En la parte superior izquierda de la orden de venta, pulsar:
+                        <div style="margin-top: 5px;">
+                            <span style="background: #0f5144; color: white; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 10px;">
+                                GENERAR PRESUPUESTO PDF
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-box">
+                    <div class="step-circle">2</div>
+                    <div>
+                        <strong style="color: #0f5144;">Descargar o enviar desde el Chatter:</strong><br>
+                        El sistema generará el PDF y publicará automáticamente un mensaje en el panel derecho (Chatter) con el archivo adjunto:
+                        <div style="margin-top: 4px;">
+                            <span class="pill-field">N°02125_presupuesto.pdf</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. ANATOMÍA -->
+            <div class="section-title">
+                <span class="step-num">6</span> Estructura de las 4 Páginas del Documento Final
+            </div>
+
+            <div class="grid-2">
+                <div class="card" style="padding: 8px;">
+                    <strong style="color: #0f5144; font-size: 11px;">PÁGINA 1: Portada y Cuadro de Precios</strong>
+                    <ul style="margin: 3px 0 0 0; padding-left: 15px; font-size: 10px; color: #475569;">
+                        <li>Nombre de empresa y persona de contacto destinataria.</li>
+                        <li>Características generales fijas del producto.</li>
+                        <li>Las 6 especificaciones técnicas editables (viñetas rojas).</li>
+                        <li>Cuadro de precios unitarios y totales por escala.</li>
+                    </ul>
+                </div>
+                <div class="card" style="padding: 8px;">
+                    <strong style="color: #0f5144; font-size: 11px;">PÁGINA 2: Alcance de Diseño Gráfico</strong>
+                    <ul style="margin: 3px 0 0 0; padding-left: 15px; font-size: 10px; color: #475569;">
+                        <li>Los 3 items de diseño (Tapas, Insert, Interior) con su Sí/No.</li>
+                        <li>Pautas de entrega de logos vectoriales por el cliente.</li>
+                        <li>Caja destacada "¿Por qué elegir nuestras agendas/cuadernos?".</li>
+                    </ul>
+                </div>
+                <div class="card" style="padding: 8px;">
+                    <strong style="color: #0f5144; font-size: 11px;">PÁGINA 3: Condiciones Comerciales</strong>
+                    <ul style="margin: 3px 0 0 0; padding-left: 15px; font-size: 10px; color: #475569;">
+                        <li>Cuentas bancarias de VEO Imagen y Comunicación S.A.S.</li>
+                        <li>Forma de pago propuesta y Forma de entrega convenida.</li>
+                        <li>Plazo de ejecución y fecha de validez de la propuesta.</li>
+                        <li>Condiciones particulares editadas en el presupuesto.</li>
+                    </ul>
+                </div>
+                <div class="card" style="padding: 8px;">
+                    <strong style="color: #0f5144; font-size: 11px;">PÁGINA 4: Hoja de Aprobación Formal</strong>
+                    <ul style="margin: 3px 0 0 0; padding-left: 15px; font-size: 10px; color: #475569;">
+                        <li>Espacio para que el cliente marque la opción elegida.</li>
+                        <li>Campos para firma, aclaración, DNI y fecha de conformidad.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 7. TIPS / FAQ -->
+            <div class="section-title">
+                <span class="step-num">7</span> Consejos Prácticos y Preguntas Frecuentes
+            </div>
+
+            <div class="callout callout-info" style="margin-bottom: 4px;">
+                <div class="callout-icon">✔️</div>
+                <div>
+                    <strong>¿Qué pasa si escribo menos de 6 oraciones en las especificaciones?</strong><br>
+                    No hay problema: se completarán las viñetas que hayas escrito y las restantes quedarán en blanco limpiamente, sin errores.
+                </div>
+            </div>
+
+            <div class="callout callout-info" style="margin-bottom: 4px;">
+                <div class="callout-icon">✔️</div>
+                <div>
+                    <strong>¿Puedo re-generar el presupuesto si el cliente pide cambios?</strong><br>
+                    Sí. Modificás los valores en Odoo y volvés a presionar "GENERAR PRESUPUESTO PDF". El sistema subirá la nueva versión actualizada al chatter.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <span>VEO Imagen y Comunicación S.A.S. — Sistema Generador de Presupuestos Odoo</span>
+            <span>Fin del Manual • Documento de Capacitación Interna</span>
+        </div>
+    </div>
+
+</body>
+</html>

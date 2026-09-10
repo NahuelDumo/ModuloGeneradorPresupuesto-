@@ -610,18 +610,18 @@ class SaleOrder(models.Model):
 
                 # Variables para Productos (Agendas y Cuadernos)
                 "{{forma_entrega}}": f"<span style='font-family: Roboto, sans-serif;'>{record.forma_entrega or 'A convenir'}</span>",
-                "{{cant1}}": f"<span style='font-family: Roboto, sans-serif;'>{cant1_prod}</span>" if record.is_productos else f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
-                "{{cant2}}": f"<span style='font-family: Roboto, sans-serif;'>Cantidad: {cant2_prod}</span>" if (record.is_productos and cant2_prod) else "",
-                "{{cant3}}": f"<span style='font-family: Roboto, sans-serif;'>Cantidad: {cant3_prod}</span>" if (record.is_productos and cant3_prod) else "",
-                "{{precio1}}": f"<span style='font-family: Roboto, sans-serif;'>$ {precio1_prod} + IVA</span>" if (record.is_productos and precio1_prod) else "",
-                "{{precio2}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Unit: $ {precio2_prod} + IVA</span>" if (record.is_productos and precio2_prod) else "",
-                "{{precio3}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Unit: $ {precio3_prod} + IVA</span>" if (record.is_productos and precio3_prod) else "",
-                "{{valor1}}": f"<span style='font-family: Roboto, sans-serif;'>$ {precio1_prod} + IVA</span>" if (record.is_productos and precio1_prod) else "",
-                "{{valor2}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Unit: $ {precio2_prod} + IVA</span>" if (record.is_productos and precio2_prod) else "",
-                "{{valor3}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Unit: $ {precio3_prod} + IVA</span>" if (record.is_productos and precio3_prod) else "",
-                "{{total1}}": f"<span style='font-family: Roboto, sans-serif;'>$ {total1_prod} + IVA</span>" if (record.is_productos and total1_prod) else "",
-                "{{total2}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {total2_prod} + IVA</span>" if (record.is_productos and total2_prod) else "",
-                "{{total3}}": f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {total3_prod} + IVA</span>" if (record.is_productos and total3_prod) else "",
+                "{{cant1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{cant1_prod}</span>" if record.is_productos else f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
+                "{{cant2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Cantidad: {cant2_prod}</span>" if (record.is_productos and cant2_prod) else "",
+                "{{cant3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Cantidad: {cant3_prod}</span>" if (record.is_productos and cant3_prod) else "",
+                "{{precio1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>$ {precio1_prod} + IVA</span>" if (record.is_productos and precio1_prod) else "",
+                "{{precio2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Precio Unit: $ {precio2_prod} + IVA</span>" if (record.is_productos and precio2_prod) else "",
+                "{{precio3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Precio Unit: $ {precio3_prod} + IVA</span>" if (record.is_productos and precio3_prod) else "",
+                "{{valor1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>$ {precio1_prod} + IVA</span>" if (record.is_productos and precio1_prod) else "",
+                "{{valor2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Precio Unit: $ {precio2_prod} + IVA</span>" if (record.is_productos and precio2_prod) else "",
+                "{{valor3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Precio Unit: $ {precio3_prod} + IVA</span>" if (record.is_productos and precio3_prod) else "",
+                "{{total1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>$ {total1_prod} + IVA</span>" if (record.is_productos and total1_prod) else "",
+                "{{total2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Precio Total: $ {total2_prod} + IVA</span>" if (record.is_productos and total2_prod) else "",
+                "{{total3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Precio Total: $ {total3_prod} + IVA</span>" if (record.is_productos and total3_prod) else "",
             }   
 
             if not record.incluye_multilenguaje and record.is_desarrollo_web_especial:

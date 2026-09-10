@@ -148,7 +148,7 @@ def cadena_reformada(nombre):
 
     return resultado
 
-def dividir_en_items(texto, max_len_total=33, cantidad_items=6):
+def dividir_en_items(texto, max_len_total=46, cantidad_items=6):
     items = ["" *cantidad_items]
     
     # Dividir en oraciones usando punto como separador
@@ -171,9 +171,10 @@ def verificarEspacios(oracion, max_len_total):
         espacios_faltantes = max_len_total - len(oracion)
         oracion += " " * espacios_faltantes
     elif len(oracion) > max_len_total:
-        # Cortar la oración
-        oracion = oracion[:max_len_total]
-    
+        # Cortar en el último espacio antes del límite para no partir palabras
+        corte = oracion.rfind(" ", 0, max_len_total)
+        oracion = oracion[:corte] if corte != -1 else oracion[:max_len_total]
+
     return oracion
 
 def formatear_item(item):
