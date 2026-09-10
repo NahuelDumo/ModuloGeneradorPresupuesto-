@@ -609,7 +609,7 @@ class SaleOrder(models.Model):
                 "{{n}}": str(obtener_cantidad_idiomas(record.idiomas or "Inglés y Español")) if record.incluye_multilenguaje else "",
 
                 # Variables para Productos (Agendas y Cuadernos)
-                "{{forma_entrega}}": f"<span style='font-family: Roboto, sans-serif;'>{record.forma_entrega or 'A convenir'}</span>",
+                "{{forma_entrega}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.forma_entrega or 'A convenir'}</span>",
                 "{{cant1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{cant1_prod}</span>" if record.is_productos else f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
                 "{{cant2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Cantidad: {cant2_prod}</span>" if (record.is_productos and cant2_prod) else "",
                 "{{cant3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Cantidad: {cant3_prod}</span>" if (record.is_productos and cant3_prod) else "",
