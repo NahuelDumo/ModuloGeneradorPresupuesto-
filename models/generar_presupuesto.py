@@ -610,7 +610,7 @@ class SaleOrder(models.Model):
 
                 # Variables para Productos (Agendas y Cuadernos)
                 "{{forma_entrega}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{record.forma_entrega or 'A convenir'}</span>",
-                "{{cant1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{cant1_prod}</span>" if record.is_productos else f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
+                "{{cant1}}": f"<span style='font-family: Roboto, sans-serif; font-size: 42.43px; word-spacing: 0px;'>{cant1_prod}</span>" if record.is_productos else f"<span style='font-family: Roboto, sans-serif;'>{str(cantidad_unidades1)}</span>",
                 "{{cant2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Cantidad: {cant2_prod}</span>" if (record.is_productos and cant2_prod) else "",
                 "{{cant3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Cantidad: {cant3_prod}</span>" if (record.is_productos and cant3_prod) else "",
                 "{{precio1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>$ {precio1_prod} + IVA</span>" if (record.is_productos and precio1_prod) else "",
