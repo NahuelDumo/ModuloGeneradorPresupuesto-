@@ -88,15 +88,20 @@ def test_get_rango_cantidad_does_not_mistake_product_code_for_a_range():
     assert rango("20-29 uu", 29) == "20-29 uu"
 
 
-def test_cant1_font_size_matches_cant2_cant3():
-    # Row 1's {{cant1}} sits inside a template span with the ff1/fsc class
-    # (49.5px), while cant2/cant3 inherit the row's ambient fsb (42.4px).
-    # Left unfixed, row 1 renders bigger and pushes "Precio Total" right of
-    # rows 2-3. The injected span must force the same size as the others.
-    with open("models/generar_presupuesto.py", encoding="utf-8") as f:
-        src = f.read()
-    m = re.search(r'"\{\{cant1\}\}":\s*f"<span[^"]*"', src)
-    assert m and "font-size: 42.43px" in m.group(0)
+def test_price_table_is_fixed_column_grid():
+    # Inline flow can't align: each row's "Precio Total" was pushed by a spacer
+    # inheriting a different huge word-spacing (984px row 1 vs 1164px rows 2-3).
+    # Every cell must be its own div, same classes, sharing one x per column,
+    # and .x10 must exist in both the screen (px) and print (pt) CSS blocks.
+    for tpl, precio in [("Cuadernos-personalizados-Plantilla.html", "valor"),
+                        ("Agendas-personalizadas-Plantilla.html", "precio")]:
+        with open(f"Plantillas/PlantillaProductos/{tpl}", encoding="utf-8") as f:
+            html = f.read()
+        for col, x in [("cant", "x2"), (precio, "x5"), ("total", "x10")]:
+            for row, y in [(1, "yd"), (2, "y11"), (3, "yf")]:
+                cell = f'<div class="t m0 {x} hb {y} ff2 fsb fc6 sc0 ls7">{{{{{col}{row}}}}}</div>'
+                assert cell in html, f"{tpl}: missing grid cell {cell}"
+        assert ".x10{left:630.000000px;}" in html and ".x10{left:840.000000pt;}" in html, tpl
 
 
 def test_generar_presupuesto_wraps_all_producto_vars_with_word_spacing():
@@ -114,6 +119,6 @@ if __name__ == "__main__":
     test_price_row_variables_have_word_spacing_zero()
     test_template_says_cuadernos_not_agendas()
     test_get_rango_cantidad_does_not_mistake_product_code_for_a_range()
-    test_cant1_font_size_matches_cant2_cant3()
+    test_price_table_is_fixed_column_grid()
     test_generar_presupuesto_wraps_all_producto_vars_with_word_spacing()
     print("OK - all checks passed")
