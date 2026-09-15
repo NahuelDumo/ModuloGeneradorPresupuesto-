@@ -59,6 +59,35 @@ def test_template_says_cuadernos_not_agendas():
     assert "¿Por qué elegir nuestros cuadernos?" in html
 
 
+def test_get_rango_cantidad_does_not_mistake_product_code_for_a_range():
+    # Real bug: order lines named literally "Cuadernos A5" (no range text)
+    # made get_rango_cantidad treat the "5" in "A5" as a valid range and
+    # return the product name itself for all 3 rows ("Cantidad: Cuadernos A5"
+    # x3). It must fall back to product_uom_qty instead, and still recognize
+    # genuine ranges like "20 a 29 uu" / "20-29 uu".
+    with open("models/generar_presupuesto.py", encoding="utf-8") as f:
+        src = f.read()
+    m = re.search(r"def get_rango_cantidad.*?\n\n", src, re.S)
+    assert m, "get_rango_cantidad not found"
+    body = m.group(0)
+    patterns = re.findall(r"re\.search\(r'([^']+)'", body)
+    assert patterns, "expected a regex-based range check"
+    pattern = patterns[0]
+
+    def rango(name, qty):
+        name = (name or "").strip()
+        if re.search(pattern, name):
+            return name
+        qty = int(round(qty)) if qty else 0
+        return f"{qty} uu." if qty > 0 else ""
+
+    assert rango("Cuadernos A5", 20) == "20 uu."
+    assert rango("Cuadernos A5", 30) == "30 uu."
+    assert rango("Cuadernos A5", 50) == "50 uu."
+    assert rango("20 a 29 uu", 29) == "20 a 29 uu"
+    assert rango("20-29 uu", 29) == "20-29 uu"
+
+
 def test_cant1_font_size_matches_cant2_cant3():
     # Row 1's {{cant1}} sits inside a template span with the ff1/fsc class
     # (49.5px), while cant2/cant3 inherit the row's ambient fsb (42.4px).
@@ -84,6 +113,7 @@ if __name__ == "__main__":
     test_formatear_item_has_word_spacing_zero()
     test_price_row_variables_have_word_spacing_zero()
     test_template_says_cuadernos_not_agendas()
+    test_get_rango_cantidad_does_not_mistake_product_code_for_a_range()
     test_cant1_font_size_matches_cant2_cant3()
     test_generar_presupuesto_wraps_all_producto_vars_with_word_spacing()
     print("OK - all checks passed")

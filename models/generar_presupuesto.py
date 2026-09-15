@@ -289,9 +289,9 @@ class SaleOrder(models.Model):
                     name = (line.name or "").strip()
                     if " - " in name:
                         partes = name.split(" - ", 1)
-                        if any(c.isdigit() for c in partes[1]):
+                        if re.search(r'\d+\s*(?:a|-)\s*\d+', partes[1]):
                             return partes[1].strip()
-                    if any(c.isdigit() for c in name):
+                    if re.search(r'\d+\s*(?:a|-)\s*\d+', name):
                         return name
                     qty = int(round(line.product_uom_qty)) if line.product_uom_qty else 0
                     return f"{qty} uu." if qty > 0 else ""
