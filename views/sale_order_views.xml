@@ -28,10 +28,25 @@
                 <field name="is_hosting" invisible="1"/>
                 <field name="is_landing_page" invisible="1"/>
                 <field name="is_productos" invisible="1"/>
-                <field name="text_pagina1" placeholder="Rellenar texto página 1" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', False)], 'invisible': [('is_desarrollo_web', '=', True)]}"/>
-                <field name="text_pagina1_web" placeholder="Ej: Incluye login de usuarios y roles. Integraciones con APIs externas y redes sociales. Tiempo de respuesta cliente: max 48hs." widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', True)], 'invisible': [('is_desarrollo_web', '=', False)]}"/>
-                <field name="text_pagina2_web" placeholder="Ej: Hasta 5 páginas/módulos. Incluye diseño a medida (2 propuestas, 3 revisiones). Responsive design (mobile, tablet, desktop)." widget="char_length_counter" attrs="{'invisible': ['|', '|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_landing_page', '=', True), ('is_actualizacion_web', '=', True)]}"/>
-                <field name="cantidad_minima" placeholder="Ej: 6 meses" help="Mínimo de meses que tiene que ser contratado el servicio" attrs="{'invisible': [('is_hosting', '=', False)]}"/>
+                <field name="is_servicios_web" invisible="1"/>
+                <field name="is_cloud" invisible="1"/>
+                <field name="is_soporte_web" invisible="1"/>
+                <field name="is_ssl" invisible="1"/>
+                <field name="is_pack_web" invisible="1"/>
+                <field name="text_pagina1" placeholder="Rellenar texto página 1" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', False), ('is_servicios_web', '=', False)], 'invisible': ['|', ('is_desarrollo_web', '=', True), ('is_servicios_web', '=', True)]}"/>
+                <field name="text_pagina1_web" placeholder="Ej: Incluye login de usuarios y roles. Integraciones con APIs externas y redes sociales. Tiempo de respuesta cliente: max 48hs." widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', True), ('is_servicios_web', '=', False)], 'invisible': ['|', ('is_desarrollo_web', '=', False), ('is_servicios_web', '=', True)]}"/>
+                <field name="text_pagina2_web" placeholder="Ej: Hasta 5 páginas/módulos. Incluye diseño a medida (2 propuestas, 3 revisiones). Responsive design (mobile, tablet, desktop)." widget="char_length_counter" attrs="{'invisible': ['|', '|', '|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_landing_page', '=', True), ('is_actualizacion_web', '=', True), ('is_servicios_web', '=', True)]}"/>
+                <field name="cantidad_minima" placeholder="Ej: 6 meses" help="Mínimo de meses que tiene que ser contratado el servicio" attrs="{'invisible': [('is_hosting', '=', False), ('is_soporte_web', '=', False), ('is_ssl', '=', False), ('is_pack_web', '=', False)]}"/>
+                <field name="texto_cliente" placeholder="Texto para el cliente (1 línea)" widget="char_length_counter" attrs="{'invisible': ['|', ('is_servicios_web', '=', False), ('is_pack_web', '=', True)]}"/>
+                <field name="aclaraciones" placeholder="Aclaraciones (hasta 4 líneas)" widget="char_length_counter" attrs="{'invisible': ['|', ('is_servicios_web', '=', False), ('is_pack_web', '=', True)]}"/>
+                <field name="actualizacion_contenidos" widget="char_length_counter" attrs="{'invisible': ['|', ('is_soporte_web', '=', False), ('is_pack_web', '=', True)]}"/>
+                <field name="incluye_estadisticas_web" widget="boolean_toggle" attrs="{'invisible': ['|', ('is_soporte_web', '=', False), ('is_pack_web', '=', True)]}"/>
+                <field name="cloud_cpu" attrs="{'invisible': [('is_cloud', '=', False)]}"/>
+                <field name="cloud_ram" attrs="{'invisible': [('is_cloud', '=', False)]}"/>
+                <field name="cloud_storage" attrs="{'invisible': [('is_cloud', '=', False)]}"/>
+                <field name="cloud_transferencia" attrs="{'invisible': [('is_cloud', '=', False)]}"/>
+                <field name="cloud_backup" attrs="{'invisible': [('is_cloud', '=', False)]}"/>
+                <field name="cloud_rdp" attrs="{'invisible': [('is_cloud', '=', False)]}"/>
                 <field name="text_pagina2" placeholder="Ej: Hasta 5 páginas/módulos. Incluye diseño a medida (2 propuestas, 3 revisiones). Responsive design (mobile, tablet, desktop)." widget="char_length_counter" required="1"/>
                 <field name="incluye_multilenguaje" widget="boolean_toggle" attrs="{'invisible': [('is_desarrollo_web_especial', '=', False)]}"/>
                 <field name="idiomas" placeholder="Ej: Inglés y Español" attrs="{'invisible': ['|', ('is_desarrollo_web_especial', '=', False), ('incluye_multilenguaje', '=', False)]}"/>

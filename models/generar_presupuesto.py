@@ -10,6 +10,12 @@ def formatear_item_web(item):
     return f"• <span style='font-family: Roboto, sans-serif; font-style: italic; color: #58887e; word-spacing: 0px;'>{item}</span>" if item else ""
 
 
+def formatear_numero(valor):
+    # 2.0 -> "2", 0.5 -> "0,5"
+    return ('%f' % (valor or 0)).rstrip('0').rstrip('.').replace('.', ',')
+
+
+
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -76,6 +82,16 @@ class SaleOrder(models.Model):
         string="Portal de usuarios",
         default=True,
     )
+    texto_cliente = fields.Char(string="Texto cliente", size=85, help="Texto para el cliente (1 línea). Servicios Web.")
+    aclaraciones = fields.Char(string="Aclaraciones", size=340, help="Hasta 4 líneas. Servicios Web.")
+    actualizacion_contenidos = fields.Char(string="Actualización de contenidos web", size=300, help="Hasta 3 líneas. Soporte y Mantenimiento Web.")
+    incluye_estadisticas_web = fields.Boolean(string="Estadísticas web", default=True)
+    cloud_cpu = fields.Float(string="Cantidad de vCPU")
+    cloud_ram = fields.Float(string="RAM (GB)")
+    cloud_storage = fields.Float(string="Storage SSD (GB)")
+    cloud_transferencia = fields.Float(string="Transferencia (TB)")
+    cloud_backup = fields.Float(string="Copia de seguridad Standard (GB)")
+    cloud_rdp = fields.Float(string="Conexiones RDP")
 
     forma_entrega = fields.Char(
         string="Forma de entrega",
@@ -128,6 +144,23 @@ class SaleOrder(models.Model):
         compute="_compute_web_product_flags",
         store=True,
     )
+    is_servicios_web = fields.Boolean(
+        string="¿Es Servicios Web?",
+        compute="_compute_web_product_flags",
+        store=True,
+    )
+    is_cloud = fields.Boolean(
+        string="¿Es Cloud Server?",
+        compute="_compute_web_product_flags",
+        store=True,
+    )
+    is_soporte_web = fields.Boolean(
+        string="¿Es Soporte y Mantenimiento Web?",
+        compute="_compute_web_product_flags",
+        store=True,
+    )
+    is_ssl = fields.Boolean(string="¿Es Certificado SSL?", compute="_compute_web_product_flags", store=True)
+    is_pack_web = fields.Boolean(string="¿Es Pack Servicios Web?", compute="_compute_web_product_flags", store=True)
 
     @api.depends('order_line.product_id', 'order_line.product_id.categ_id')
     def _compute_web_product_flags(self):
@@ -136,12 +169,19 @@ class SaleOrder(models.Model):
             products = record.order_line.mapped('product_id.name')
 
             record.is_desarrollo_web = "Desarrollo Web" in categories
-            record.is_actualizacion_web = any("actualizac" in (p or "").lower() for p in products)
+            record.is_actualizacion_web = any("actualizac" in (p or "").lower() and "dominio" not in (p or "").lower() for p in products)
+            # "especial"/"tienda" solo cuentan en Desarrollo Web: "Impresión de pieza gráfica especial" no es web
             record.is_desarrollo_web_especial = any(
-                p in ["Creación de sitio web especial", "Creación de tienda on-line"] or "especial" in (p or "").lower() or "tienda" in (p or "").lower()
-                for p in products
+                p.name in ["Creación de sitio web especial", "Creación de tienda on-line"]
+                or (p.categ_id.name == "Desarrollo Web" and ("especial" in (p.name or "").lower() or "tienda" in (p.name or "").lower()))
+                for p in record.order_line.mapped('product_id')
             )
             record.is_hosting = any("hosting" in (p or "").lower() for p in products)
+            record.is_cloud = any("cloud" in (p or "").lower() for p in products)
+            record.is_soporte_web = any("soporte y mantenimiento" in (p or "").lower() for p in products)
+            record.is_ssl = any("ssl" in (p or "").lower() for p in products)
+            record.is_servicios_web = "Servicios Web" in categories or record.is_hosting or record.is_cloud or record.is_soporte_web or record.is_ssl or any("dominio" in (p or "").lower() for p in products)
+            record.is_pack_web = es_pack_servicios_web(products)
             record.is_landing_page = any("landing" in (p or "").lower() for p in products)
             record.is_productos = any(
                 c and ("producto" in c.lower() or "merchandising" in c.lower())
@@ -462,14 +502,10 @@ class SaleOrder(models.Model):
             hosting_product = self.env['product.product'].search([('name', 'ilike', 'Hosting')], limit=1)
             hosting_price = hosting_product.lst_price if hosting_product else 200000
 
-            ssl_product = self.env['product.product'].search([('name', 'ilike', 'SSL')], limit=1)
-            ssl_price = ssl_product.lst_price if ssl_product else 200000
-
             dominio_product = self.env['product.product'].search([('name', 'ilike', 'Registro o actualización de dominios')], limit=1)
             dominio_price = dominio_product.lst_price if dominio_product else 200000
 
             hosting_price_str = format_moneda(hosting_price)
-            ssl_price_str = format_moneda(ssl_price)
             dominio_price_str = format_moneda(dominio_price)
 
             hosting_price_unit = record.order_line[0].price_unit if record.order_line else 0
@@ -481,6 +517,16 @@ class SaleOrder(models.Model):
             hosting_editable3 = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_h[2]}</span>" if len(oraciones_h) > 2 else ""
             hosting_editable4 = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_h[3]}</span>" if len(oraciones_h) > 3 else ""
             hosting_editable5 = f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{oraciones_h[4]}</span>" if len(oraciones_h) > 4 else ""
+
+            def span_texto(t):
+                return f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>{t}</span>" if t else ""
+
+            def precio_producto(nombre):
+                prod = self.env['product.product'].search([('name', 'ilike', nombre)], limit=1)
+                return f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>$ {format_moneda(prod.lst_price)} + IVA</span>" if prod else ""
+
+            aclaraciones = dividir_en_oraciones(record.aclaraciones or "", max_len=85)
+            actualizaciones = dividir_en_oraciones(record.actualizacion_contenidos or "", max_len=100)
 
             # Reemplazar variables en el HTML
             variables = {
@@ -523,15 +569,15 @@ class SaleOrder(models.Model):
                 "{{caracteristicas1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; color: #58887E; font-style: italic;'>{dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or '', max_len=85)[0]}</span>" if len(dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or "", max_len=85)) > 0 else "",
                 "{{caracteristicas2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; color: #58887E; font-style: italic;'>{dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or '', max_len=85)[1]}</span>" if len(dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or "", max_len=85)) > 1 else "",
                 "{{caracteristicas3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px; color: #58887E; font-style: italic;'>{dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or '', max_len=85)[2]}</span>" if len(dividir_en_oraciones(record.text_pagina2_web or record.text_pagina1 or "", max_len=85)) > 2 else "",
-                "{{precio_Hostin}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${hosting_price_str}</span>",
-                "{{precio_hosting}}": precio_hosting_str,
+                "{{precio_Hostin}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>$ {hosting_price_str} + IVA</span>",
+                "{{precio_hosting}}": precio_producto("Servicio de Hosting") if record.is_pack_web else f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>$ {precio_hosting_str} + IVA</span>",
                 "{{hosting_editable1}}": hosting_editable1,
                 "{{hosting_editable2}}": hosting_editable2,
                 "{{hosting_editable3}}": hosting_editable3,
                 "{{hosting_editable4}}": hosting_editable4,
                 "{{hosting_editable5}}": hosting_editable5,
-                "{{precio_ssl}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${ssl_price_str}</span>",
-                "{{precio_dominios}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${dominio_price_str}</span>",
+                "{{precio_ssl}}": precio_producto("Certificado SSL"),
+                "{{precio_dominios}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>$ {dominio_price_str} + IVA</span>",
 
                 "{{valor_cuota1}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>${cuota1_str}</span> + IVA" if cuota1_str else "",
                 "{{total_1}}": f"${total1_str} + IVA" if total1_str else "",
@@ -599,9 +645,9 @@ class SaleOrder(models.Model):
                 "{{Precio Total: $ precio_total3}}": "" if not precioTotal3 or precioTotal3 == '0' else f"<span style='font-family: Roboto, sans-serif;'>Precio Total: $ {precioTotal3} + IVA</span>",
                 "{{fecha_hoy}}": date.today().strftime('%d-%m-%Y'),
                 "{{paginas}}": str(record.paginas),
-                "{{editable1}}": formatear_item_web(editable1_val),
-                "{{editable2}}": formatear_item_web(editable2_val),
-                "{{editable3}}": formatear_item_web(editable3_val),
+                "{{editable1}}": (span_texto(actualizaciones[0]) if len(actualizaciones) > 0 else "") if record.is_soporte_web else formatear_item_web(editable1_val),
+                "{{editable2}}": (span_texto(actualizaciones[1]) if len(actualizaciones) > 1 else "") if record.is_soporte_web else formatear_item_web(editable2_val),
+                "{{editable3}}": (span_texto(actualizaciones[2]) if len(actualizaciones) > 2 else "") if record.is_soporte_web else formatear_item_web(editable3_val),
                 "{{1}}": ("si" if record.incluye_diseno_tapas else "no") if record.is_productos else ("si" if record.incluye_multilenguaje else "no"),
                 "{{2}}": ("si" if record.incluye_diseno_insert else "no") if record.is_productos else ("si" if record.incluye_tienda else "no"),
                 "{{3}}": ("si" if record.incluye_diseno_interior else "no") if record.is_productos else ("si" if record.incluye_portal else "no"),
@@ -622,6 +668,26 @@ class SaleOrder(models.Model):
                 "{{total1}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Precio Total: $ {total1_prod} + IVA</span>" if (record.is_productos and total1_prod) else "",
                 "{{total2}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Precio Total: $ {total2_prod} + IVA</span>" if (record.is_productos and total2_prod) else "",
                 "{{total3}}": f"<span style='font-family: Roboto, sans-serif; word-spacing: 0px;'>Precio Total: $ {total3_prod} + IVA</span>" if (record.is_productos and total3_prod) else "",
+
+                # Servicios Web (Cloud, Soporte y Mantenimiento, Dominio, Hosting)
+                "{{texto_cliente}}": span_texto(record.texto_cliente),
+                "{{Aclaraciones1}}": span_texto(aclaraciones[0]) if len(aclaraciones) > 0 else "",
+                "{{Aclaraciones2}}": span_texto(aclaraciones[1]) if len(aclaraciones) > 1 else "",
+                "{{Aclaraciones3}}": span_texto(aclaraciones[2]) if len(aclaraciones) > 2 else "",
+                "{{Aclaraciones4}}": span_texto(aclaraciones[3]) if len(aclaraciones) > 3 else "",
+                "{{precio_cloud}}": precio_producto("Cloud Server"),
+                "{{precio_soporteymantenimientoweb}}": precio_producto("Soporte y Mantenimiento Web"),
+                "{{precio_gestiondedominio}}": precio_producto("Registro o actualización de dominios"),
+                "{{precio_dominio}}": precio_producto("Registro o actualización de dominios"),
+                "{{precio_act_web}}": precio_producto("Soporte y Mantenimiento Web"),
+                "{{contratacion_minima}}": str(record.cantidad_minima or "6 meses"),
+                "{{ew}}": "si" if record.incluye_estadisticas_web else "no",
+                "{{cp}}": formatear_numero(record.cloud_cpu),
+                "{{ram}}": formatear_numero(record.cloud_ram),
+                "{{str}}": formatear_numero(record.cloud_storage),
+                "{{tra}}": formatear_numero(record.cloud_transferencia),
+                "{{cps}}": formatear_numero(record.cloud_backup),
+                "{{rdp}}": formatear_numero(record.cloud_rdp),
             }   
 
             if not record.incluye_multilenguaje and record.is_desarrollo_web_especial:

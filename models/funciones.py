@@ -1,5 +1,10 @@
 import re
 
+def es_pack_servicios_web(nombres):
+    # Pack = un producto propio, ej. "Servicio Web Completo" o "Pack Servicios Web"
+    return any("web" in n and ("completo" in n or "pack" in n) for n in ((n or "").lower() for n in nombres))
+
+
 def buscarPlantillaPresupuesto(record):
     base_dir = "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas"
     default_path = f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web.html"
@@ -17,6 +22,13 @@ def buscarPlantillaPresupuesto(record):
             "Creación de sitio web especial": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web-Especial.html",
             "Servicio de Hosting": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Hosting.html",
             "Creación de Landing Page": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Creación-Landing-Page.html",
+        },
+        "Servicios Web": {
+            "Cloud Server": f"{base_dir}/PlantillaServiciosWeb/Cloud-Plantilla.html",
+            "Soporte y Mantenimiento Web": f"{base_dir}/PlantillaServiciosWeb/Soporte-y-Mantenimiento-Web-Plantilla.html",
+            "Registro o actualización de dominios": f"{base_dir}/PlantillaServiciosWeb/Gestión-de-Dominio-Plantilla.html",
+            "Servicio de Hosting": f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Hosting.html",
+            "Certificado SSL": f"{base_dir}/PlantillaServiciosWeb/SSL-Plantilla.html",
         },
         "Editorial": {
             "Diseño gráfico de Boletín o News": f"{base_dir}/PlantillaEditorial/PlantillaDIseñoGraficoBoletin.html",
@@ -67,6 +79,9 @@ def buscarPlantillaPresupuesto(record):
         }
     }
 
+    if es_pack_servicios_web(record.order_line.mapped('product_id.name')):
+        return f"{base_dir}/PlantillaServiciosWeb/Servicios-Web-_Completo_-Plantilla.html"
+
     # Iterar sobre las líneas del pedido
     for line in record.order_line:
         if line.product_id:
@@ -94,11 +109,19 @@ def buscarPlantillaPresupuesto(record):
                 return f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html"
             if "hosting" in prod_lower:
                 return f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Hosting.html"
+            if "cloud" in prod_lower:
+                return f"{base_dir}/PlantillaServiciosWeb/Cloud-Plantilla.html"
+            if "soporte y mantenimiento" in prod_lower:
+                return f"{base_dir}/PlantillaServiciosWeb/Soporte-y-Mantenimiento-Web-Plantilla.html"
+            if "dominio" in prod_lower:
+                return f"{base_dir}/PlantillaServiciosWeb/Gestión-de-Dominio-Plantilla.html"
+            if "ssl" in prod_lower:
+                return f"{base_dir}/PlantillaServiciosWeb/SSL-Plantilla.html"
             if "landing" in prod_lower:
                 return f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Creación-Landing-Page.html"
             if "actualizaci" in prod_lower:
                 return f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Actualizacion-de-Sitio-Web.html"
-            if "especial" in prod_lower or "tienda" in prod_lower or "on-line" in prod_lower:
+            if ("especial" in prod_lower and "web" in etiqueta.lower()) or "tienda" in prod_lower or "on-line" in prod_lower:
                 return f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web-Especial.html"
             
             # Fallback por categoría
