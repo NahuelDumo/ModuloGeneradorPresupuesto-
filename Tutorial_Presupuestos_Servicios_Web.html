@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tutorial: Generador de Presupuestos - Servicios Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm 14mm 12mm 14mm;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #1e293b;
+            background-color: #ffffff;
+            line-height: 1.45;
+            font-size: 11.5px;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .page {
+            height: 272mm;
+            max-height: 272mm;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            page-break-after: always;
+            padding: 0;
+        }
+
+        .page:last-child {
+            page-break-after: avoid;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0f5144;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .header-logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, #0f5144 0%, #177361 100%);
+            color: white;
+            font-weight: 800;
+            font-size: 18px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            letter-spacing: 1px;
+        }
+
+        .header-titles h1 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 800;
+            color: #0f5144;
+            line-height: 1.2;
+        }
+
+        .header-titles p {
+            margin: 2px 0 0 0;
+            font-size: 10.5px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .header-meta {
+            text-align: right;
+            font-size: 10px;
+            color: #475569;
+        }
+
+        .header-meta span {
+            display: block;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            background-color: #e6f4f1;
+            color: #0f5144;
+            padding: 2px 7px;
+            border-radius: 9999px;
+            font-size: 9.5px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #0f5144;
+            border-left: 3.5px solid #177361;
+            padding-left: 8px;
+            margin-top: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-title .step-num {
+            background-color: #0f5144;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10.5px;
+            font-weight: 700;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .card.highlight {
+            border-color: #99d5c9;
+            background-color: #f0fdfa;
+        }
+
+        .card-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #0f5144;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 8px 0;
+            background-color: #ffffff;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .table-custom th {
+            background-color: #0f5144;
+            color: white;
+            text-align: left;
+            padding: 6px 8px;
+            font-weight: 600;
+            font-size: 10.5px;
+        }
+
+        .table-custom td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #edf2f7;
+            color: #334155;
+        }
+
+        .table-custom tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-custom tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .pill-field {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #e2e8f0;
+            color: #0f172a;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .pill-val {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .callout {
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 11px;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .callout-info {
+            background-color: #f0fdfa;
+            border-left: 3.5px solid #0f5144;
+            color: #134e4a;
+        }
+
+        .callout-warning {
+            background-color: #fffbeb;
+            border-left: 3.5px solid #f59e0b;
+            color: #78350f;
+        }
+
+        .callout-tip {
+            background-color: #eff6ff;
+            border-left: 3.5px solid #3b82f6;
+            color: #1e3a8a;
+        }
+
+        .callout-icon {
+            font-size: 14px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .example-box {
+            background-color: #1e293b;
+            color: #f1f5f9;
+            border-radius: 5px;
+            padding: 8px 10px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10.5px;
+            margin: 5px 0 0 0;
+            line-height: 1.35;
+        }
+
+        .example-box .hl-red { color: #f87171; font-weight: 700; }
+        .example-box .hl-green { color: #4ade80; font-weight: 700; }
+        .example-box .hl-blue { color: #60a5fa; font-weight: 700; }
+
+        .preview-scale {
+            background-color: #ffffff;
+            border: 1px dashed #0f5144;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 6px;
+            font-size: 11px;
+        }
+
+        .preview-scale-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .preview-scale-row:last-child {
+            border-bottom: none;
+        }
+
+        .footer-note {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 6px;
+            font-size: 9.5px;
+            color: #94a3b8;
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .tag-yes {
+            color: #166534;
+            background-color: #dcfce7;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 9.5px;
+        }
+
+        .tag-no {
+            color: #991b1b;
+            background-color: #fee2e2;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 9.5px;
+        }
+
+        .step-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin-bottom: 6px;
+        }
+
+        .step-circle {
+            background-color: #0f5144;
+            color: white;
+            font-weight: 800;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== PÁGINA 1 ==================== -->
+    <div class="page">
+        <div>
+            <div class="header">
+                <div class="header-logo-area">
+                    <div class="brand-badge">VEO</div>
+                    <div class="header-titles">
+                        <h1>Manual de Presupuestación: Servicios Web</h1>
+                        <p>Módulo Generador de Presupuestos Odoo • Guía Práctica de Operación</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <span><strong>Módulo:</strong> Generador PDF</span>
+                    <span><strong>Categoría:</strong> Servicios Web</span>
+                    <span class="badge-pill">Página 1 de 4</span>
+                </div>
+            </div>
+
+            <p style="font-size: 11.5px; color: #475569; margin-bottom: 8px;">
+                Este instructivo detalla el procedimiento para emitir propuestas comerciales en PDF de los productos de la categoría <strong>Servicios Web</strong> en Odoo. El módulo cuenta con <strong>6 plantillas automatizadas</strong> con diseño profesional, listas para enviar de forma inmediata a los clientes.
+            </p>
+
+            <!-- 1. DETECCIÓN Y ASIGNACIÓN DE PLANTILLAS -->
+            <div class="section-title">
+                <span class="step-num">1</span> Selección del Producto en Odoo y Plantillas Asociadas
+            </div>
+            <p>
+                Al crear una orden de venta en Odoo, el sistema detecta de forma automática qué plantilla debe utilizar según el producto cargado en las líneas del pedido:
+            </p>
+
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th style="width: 32%;">Producto en Odoo</th>
+                        <th style="width: 44%;">Plantilla HTML Asociada</th>
+                        <th style="width: 12%; text-align: center;">Páginas</th>
+                        <th style="width: 12%;">Alcance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Cloud Server</strong></td>
+                        <td><span class="pill-field">Cloud-Plantilla.html</span></td>
+                        <td style="text-align: center;"><span class="pill-val">4</span></td>
+                        <td>Servidor Cloud</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Soporte y Mantenimiento Web</strong></td>
+                        <td><span class="pill-field">Soporte-y-Mantenimiento-Web-Plantilla.html</span></td>
+                        <td style="text-align: center;"><span class="pill-val">4</span></td>
+                        <td>Mantenimiento</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Registro o actualización de dominios</strong></td>
+                        <td><span class="pill-field">Gestión-de-Dominio-Plantilla.html</span></td>
+                        <td style="text-align: center;"><span class="pill-val">4</span></td>
+                        <td>Gestión Dominio</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Servicio de Hosting</strong></td>
+                        <td><span class="pill-field">Plantilla-Hosting.html</span></td>
+                        <td style="text-align: center;"><span class="pill-val">4</span></td>
+                        <td>Alojamiento Web</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Certificado SSL</strong></td>
+                        <td><span class="pill-field">SSL-Plantilla.html</span></td>
+                        <td style="text-align: center;"><span class="pill-val">4</span></td>
+                        <td>Seguridad Web</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Servicio Web Completo (Pack)</strong></td>
+                        <td><span class="pill-field">Servicios-Web-_Completo_-Plantilla.html</span></td>
+                        <td style="text-align: center;"><span class="pill-val">7</span></td>
+                        <td>Pack Integral</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-warning">
+                <div class="callout-icon">⚠️</div>
+                <div>
+                    <strong>Regla crítica de cotización: Cargar UN solo producto por presupuesto</strong><br>
+                    • <strong>Productos individuales:</strong> Si cargás varios productos sueltos en las líneas, el sistema usará <strong>únicamente la plantilla del primer producto</strong> de la lista.<br>
+                    • <strong>Cotización integrada:</strong> Para cotizar todo junto (Dominio + Hosting + SSL + Mantenimiento) tenés que usar exclusivamente el producto <strong>"Servicio Web Completo (Pack)"</strong>, cargado solo y sin agregar los otros productos en las líneas.
+                </div>
+            </div>
+
+            <!-- 2. DINÁMICA DE CAMPOS -->
+            <div class="section-title">
+                <span class="step-num">2</span> Dinámica del Formulario en Servicios Web
+            </div>
+            <p>
+                El formulario de Odoo adapta su comportamiento para simplificar la carga y evitar confusiones en esta categoría:
+            </p>
+
+            <div class="grid-2">
+                <div class="card highlight">
+                    <div class="card-title">🚫 Campos que se ocultan automáticamente</div>
+                    <p style="font-size: 10.5px; margin-bottom: 2px;">
+                        Para todos los productos de Servicios Web, los campos <span class="pill-field">Esp. Técnicas editables</span> y <span class="pill-field">Esp. Técnicas Web</span> <strong>se ocultan de la vista y no son obligatorios</strong>. No hace falta completarlos.
+                    </p>
+                </div>
+                <div class="card highlight">
+                    <div class="card-title">⚙️ Aparición dinámica de campos técnicos</div>
+                    <p style="font-size: 10.5px; margin-bottom: 2px;">
+                        Los campos específicos (como vCPU y RAM para Cloud, o actualización de contenidos para Soporte) <strong>aparecen solos en pantalla</strong> según el producto seleccionado en la cotización.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <span>VEO Imagen y Comunicación S.A.S. — Sistema Generador de Presupuestos Odoo</span>
+            <span>Página 1 de 4</span>
+        </div>
+    </div>
+
+    <!-- ==================== PÁGINA 2 ==================== -->
+    <div class="page">
+        <div>
+            <div class="header">
+                <div class="header-logo-area">
+                    <div class="brand-badge">VEO</div>
+                    <div class="header-titles">
+                        <h1>Manual de Presupuestación: Servicios Web</h1>
+                        <p>Campos Comunes de Cabecera y Parámetros de Texto</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <span><strong>Módulo:</strong> Generador PDF</span>
+                    <span><strong>Categoría:</strong> Servicios Web</span>
+                    <span class="badge-pill">Página 2 de 4</span>
+                </div>
+            </div>
+
+            <!-- 3. CAMPOS COMUNES -->
+            <div class="section-title">
+                <span class="step-num">3</span> Campos Comunes de Cabecera en Odoo
+            </div>
+            <p>
+                En el formulario de la orden de venta debés completar los campos comerciales compartidos que nutren al PDF:
+            </p>
+
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th style="width: 24%;">Campo en Odoo</th>
+                        <th style="width: 48%;">Qué ingresar / Reglas y validaciones</th>
+                        <th style="width: 28%;">Destino en el PDF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Forma de pago</strong></td>
+                        <td>Obligatorio en Odoo. Texto libre.</td>
+                        <td>No se imprime en estas plantillas (solo es obligatorio en Odoo)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fecha de expiración</strong></td>
+                        <td>Fecha límite de la oferta comercial. Se imprime automáticamente con el formato: <em>"Plazo de validez de la oferta: Hasta el dd-mm-aaaa"</em>. La fecha de emisión se autocompleta con el día actual.</td>
+                        <td>Página de Condiciones Generales</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Condiciones editables.</strong></td>
+                        <td><strong>Obligatorio.</strong> Texto libre, máx. <strong>315 caracteres</strong>. Se corta automáticamente en renglones de ~105 caracteres. Hasta 3 renglones (Cloud y Pack imprimen solo 2).</td>
+                        <td>Página de Condiciones Generales</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Texto cliente</strong></td>
+                        <td>Texto breve en 1 solo renglón, máx. <strong>85 caracteres</strong> (Odoo no permite escribir más). Texto personalizado para el cliente. <em>(No aplica al Pack Servicio Web Completo).</em></td>
+                        <td>Página 1 (Portada del PDF)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Aclaraciones</strong></td>
+                        <td>Bloque de observaciones comerciales de hasta <strong>340 caracteres</strong>. Se corta automáticamente en renglones de ~85 caracteres. <strong>NO hace falta separar con punto</strong>. <em>(No aplica al Pack).</em></td>
+                        <td>Página 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cantidad meses</strong></td>
+                        <td>Por defecto <strong>"6 meses"</strong>. Se imprime como <em>"Contratación mínima: X meses"</em> en Hosting, Soporte, SSL y Pack. Cloud trae fijo <em>"12 meses"</em>; Dominio no lo usa.</td>
+                        <td>Página de Condiciones Generales</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- REGLAS DE RENGLONES EN ACLARACIONES -->
+            <div class="grid-2" style="margin-top: 6px; margin-bottom: 6px;">
+                <div class="card">
+                    <div class="card-title">📏 Renglones de "Aclaraciones" por Plantilla</div>
+                    <ul style="margin: 0; padding-left: 16px; font-size: 10.5px; line-height: 1.5; color: #334155;">
+                        <li><strong>Cloud Server:</strong> Imprime hasta <strong>4 renglones</strong> (~340 car.).</li>
+                        <li><strong>Soporte y Mantenimiento Web:</strong> Imprime hasta <strong>4 renglones</strong> (~340 car.).</li>
+                        <li><strong>Gestión de Dominio:</strong> Imprime hasta <strong>3 renglones</strong> (~255 car.).</li>
+                        <li><strong>Servicio de Hosting:</strong> Imprime hasta <strong>3 renglones</strong> (~255 car.).</li>
+                        <li><strong>Certificado SSL:</strong> Imprime hasta <strong>3 renglones</strong> (~255 car.).</li>
+                        <li><em>Todo texto que exceda esos renglones no se imprimirá en el PDF.</em></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title">✂️ Corte Automático Inteligente</div>
+                    <p style="font-size: 10.5px; line-height: 1.45; margin: 0; color: #334155;">
+                        A diferencia de otros módulos (como Agendas), acá <strong>no tenés que poner puntos finales</strong> para forzar renglones. El sistema calcula los saltos de línea cada <strong>~85 caracteres</strong> respetando palabras completas para que el texto fluya de forma prolija.
+                    </p>
+                </div>
+            </div>
+
+            <div class="callout callout-tip" style="margin-top: 6px;">
+                <div class="callout-icon">💡</div>
+                <div>
+                    <strong>Ejemplo para copiar y pegar en "Aclaraciones":</strong>
+                    <div class="example-box">
+                        Incluye migración del sitio actual sin costo. Configuración de 5 casillas de correo corporativo. Soporte prioritario durante el primer mes.
+                    </div>
+                    <span style="font-size: 10px; color: #1e3a8a; display: block; margin-top: 3px;">
+                        (Texto de 144 caracteres que se acomoda automáticamente en 2 renglones limpios en cualquiera de las plantillas).
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <span>VEO Imagen y Comunicación S.A.S. — Sistema Generador de Presupuestos Odoo</span>
+            <span>Página 2 de 4</span>
+        </div>
+    </div>
+
+    <!-- ==================== PÁGINA 3 ==================== -->
+    <div class="page">
+        <div>
+            <div class="header">
+                <div class="header-logo-area">
+                    <div class="brand-badge">VEO</div>
+                    <div class="header-titles">
+                        <h1>Manual de Presupuestación: Servicios Web</h1>
+                        <p>Campos Específicos por Plantilla & Esquema Tarifario</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <span><strong>Módulo:</strong> Generador PDF</span>
+                    <span><strong>Categoría:</strong> Servicios Web</span>
+                    <span class="badge-pill">Página 3 de 4</span>
+                </div>
+            </div>
+
+            <!-- 4. CAMPOS ESPECÍFICOS -->
+            <div class="section-title">
+                <span class="step-num">4</span> Campos Específicos según el Servicio Cotizado
+            </div>
+            <p>
+                Al seleccionar ciertos productos, se activan campos particulares que definen las características técnicas del servicio:
+            </p>
+
+            <div class="grid-2" style="margin-bottom: 8px;">
+                <div class="card">
+                    <div class="card-title">☁️ Cloud Server (Página 2 del PDF)</div>
+                    <p style="font-size: 10px; color: #64748b; margin-bottom: 4px;">
+                        Completás los recursos asignados. <strong>Aceptan decimales</strong> (ej: 2 se imprime "2", y 0,5 se imprime "0,5"):
+                    </p>
+                    <table style="width: 100%; font-size: 10px; border-collapse: collapse;">
+                        <tr><td style="padding: 2px 0;"><strong>Cantidad de vCPU:</strong></td><td><span class="pill-val">2</span> → "2 vCPU's"</td></tr>
+                        <tr><td style="padding: 2px 0;"><strong>RAM (GB):</strong></td><td><span class="pill-val">4</span> → "4 GB RAM"</td></tr>
+                        <tr><td style="padding: 2px 0;"><strong>Storage SSD (GB):</strong></td><td><span class="pill-val">50</span> → "50 GB SSD Storage"</td></tr>
+                        <tr><td style="padding: 2px 0;"><strong>Transferencia (TB):</strong></td><td><span class="pill-val">1</span> → "1 TB de transferencia"</td></tr>
+                        <tr><td style="padding: 2px 0;"><strong>Copia seguridad Std (GB):</strong></td><td><span class="pill-val">50</span> → "50 GB de copia de seguridad Standard"</td></tr>
+                        <tr><td style="padding: 2px 0;"><strong>Conexiones RDP:</strong></td><td><span class="pill-val">1</span> → "1 conexión RDP incluida"</td></tr>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">🛠️ Soporte y Mantenimiento Web (Página 2)</div>
+                    <div style="font-size: 10px; line-height: 1.45; color: #334155;">
+                        • <strong>Actualización de contenidos web:</strong> Máx. 300 caracteres. Se formatea automáticamente en renglones de ~100 caracteres (hasta 3 renglones) y se imprime debajo de <em>"• Actualización de Contenido web"</em>.<br>
+                        • <strong>Interruptor "Estadísticas web":</strong> Encendido por defecto. Imprime debajo de <em>"• Estadísticas web"</em>:<br>
+                        - <span class="tag-yes">Sí</span>: <em>"Este presupuesto si incluye este servicio."</em><br>
+                        - <span class="tag-no">No</span>: <em>"Este presupuesto no incluye este servicio."</em>
+                    </div>
+                    <div style="margin-top: 6px; padding-top: 5px; border-top: 1px dashed #cbd5e1; font-size: 9.5px; color: #475569;">
+                        <strong>Gestión de Dominio, Hosting y SSL:</strong> Utilizan únicamente los campos comunes.<br>
+                        <strong>Servicio Web Completo (Pack):</strong> Solo campos comunes + Cantidad meses (no usa texto cliente ni aclaraciones).
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. PRECIOS -->
+            <div class="section-title">
+                <span class="step-num">5</span> Origen de Precios y Esquema Tarifario
+            </div>
+            <p>
+                Todos los valores monetarios se imprimen en el PDF bajo el formato estándar: <strong>$ 9.535 + IVA</strong> (redondeados sin decimales, en negrita):
+            </p>
+
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th style="width: 32%;">Plantilla / Servicio</th>
+                        <th style="width: 50%;">De dónde sale el precio en Odoo</th>
+                        <th style="width: 18%;">Modalidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Cloud Server</strong></td>
+                        <td>Precio de venta del producto <strong>"Cloud Server"</strong> en el catálogo.</td>
+                        <td>Cuota mensual</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Soporte y Mantenimiento</strong></td>
+                        <td>Precio de venta del producto <strong>"Soporte y Mantenimiento Web"</strong> en el catálogo.</td>
+                        <td>Tarifa mensual</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gestión de Dominio</strong></td>
+                        <td>Precio de venta del producto <strong>"Registro o actualización de dominios"</strong> en catálogo.</td>
+                        <td>Tarifa anual</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Certificado SSL</strong></td>
+                        <td>Precio de venta del producto <strong>"Certificado SSL"</strong> en el catálogo.</td>
+                        <td>Cuota mensual</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Servicio de Hosting</strong></td>
+                        <td><strong>Precio unitario de la línea del presupuesto</strong> (se puede ajustar en la cotización).</td>
+                        <td>Cuota mensual</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Servicio Web Completo (Pack)</strong></td>
+                        <td><strong>Los 4 precios salen del catálogo de cada producto:</strong> Dominio (anual), Hosting (mensual), SSL (mensual) y Soporte como "Actualización Web" (tarifa básica mensual). <em>El precio del producto "Servicio Web Completo" NO se usa.</em></td>
+                        <td>Desglose integral</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-warning" style="margin-top: 6px;">
+                <div class="callout-icon">⚠️</div>
+                <div>
+                    <strong>Cómo actualizar precios de catálogo y advertencia sobre nombres:</strong><br>
+                    • <strong>Modificar precios fijos:</strong> Ir a <strong>Ventas > Productos > Productos</strong>, abrir el producto deseado y modificar el <strong>"Precio de venta"</strong>.<br>
+                    • <strong>¡NO renombrar los productos!:</strong> El sistema busca los productos en la base de datos por su <strong>nombre exacto</strong>. Si se renombra un producto o no se encuentra, el lugar del precio en el PDF <strong>quedará completamente vacío</strong>.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <span>VEO Imagen y Comunicación S.A.S. — Sistema Generador de Presupuestos Odoo</span>
+            <span>Página 3 de 4</span>
+        </div>
+    </div>
+
+    <!-- ==================== PÁGINA 4 ==================== -->
+    <div class="page">
+        <div>
+            <div class="header">
+                <div class="header-logo-area">
+                    <div class="brand-badge">VEO</div>
+                    <div class="header-titles">
+                        <h1>Manual de Presupuestación: Servicios Web</h1>
+                        <p>Emisión del Documento, Anatomía de Páginas & Preguntas Frecuentes</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <span><strong>Módulo:</strong> Generador PDF</span>
+                    <span><strong>Categoría:</strong> Servicios Web</span>
+                    <span class="badge-pill">Página 4 de 4</span>
+                </div>
+            </div>
+
+            <!-- 6. GENERACIÓN -->
+            <div class="section-title">
+                <span class="step-num">6</span> Emisión del Presupuesto PDF
+            </div>
+
+            <div class="grid-2" style="margin-bottom: 6px;">
+                <div class="step-box">
+                    <div class="step-circle">1</div>
+                    <div>
+                        <strong style="color: #0f5144;">Hacer clic en el botón de cabecera:</strong><br>
+                        En la parte superior izquierda de la orden de venta (presupuesto), pulsar:
+                        <div style="margin-top: 5px;">
+                            <span style="background: #0f5144; color: white; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 10px;">
+                                GENERAR PRESUPUESTO PDF
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-box">
+                    <div class="step-circle">2</div>
+                    <div>
+                        <strong style="color: #0f5144;">Obtener el archivo desde el Chatter:</strong><br>
+                        El PDF queda adjunto en el panel derecho (Chatter) con el mensaje de confirmación del sistema:
+                        <div style="margin-top: 5px;">
+                            <span class="pill-field">Presupuesto generado correctamente.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. ANATOMÍA DE LAS PLANTILLAS -->
+            <div class="section-title">
+                <span class="step-num">7</span> Anatomía y Páginas del Documento Final
+            </div>
+
+            <div class="grid-2" style="margin-bottom: 6px;">
+                <div class="card" style="padding: 8px;">
+                    <strong style="color: #0f5144; font-size: 11px;">📄 Plantillas Individuales (4 Páginas)</strong>
+                    <p style="font-size: 9.5px; color: #64748b; margin: 2px 0 4px 0;">Cloud Server, Soporte Web, Dominio, Hosting y SSL</p>
+                    <ul style="margin: 0; padding-left: 15px; font-size: 10px; color: #475569; line-height: 1.45;">
+                        <li><strong>Pág. 1:</strong> Portada, cliente, precio, texto cliente y aclaraciones.</li>
+                        <li><strong>Pág. 2:</strong> Qué incluye el servicio (en Cloud: características técnicas; en Soporte: actualización de contenidos y estadísticas web).</li>
+                        <li><strong>Pág. 3:</strong> Condiciones generales: contratación mínima, condiciones editables, cuentas bancarias, fecha de emisión y validez.</li>
+                        <li><strong>Pág. 4:</strong> Hoja de aprobación del presupuesto con firma del cliente.</li>
+                    </ul>
+                </div>
+                <div class="card" style="padding: 8px;">
+                    <strong style="color: #0f5144; font-size: 11px;">📑 Servicio Web Completo (7 Páginas)</strong>
+                    <p style="font-size: 9.5px; color: #64748b; margin: 2px 0 4px 0;">Solución integral Pack con todos los servicios</p>
+                    <ul style="margin: 0; padding-left: 15px; font-size: 10px; color: #475569; line-height: 1.45;">
+                        <li><strong>Pág. 1:</strong> Portada con los 4 precios: Dominio (tarifa anual), Hosting, SSL y Actualización Web (cuota/tarifa mensual).</li>
+                        <li><strong>Pág. 2 a 5:</strong> Qué incluye cada servicio: Gestión de Dominio, Hosting, Certificado SSL y Soporte y Mantenimiento.</li>
+                        <li><strong>Pág. 6:</strong> Condiciones generales: contratación mínima, condiciones editables (2 renglones), cuentas bancarias, fecha de emisión y validez.</li>
+                        <li><strong>Pág. 7:</strong> Hoja de aprobación del presupuesto con firma del cliente.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 8. FAQ -->
+            <div class="section-title">
+                <span class="step-num">8</span> Preguntas Frecuentes del Equipo Comercial
+            </div>
+
+            <div class="grid-2" style="gap: 8px; margin-bottom: 0;">
+                <div class="callout callout-info" style="margin: 0;">
+                    <div class="callout-icon">💬</div>
+                    <div style="font-size: 10.5px;">
+                        <strong>"Un renglón de aclaraciones se sale del margen"</strong><br>
+                        Acortá levemente el texto ingresado. El sistema corta a ~85 caracteres, pero si hay palabras muy largas puede desbordar. Si pasa seguido, avisá a sistemas.
+                    </div>
+                </div>
+
+                <div class="callout callout-info" style="margin: 0;">
+                    <div class="callout-icon">💬</div>
+                    <div style="font-size: 10.5px;">
+                        <strong>"El precio sale completamente vacío"</strong><br>
+                        El producto fue renombrado en catálogo o no existe. Revisá en <em>Ventas > Productos</em> que el nombre coincida exactamente con la denominación oficial.
+                    </div>
+                </div>
+
+                <div class="callout callout-info" style="margin: 0;">
+                    <div class="callout-icon">💬</div>
+                    <div style="font-size: 10.5px;">
+                        <strong>"Cargué Hosting + SSL y salió solo Hosting"</strong><br>
+                        Cada presupuesto individual toma la plantilla del primer producto. Para cotizar ambos servicios juntos tenés que usar <strong>"Servicio Web Completo (Pack)"</strong>.
+                    </div>
+                </div>
+
+                <div class="callout callout-info" style="margin: 0;">
+                    <div class="callout-icon">💬</div>
+                    <div style="font-size: 10.5px;">
+                        <strong>"¿El Cloud Server acepta valores como 0,5 TB?"</strong><br>
+                        Sí, todos los campos técnicos de Cloud aceptan valores decimales. Si escribís <code>0,5</code> en transferencia, el PDF imprimirá con precisión <code>0,5 TB</code>.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <span>VEO Imagen y Comunicación S.A.S. — Sistema Generador de Presupuestos Odoo</span>
+            <span>Página 4 de 4 • Documento de Capacitación Interna</span>
+        </div>
+    </div>
+
+</body>
+</html>

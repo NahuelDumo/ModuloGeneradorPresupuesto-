@@ -133,7 +133,7 @@ def buscarPlantillaPresupuesto(record):
 
 def dividir_en_oraciones(texto, max_len):
         oraciones_finales = []
-        texto = texto.strip()
+        texto = (texto or "").strip()
         
         while len(texto) > 0:
             if len(texto) <= max_len:
@@ -175,7 +175,7 @@ def dividir_en_items(texto, max_len_total=46, cantidad_items=6):
     items = ["" *cantidad_items]
     
     # Dividir en oraciones usando punto como separador
-    texto = texto.strip().split(".")
+    texto = (texto or "").strip().split(".")
     oraciones = [o.strip() + "." for o in texto if o.strip()]
     itemIndice = 0 
     for oracion in oraciones[:cantidad_items]:
