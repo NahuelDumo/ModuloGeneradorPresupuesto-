@@ -4,6 +4,10 @@ def es_pack_servicios_web(nombres):
     # Pack = un producto propio, ej. "Servicio Web Completo" o "Pack Servicios Web"
     return any("web" in n and ("completo" in n or "pack" in n) for n in ((n or "").lower() for n in nombres))
 
+def es_campana_redes(nombres):
+    # "Campañas publicitarias en RRSS anual / puntual / semestral"
+    return any("campa" in n and "rrss" in n for n in ((n or "").lower() for n in nombres))
+
 
 def buscarPlantillaPresupuesto(record):
     base_dir = "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas"
@@ -117,7 +121,7 @@ def buscarPlantillaPresupuesto(record):
                 return f"{base_dir}/PlantillaServiciosWeb/Gestión-de-Dominio-Plantilla.html"
             if "ssl" in prod_lower:
                 return f"{base_dir}/PlantillaServiciosWeb/SSL-Plantilla.html"
-            if "redes" in prod_lower:
+            if es_campana_redes([prod_lower]):
                 return f"{base_dir}/PlantillaRedesSociales/Plantilla-Pto.-Campaña-de-Redes.html"
             if "landing" in prod_lower:
                 return f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Creación-Landing-Page.html"

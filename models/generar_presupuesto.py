@@ -194,7 +194,7 @@ class SaleOrder(models.Model):
             record.is_ssl = any("ssl" in (p or "").lower() for p in products)
             record.is_servicios_web = "Servicios Web" in categories or record.is_hosting or record.is_cloud or record.is_soporte_web or record.is_ssl or any("dominio" in (p or "").lower() for p in products)
             record.is_pack_web = es_pack_servicios_web(products)
-            record.is_redes = any("redes" in (p or "").lower() for p in products)
+            record.is_redes = es_campana_redes(products)
             record.is_landing_page = any("landing" in (p or "").lower() for p in products)
             record.is_productos = any(
                 c and ("producto" in c.lower() or "merchandising" in c.lower())
