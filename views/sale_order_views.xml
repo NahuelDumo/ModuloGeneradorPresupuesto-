@@ -33,7 +33,8 @@
                 <field name="is_soporte_web" invisible="1"/>
                 <field name="is_ssl" invisible="1"/>
                 <field name="is_pack_web" invisible="1"/>
-                <field name="text_pagina1" placeholder="Rellenar texto página 1" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', False), ('is_servicios_web', '=', False)], 'invisible': ['|', ('is_desarrollo_web', '=', True), ('is_servicios_web', '=', True)]}"/>
+                <field name="is_redes" invisible="1"/>
+                <field name="text_pagina1" placeholder="Rellenar texto página 1" widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', False), ('is_servicios_web', '=', False), ('is_redes', '=', False)], 'invisible': ['|', '|', ('is_desarrollo_web', '=', True), ('is_servicios_web', '=', True), ('is_redes', '=', True)]}"/>
                 <field name="text_pagina1_web" placeholder="Ej: Incluye login de usuarios y roles. Integraciones con APIs externas y redes sociales. Tiempo de respuesta cliente: max 48hs." widget="char_length_counter" attrs="{'required': [('is_desarrollo_web', '=', True), ('is_servicios_web', '=', False)], 'invisible': ['|', ('is_desarrollo_web', '=', False), ('is_servicios_web', '=', True)]}"/>
                 <field name="text_pagina2_web" placeholder="Ej: Hasta 5 páginas/módulos. Incluye diseño a medida (2 propuestas, 3 revisiones). Responsive design (mobile, tablet, desktop)." widget="char_length_counter" attrs="{'invisible': ['|', '|', '|', '|', ('is_desarrollo_web', '=', False), ('is_hosting', '=', True), ('is_landing_page', '=', True), ('is_actualizacion_web', '=', True), ('is_servicios_web', '=', True)]}"/>
                 <field name="cantidad_minima" placeholder="Ej: 6 meses" help="Mínimo de meses que tiene que ser contratado el servicio" attrs="{'invisible': [('is_hosting', '=', False), ('is_soporte_web', '=', False), ('is_ssl', '=', False), ('is_pack_web', '=', False)]}"/>
@@ -47,6 +48,17 @@
                 <field name="cloud_transferencia" attrs="{'invisible': [('is_cloud', '=', False)]}"/>
                 <field name="cloud_backup" attrs="{'invisible': [('is_cloud', '=', False)]}"/>
                 <field name="cloud_rdp" attrs="{'invisible': [('is_cloud', '=', False)]}"/>
+                <field name="precio_semestral" attrs="{'invisible': [('is_redes', '=', False)]}"/>
+                <field name="precio_anual" attrs="{'invisible': [('is_redes', '=', False)]}"/>
+                <field name="redes_publicaciones_semana" attrs="{'invisible': [('is_redes', '=', False)]}"/>
+                <field name="redes_videos_mes" attrs="{'invisible': [('is_redes', '=', False)]}"/>
+                <field name="redes_campanas_pagas" attrs="{'invisible': [('is_redes', '=', False)]}"/>
+                <field name="incluye_trabajos_plan" widget="boolean_toggle" attrs="{'invisible': [('is_redes', '=', False)]}"/>
+                <field name="incluye_diseno_grafico_redes" widget="boolean_toggle" attrs="{'invisible': [('is_redes', '=', False)]}"/>
+                <field name="incluye_diseno_audiovisual" widget="boolean_toggle" attrs="{'invisible': [('is_redes', '=', False)]}"/>
+                <field name="incluye_fotografia" widget="boolean_toggle" attrs="{'invisible': [('is_redes', '=', False)]}"/>
+                <field name="incluye_campanas_pagas" widget="boolean_toggle" attrs="{'invisible': [('is_redes', '=', False)]}"/>
+                <field name="incluye_optimizacion_perfiles" widget="boolean_toggle" attrs="{'invisible': [('is_redes', '=', False)]}"/>
                 <field name="text_pagina2" placeholder="Ej: Hasta 5 páginas/módulos. Incluye diseño a medida (2 propuestas, 3 revisiones). Responsive design (mobile, tablet, desktop)." widget="char_length_counter" required="1"/>
                 <field name="incluye_multilenguaje" widget="boolean_toggle" attrs="{'invisible': [('is_desarrollo_web_especial', '=', False)]}"/>
                 <field name="idiomas" placeholder="Ej: Inglés y Español" attrs="{'invisible': ['|', ('is_desarrollo_web_especial', '=', False), ('incluye_multilenguaje', '=', False)]}"/>

@@ -92,6 +92,17 @@ class SaleOrder(models.Model):
     cloud_transferencia = fields.Float(string="Transferencia (TB)")
     cloud_backup = fields.Float(string="Copia de seguridad Standard (GB)")
     cloud_rdp = fields.Float(string="Conexiones RDP")
+    precio_semestral = fields.Float(string="Cuota plan semestral")
+    precio_anual = fields.Float(string="Cuota plan anual")
+    redes_publicaciones_semana = fields.Integer(string="Publicaciones por semana")
+    redes_videos_mes = fields.Integer(string="Videos por mes")
+    redes_campanas_pagas = fields.Integer(string="Campañas pagas mensuales")
+    incluye_trabajos_plan = fields.Boolean(string="Plan incluye trabajos en la cuota", default=True)
+    incluye_diseno_grafico_redes = fields.Boolean(string="Diseño gráfico", default=True)
+    incluye_diseno_audiovisual = fields.Boolean(string="Diseño audiovisual (videos)", default=True)
+    incluye_fotografia = fields.Boolean(string="Fotografía", default=False)
+    incluye_campanas_pagas = fields.Boolean(string="Campañas pagas", default=False)
+    incluye_optimizacion_perfiles = fields.Boolean(string="Optimización de perfiles", default=True)
 
     forma_entrega = fields.Char(
         string="Forma de entrega",
@@ -161,6 +172,7 @@ class SaleOrder(models.Model):
     )
     is_ssl = fields.Boolean(string="¿Es Certificado SSL?", compute="_compute_web_product_flags", store=True)
     is_pack_web = fields.Boolean(string="¿Es Pack Servicios Web?", compute="_compute_web_product_flags", store=True)
+    is_redes = fields.Boolean(string="¿Es Campaña de Redes?", compute="_compute_web_product_flags", store=True)
 
     @api.depends('order_line.product_id', 'order_line.product_id.categ_id')
     def _compute_web_product_flags(self):
@@ -182,6 +194,7 @@ class SaleOrder(models.Model):
             record.is_ssl = any("ssl" in (p or "").lower() for p in products)
             record.is_servicios_web = "Servicios Web" in categories or record.is_hosting or record.is_cloud or record.is_soporte_web or record.is_ssl or any("dominio" in (p or "").lower() for p in products)
             record.is_pack_web = es_pack_servicios_web(products)
+            record.is_redes = any("redes" in (p or "").lower() for p in products)
             record.is_landing_page = any("landing" in (p or "").lower() for p in products)
             record.is_productos = any(
                 c and ("producto" in c.lower() or "merchandising" in c.lower())
@@ -648,9 +661,9 @@ class SaleOrder(models.Model):
                 "{{editable1}}": (span_texto(actualizaciones[0]) if len(actualizaciones) > 0 else "") if record.is_soporte_web else formatear_item_web(editable1_val),
                 "{{editable2}}": (span_texto(actualizaciones[1]) if len(actualizaciones) > 1 else "") if record.is_soporte_web else formatear_item_web(editable2_val),
                 "{{editable3}}": (span_texto(actualizaciones[2]) if len(actualizaciones) > 2 else "") if record.is_soporte_web else formatear_item_web(editable3_val),
-                "{{1}}": ("si" if record.incluye_diseno_tapas else "no") if record.is_productos else ("si" if record.incluye_multilenguaje else "no"),
-                "{{2}}": ("si" if record.incluye_diseno_insert else "no") if record.is_productos else ("si" if record.incluye_tienda else "no"),
-                "{{3}}": ("si" if record.incluye_diseno_interior else "no") if record.is_productos else ("si" if record.incluye_portal else "no"),
+                "{{1}}": ("si" if record.incluye_diseno_tapas else "no") if record.is_productos else ("si" if record.incluye_diseno_grafico_redes else "no") if record.is_redes else ("si" if record.incluye_multilenguaje else "no"),
+                "{{2}}": ("si" if record.incluye_diseno_insert else "no") if record.is_productos else ("si" if record.incluye_diseno_audiovisual else "no") if record.is_redes else ("si" if record.incluye_tienda else "no"),
+                "{{3}}": ("si" if record.incluye_diseno_interior else "no") if record.is_productos else ("si" if record.incluye_fotografia else "no") if record.is_redes else ("si" if record.incluye_portal else "no"),
                 "{{idiomas}}": record.idiomas or "Inglés y Español" if record.incluye_multilenguaje else "",
                 "{{n}}": str(obtener_cantidad_idiomas(record.idiomas or "Inglés y Español")) if record.incluye_multilenguaje else "",
 
@@ -688,6 +701,16 @@ class SaleOrder(models.Model):
                 "{{tra}}": formatear_numero(record.cloud_transferencia),
                 "{{cps}}": formatear_numero(record.cloud_backup),
                 "{{rdp}}": formatear_numero(record.cloud_rdp),
+
+                # Campaña de Redes Sociales
+                "{{precio_semestral}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>$ {format_moneda(record.precio_semestral)} + IVA</span>" if record.precio_semestral else "",
+                "{{precio_anual}}": f"<span style='font-family: Roboto, sans-serif; font-weight: bold;'>$ {format_moneda(record.precio_anual)} + IVA</span>" if record.precio_anual else "",
+                "{{s}}": str(record.redes_publicaciones_semana),
+                "{{m}}": str(record.redes_videos_mes),
+                "{{num}}": str(record.redes_campanas_pagas),
+                "{{0}}": "si" if record.incluye_trabajos_plan else "no",
+                "{{5}}": "si" if record.incluye_campanas_pagas else "no",
+                "{{6}}": "si" if record.incluye_optimizacion_perfiles else "no",
             }   
 
             if not record.incluye_multilenguaje and record.is_desarrollo_web_especial:

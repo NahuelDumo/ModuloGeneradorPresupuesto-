@@ -117,6 +117,8 @@ def buscarPlantillaPresupuesto(record):
                 return f"{base_dir}/PlantillaServiciosWeb/Gestión-de-Dominio-Plantilla.html"
             if "ssl" in prod_lower:
                 return f"{base_dir}/PlantillaServiciosWeb/SSL-Plantilla.html"
+            if "redes" in prod_lower:
+                return f"{base_dir}/PlantillaRedesSociales/Plantilla-Pto.-Campaña-de-Redes.html"
             if "landing" in prod_lower:
                 return f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Creación-Landing-Page.html"
             if "actualizaci" in prod_lower:

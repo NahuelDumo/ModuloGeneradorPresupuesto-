@@ -98,4 +98,8 @@ assert not flags(("Registro o actualización de dominios", "Servicios Web")).is_
 assert flags(("Actualización Sitio Web", "Desarrollo Web")).is_actualizacion_web
 assert not flags(("Creación de Sitio Web Basico", "Desarrollo Web")).is_pack_web
 
+assert buscar(orden(("Campaña de Redes Sociales", "Redes Sociales"))).endswith("Plantilla-Pto.-Campaña-de-Redes.html")
+assert flags(("Campaña de Redes Sociales", "Redes Sociales")).is_redes
+assert not flags(("Servicio de Hosting", "Servicios Web")).is_redes
+
 print("OK")
