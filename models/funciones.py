@@ -8,10 +8,6 @@ def es_campana_redes(nombres):
     # "Campañas publicitarias en RRSS anual / puntual / semestral"
     return any("campa" in n and "rrss" in n for n in ((n or "").lower() for n in nombres))
 
-def es_impresion(nombre_servicio):
-    # Productos que se cotizan por cantidades (hasta 3 líneas = 3 cantidades)
-    return nombre_servicio.startswith(("Impresión", "Ploteado"))
-
 
 def buscarPlantillaPresupuesto(record):
     base_dir = "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas"
@@ -61,7 +57,7 @@ def buscarPlantillaPresupuesto(record):
             "Diseño gráfico de Sobres": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G1_DGSobres.html",
             "Diseño gráfico de Tarjetas": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G1_DGTarjetas.html",
             "Diseño gráfico de pieza gráfica especial": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G1_DGPiezaGEspecial.html",
-            "Ploteado de Banners": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G3_Banners.html",
+            "Impresión de Banners": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G3_Banners.html",
             "Impresión de Bolsas o Cajas": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G2_DGBolsas.html",
             "Impresión de Brochure": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G2_DGBrochure.html",
             "Impresión de Carpetas o Carátulas Notariales": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G2_DGCarpetas.html",
