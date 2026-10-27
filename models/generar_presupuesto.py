@@ -249,7 +249,7 @@ class SaleOrder(models.Model):
             opcion1 = opcion2 = opcion3 = ""
             total1 = total2 = total3 = ""
 
-            if not nombre_servicio.startswith("Impresión"):
+            if not es_impresion(nombre_servicio):
                 lineas = record.order_line[:3]  # hasta 3 opciones
                 
                 for i, line in enumerate(lineas):
@@ -289,7 +289,7 @@ class SaleOrder(models.Model):
             precioTotal2 = ""
             precioTotal3 = ""
             # Impresion de Boletin, Libro, Pieza Editorial, Revista
-            if nombre_servicio.startswith("Impresión"):
+            if es_impresion(nombre_servicio):
                 def get_cantidad(line):
                     val = round(line.product_uom_qty)
                     return "" if val < 1 else val
