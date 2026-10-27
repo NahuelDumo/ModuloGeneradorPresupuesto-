@@ -57,6 +57,7 @@ def buscarPlantillaPresupuesto(record):
             "Diseño gráfico de Sobres": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G1_DGSobres.html",
             "Diseño gráfico de Tarjetas": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G1_DGTarjetas.html",
             "Diseño gráfico de pieza gráfica especial": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G1_DGPiezaGEspecial.html",
+            "Impresión de Carteles o Banners": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G3_Banners.html",
             "Impresión de Bolsas o Cajas": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G2_DGBolsas.html",
             "Impresión de Brochure": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G2_DGBrochure.html",
             "Impresión de Carpetas o Carátulas Notariales": f"{base_dir}/PlantillaGrafica/plantillaGrafica_G2_DGCarpetas.html",
