@@ -353,7 +353,7 @@ class SaleOrder(models.Model):
                     if not val:
                         return ""
                     val_int = int(round(float(val)))
-                    return format(val_int, ',').replace(",", ".")
+                    return f"<span style='font-weight: 700;'>{format(val_int, ',').replace(',', '.')}</span>"
 
                 lineas_prod = record.order_line[:3]
                 if len(lineas_prod) > 0:
