@@ -8,7 +8,6 @@ def es_campana_redes(nombres):
     # "Campañas publicitarias en RRSS anual / puntual / semestral"
     return any("campa" in n and "rrss" in n for n in ((n or "").lower() for n in nombres))
 
-
 def buscarPlantillaPresupuesto(record):
     base_dir = "/opt/odoo2/odoo-custom-addons/ModuloGeneradorPresupuesto-/Plantillas"
     default_path = f"{base_dir}/PlantillaDesarrolloWeb/Plantilla-Desarrollo-Web.html"
@@ -75,12 +74,18 @@ def buscarPlantillaPresupuesto(record):
             "Agendas personalizadas": f"{base_dir}/PlantillaProductos/Agendas-personalizadas-Plantilla.html",
             "Cuadernos": f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html",
             "Cuadernos personalizados": f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html",
+            "Diseño almanaques de pared": f"{base_dir}/PlantillaProductos/Almanaques-de-pared-Plantilla-ok.html",
+            "Diseño almanaques de escritorio": f"{base_dir}/PlantillaProductos/Almanaques-de-escritorio-Plantilla-ok.html",
+            "Diseño almanaques carpitas": f"{base_dir}/PlantillaProductos/Almanaques-carpita-Plantilla-ok.html",
         },
         "Productos Promocionales": {
             "Agendas": f"{base_dir}/PlantillaProductos/Agendas-personalizadas-Plantilla.html",
             "Agendas personalizadas": f"{base_dir}/PlantillaProductos/Agendas-personalizadas-Plantilla.html",
             "Cuadernos": f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html",
             "Cuadernos personalizados": f"{base_dir}/PlantillaProductos/Cuadernos-personalizados-Plantilla.html",
+            "Diseño almanaques de pared": f"{base_dir}/PlantillaProductos/Almanaques-de-pared-Plantilla-ok.html",
+            "Diseño almanaques de escritorio": f"{base_dir}/PlantillaProductos/Almanaques-de-escritorio-Plantilla-ok.html",
+            "Diseño almanaques carpitas": f"{base_dir}/PlantillaProductos/Almanaques-carpita-Plantilla-ok.html",
         }
     }
 
